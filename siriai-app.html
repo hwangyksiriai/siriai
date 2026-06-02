@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<title>SIRIAI</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--black:#111;--gray1:#f5f5f5;--gray2:#e8e8e8;--gray3:#999;--gray4:#555;--accent:#111;--red:#e03}
+body{font-family:-apple-system,BlinkMacSystemFont,'Malgun Gothic','Apple SD Gothic Neo',sans-serif;background:#fff;color:var(--black);max-width:430px;margin:0 auto;min-height:100vh;position:relative;overflow-x:hidden}
+/* SCREEN */
+.screen{display:none;flex-direction:column;min-height:100vh;padding-bottom:70px}
+.screen.active{display:flex}
+/* HEADER */
+.header{padding:16px 20px 12px;background:#fff;position:sticky;top:0;z-index:10;border-bottom:1px solid var(--gray2)}
+.header-row{display:flex;align-items:center;justify-content:space-between}
+.header-title{font-size:20px;font-weight:700;letter-spacing:-0.5px}
+.header-back{display:flex;align-items:center;gap:8px;background:none;border:none;font-size:16px;font-weight:600;cursor:pointer;padding:4px 0}
+.header-back svg{width:20px;height:20px}
+.header-icons{display:flex;gap:14px}
+.icon-btn{background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%}
+.icon-btn:active{background:var(--gray1)}
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#fff;border-top:1px solid var(--gray2);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom)}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 0;cursor:pointer;border:none;background:none;color:var(--gray3);font-size:10px;font-weight:500;transition:color .15s}
+.nav-item.active{color:var(--black)}
+.nav-item svg{width:22px;height:22px}
+/* BADGE */
+.badge{background:var(--red);color:#fff;border-radius:99px;font-size:9px;font-weight:700;padding:1px 5px;margin-left:4px}
+/* CONTENT AREA */
+.content{flex:1;overflow-y:auto}
+/* GREETING */
+.greeting{padding:18px 20px 10px}
+.greeting-name{font-size:14px;color:var(--gray4)}
+.greeting-title{font-size:22px;font-weight:800;letter-spacing:-0.5px;margin-top:2px}
+/* TAB BAR */
+.tab-bar{display:flex;gap:0;border-bottom:1px solid var(--gray2);padding:0 20px;position:sticky;top:57px;background:#fff;z-index:9}
+.tab{padding:10px 14px;font-size:13px;font-weight:500;color:var(--gray3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tab.active{color:var(--black);font-weight:700;border-bottom-color:var(--black)}
+/* FILTER ROW */
+.filter-row{display:flex;gap:8px;padding:12px 20px;overflow-x:auto;scrollbar-width:none}
+.filter-row::-webkit-scrollbar{display:none}
+.filter-chip{border:1.5px solid var(--gray2);border-radius:99px;padding:6px 14px;font-size:12px;font-weight:500;white-space:nowrap;cursor:pointer;background:#fff;color:var(--gray4);transition:all .15s}
+.filter-chip.active{background:var(--black);color:#fff;border-color:var(--black)}
+/* VIEW TOGGLE */
+.view-toggle{display:flex;gap:4px;margin-left:auto}
+.view-btn{background:none;border:none;cursor:pointer;padding:4px;border-radius:6px;color:var(--gray3)}
+.view-btn.active{color:var(--black)}
+/* CAMPAIGN GRID */
+.campaign-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:2px}
+.campaign-card{background:#fff;cursor:pointer;position:relative;overflow:hidden}
+.campaign-card:active{opacity:.85}
+.campaign-thumb{width:100%;aspect-ratio:3/4;background:var(--gray1);object-fit:cover;display:block;position:relative;overflow:hidden}
+.campaign-thumb-inner{width:100%;height:100%;background:linear-gradient(135deg,#f0f0f0,#e0e0e0);display:flex;align-items:center;justify-content:center;font-size:32px}
+.campaign-badge{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.7);color:#fff;font-size:10px;font-weight:700;padding:3px 7px;border-radius:99px}
+.campaign-save{position:absolute;top:8px;left:8px;background:rgba(255,255,255,.9);border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px}
+.campaign-info{padding:8px 10px 12px}
+.campaign-brand{font-size:10px;color:var(--gray3);font-weight:500;text-transform:uppercase;letter-spacing:.3px}
+.campaign-name{font-size:12px;font-weight:700;color:var(--black);margin-top:2px;line-height:1.3}
+.campaign-value{font-size:11px;color:var(--gray4);margin-top:3px;display:flex;align-items:center;gap:4px}
+.campaign-tags{display:flex;gap:4px;margin-top:5px;flex-wrap:wrap}
+.campaign-tag{background:var(--gray1);padding:2px 7px;border-radius:4px;font-size:10px;color:var(--gray4)}
+/* CAMPAIGN LIST */
+.campaign-list{padding:0 0 8px}
+.campaign-list-item{display:flex;gap:12px;padding:14px 20px;cursor:pointer;border-bottom:1px solid var(--gray1);align-items:flex-start}
+.campaign-list-item:active{background:var(--gray1)}
+.campaign-list-thumb{width:72px;height:72px;border-radius:10px;background:var(--gray1);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:24px}
+.campaign-list-body{flex:1;min-width:0}
+.campaign-list-brand{font-size:11px;color:var(--gray3);text-transform:uppercase;font-weight:600;letter-spacing:.3px}
+.campaign-list-name{font-size:14px;font-weight:700;margin-top:2px;line-height:1.3;color:var(--black)}
+.campaign-list-value{font-size:12px;color:var(--gray4);margin-top:4px}
+.campaign-list-tags{display:flex;gap:4px;margin-top:5px}
+.campaign-list-tag{background:var(--gray1);padding:2px 7px;border-radius:4px;font-size:10px;color:var(--gray4)}
+.campaign-list-cash{font-size:13px;font-weight:700;color:var(--red);flex-shrink:0}
+/* DETAIL SCREEN */
+.detail-hero{width:100%;aspect-ratio:4/5;background:var(--gray1);display:flex;align-items:center;justify-content:center;font-size:64px;position:relative}
+.detail-body{padding:20px}
+.detail-brand{font-size:12px;font-weight:600;color:var(--gray3);text-transform:uppercase;letter-spacing:.5px}
+.detail-name{font-size:20px;font-weight:800;margin-top:4px;letter-spacing:-0.5px;line-height:1.25}
+.detail-value{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:14px;color:var(--gray4)}
+.detail-tags{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.detail-tag{border:1px solid var(--gray2);border-radius:6px;padding:4px 10px;font-size:12px;color:var(--gray4)}
+.divider{height:8px;background:var(--gray1);margin:16px 0}
+.section-label{font-size:13px;font-weight:700;color:var(--black);margin-bottom:10px}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--gray1)}
+.info-row:last-child{border-bottom:none}
+.info-label{font-size:13px;color:var(--gray4)}
+.info-value{font-size:13px;font-weight:600;color:var(--black)}
+.guide-box{background:var(--gray1);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--gray4);line-height:1.6}
+.apply-bar{padding:12px 20px;background:#fff;border-top:1px solid var(--gray2)}
+.btn-primary{width:100%;background:var(--black);color:#fff;border:none;border-radius:12px;padding:15px;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:-0.3px;transition:opacity .15s}
+.btn-primary:active{opacity:.8}
+.btn-primary:disabled{background:var(--gray2);color:var(--gray3);cursor:default}
+.btn-secondary{width:100%;background:#fff;color:var(--black);border:1.5px solid var(--gray2);border-radius:12px;padding:14px;font-size:15px;font-weight:600;cursor:pointer}
+/* SCHEDULE */
+.schedule-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;gap:14px;color:var(--gray3)}
+.schedule-empty-icon{font-size:40px}
+.schedule-section{padding:0 20px 4px}
+.schedule-month{font-size:12px;font-weight:700;color:var(--gray3);padding:16px 0 8px;text-transform:uppercase}
+.schedule-item{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--gray1);border-radius:10px;margin-bottom:8px;cursor:pointer}
+.schedule-item:active{opacity:.8}
+.schedule-item-left{flex:1;min-width:0}
+.schedule-item-brand{font-size:11px;font-weight:600;color:var(--gray3);text-transform:uppercase}
+.schedule-item-name{font-size:13px;font-weight:700;color:var(--black);margin-top:2px}
+.schedule-item-type{font-size:11px;color:var(--gray4);margin-top:2px}
+.schedule-item-date{font-size:12px;color:var(--gray4);text-align:right;flex-shrink:0}
+.dday-badge{display:inline-block;background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:5px;margin-left:6px}
+.dday-done{background:var(--gray3)}
+/* MY PAGE */
+.my-profile{padding:20px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--gray2)}
+.my-avatar{width:64px;height:64px;border-radius:50%;background:var(--gray2);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
+.my-info{flex:1}
+.my-handle{font-size:14px;color:var(--gray4)}
+.my-name{font-size:18px;font-weight:800;letter-spacing:-0.5px}
+.my-stats{display:flex;gap:0;margin-top:8px}
+.my-stat{flex:1;text-align:center;padding:4px 0;border-right:1px solid var(--gray2)}
+.my-stat:last-child{border-right:none}
+.my-stat-val{font-size:15px;font-weight:700}
+.my-stat-label{font-size:10px;color:var(--gray3);margin-top:1px}
+.my-earnings{margin:16px 20px;background:var(--black);border-radius:14px;padding:18px;color:#fff}
+.earnings-label{font-size:11px;color:rgba(255,255,255,.6)}
+.earnings-total{font-size:28px;font-weight:800;margin-top:4px;letter-spacing:-1px}
+.earnings-sub{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.15)}
+.earnings-sub-item{}
+.earnings-sub-label{font-size:10px;color:rgba(255,255,255,.5)}
+.earnings-sub-val{font-size:15px;font-weight:700;margin-top:2px}
+.my-section{padding:0 20px}
+.my-menu-item{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--gray1);cursor:pointer}
+.my-menu-item:active{opacity:.7}
+.my-menu-left{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500}
+.my-menu-icon{font-size:18px;width:24px;text-align:center}
+.chevron{color:var(--gray3);font-size:16px}
+/* FORM */
+.form-section{padding:20px}
+.form-title{font-size:22px;font-weight:800;letter-spacing:-0.5px;margin-bottom:24px}
+.form-group{margin-bottom:18px}
+.form-label{font-size:12px;color:var(--gray3);font-weight:600;margin-bottom:6px}
+.form-input{width:100%;border:1.5px solid var(--gray2);border-radius:10px;padding:12px 14px;font-size:15px;outline:none;font-family:inherit;transition:border-color .15s}
+.form-input:focus{border-color:var(--black)}
+.form-select{width:100%;border:1.5px solid var(--gray2);border-radius:10px;padding:12px 14px;font-size:15px;outline:none;background:#fff;font-family:inherit;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.form-row{display:flex;gap:8px}
+.form-input-half{flex:1}
+.form-error{color:var(--red);font-size:11px;margin-top:4px}
+/* PROFILE EDIT */
+.profile-section-label{font-size:12px;font-weight:700;color:var(--gray3);padding:16px 20px 8px;background:#fff}
+.profile-field{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--gray1);cursor:pointer;background:#fff}
+.profile-field:active{background:var(--gray1)}
+.profile-field-label{font-size:11px;color:var(--gray3)}
+.profile-field-value{font-size:15px;font-weight:600;margin-top:2px}
+/* UPLOAD */
+.upload-screen{padding:24px 20px}
+.upload-title{font-size:22px;font-weight:800;letter-spacing:-0.5px;margin-bottom:6px}
+.upload-sub{font-size:13px;color:var(--gray3);line-height:1.5;margin-bottom:24px}
+.upload-input-wrap{border:1.5px solid var(--gray2);border-radius:12px;padding:14px}
+.upload-input{width:100%;border:none;outline:none;font-size:15px;font-family:inherit;color:var(--black);resize:none;min-height:48px}
+.upload-input::placeholder{color:var(--gray3)}
+/* GUIDE */
+.guide-screen{padding:0 0 20px}
+.guide-hero{padding:32px 24px 24px;text-align:center}
+.guide-hero-icon{font-size:48px;margin-bottom:12px}
+.guide-hero-title{font-size:22px;font-weight:800;letter-spacing:-0.5px}
+.guide-hero-sub{font-size:13px;color:var(--gray3);margin-top:6px;line-height:1.5}
+.guide-item{padding:20px 24px;border-bottom:1px solid var(--gray1)}
+.guide-item-icon{font-size:24px;margin-bottom:8px}
+.guide-item-title{font-size:15px;font-weight:700;color:var(--black);margin-bottom:6px}
+.guide-item-text{font-size:13px;color:var(--gray4);line-height:1.6}
+.guide-item-sub{font-size:12px;color:var(--red);margin-top:4px;line-height:1.5}
+.guide-warn{background:#fff5f5;border-radius:12px;padding:14px 16px;margin:16px 24px 0;font-size:13px;color:var(--red);line-height:1.5;font-weight:500}
+/* HISTORY */
+.history-item{padding:14px 20px;border-bottom:1px solid var(--gray1);display:flex;gap:12px;cursor:pointer}
+.history-item:active{background:var(--gray1)}
+.history-thumb{width:64px;height:64px;border-radius:10px;background:var(--gray1);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:22px}
+.history-body{flex:1}
+.history-status{font-size:10px;font-weight:700;color:var(--gray3)}
+.history-brand{font-size:11px;color:var(--gray3);margin-top:2px;font-weight:600;text-transform:uppercase}
+.history-name{font-size:13px;font-weight:700;color:var(--black);margin-top:2px;line-height:1.3}
+.history-type{font-size:11px;color:var(--gray4);margin-top:2px}
+.status-badge{display:inline-block;padding:2px 8px;border-radius:5px;font-size:10px;font-weight:700}
+.status-대기{background:#fff3e0;color:#e65100}
+.status-진행{background:#e8f5e9;color:#2e7d32}
+.status-미진행{background:#fce4ec;color:#c62828}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;display:flex;align-items:flex-end;justify-content:center;max-width:430px;left:50%;transform:translateX(-50%);opacity:0;pointer-events:none;transition:opacity .25s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal-sheet{background:#fff;border-radius:20px 20px 0 0;padding:24px 20px 32px;width:100%;transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.modal-overlay.open .modal-sheet{transform:translateY(0)}
+.modal-handle{width:40px;height:4px;background:var(--gray2);border-radius:2px;margin:0 auto 20px}
+.modal-title{font-size:18px;font-weight:800;margin-bottom:20px;letter-spacing:-0.5px}
+.filter-section{margin-bottom:20px}
+.filter-section-label{font-size:12px;font-weight:700;color:var(--gray3);margin-bottom:10px}
+.filter-chips{display:flex;gap:8px;flex-wrap:wrap}
+.filter-chip-lg{border:1.5px solid var(--gray2);border-radius:99px;padding:8px 16px;font-size:13px;font-weight:500;cursor:pointer;background:#fff;color:var(--gray4);transition:all .15s;display:flex;align-items:center;gap:6px}
+.filter-chip-lg .count{font-size:11px;color:var(--gray3)}
+.filter-chip-lg.active{background:var(--black);color:#fff;border-color:var(--black)}
+.filter-chip-lg.active .count{color:rgba(255,255,255,.7)}
+.modal-btns{display:flex;gap:10px;margin-top:24px}
+.modal-btns .btn-reset{flex:1;background:var(--gray1);color:var(--black);border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer}
+.modal-btns .btn-apply{flex:2;background:var(--black);color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer}
+/* TOAST */
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(0,0,0,.85);color:#fff;padding:10px 20px;border-radius:99px;font-size:13px;font-weight:500;z-index:300;opacity:0;transition:all .3s;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* APPLY SUCCESS */
+.success-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;padding:40px 20px;text-align:center}
+.success-icon{font-size:56px;margin-bottom:16px}
+.success-title{font-size:22px;font-weight:800;letter-spacing:-0.5px;margin-bottom:8px}
+.success-sub{font-size:14px;color:var(--gray4);line-height:1.6}
+/* SCROLLABLE CONTENT */
+.scroll-content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+</style>
+</head>
+<body>
+
+<!-- ===== HOME SCREEN ===== -->
+<div class="screen active" id="screen-home">
+  <div class="header">
+    <div class="header-row">
+      <div>
+        <div style="font-size:12px;color:#999">nooyk_h님</div>
+        <div style="font-size:20px;font-weight:800;letter-spacing:-0.5px">방문을 환영합니다</div>
+      </div>
+      <div class="header-icons">
+        <button class="icon-btn" onclick="showToast('알림이 없습니다')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </button>
+        <button class="icon-btn" onclick="showToast('채팅 기능 준비중')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </button>
+        <button class="icon-btn" style="position:relative" onclick="showToast('찜 목록')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span class="badge" style="position:absolute;top:2px;right:2px;padding:1px 4px">3</span>
+        </button>
+      </div>
+    </div>
+    <!-- Category tabs -->
+    <div style="display:flex;gap:0;margin-top:12px;border-bottom:1px solid #e8e8e8;margin-left:-20px;margin-right:-20px;padding:0 20px">
+      <div class="tab active" onclick="setHomeTab(this,'캠페인')">캠페인</div>
+      <div class="tab" onclick="setHomeTab(this,'뷰티')">뷰티</div>
+      <div class="tab" onclick="setHomeTab(this,'패션')">패션</div>
+      <div class="tab" onclick="setHomeTab(this,'라이프')">라이프</div>
+    </div>
+  </div>
+  <div class="scroll-content">
+    <!-- Filter row -->
+    <div style="display:flex;align-items:center;padding:10px 20px;gap:8px;border-bottom:1px solid #f5f5f5">
+      <div style="display:flex;gap:6px;overflow-x:auto;flex:1;scrollbar-width:none">
+        <button class="filter-chip active" onclick="filterToggle(this)">전체</button>
+        <button class="filter-chip" onclick="filterToggle(this)">뷰티</button>
+        <button class="filter-chip" onclick="filterToggle(this)">패션</button>
+        <button class="filter-chip" onclick="filterToggle(this)">릴스</button>
+        <button class="filter-chip" onclick="filterToggle(this)">캐시지급</button>
+      </div>
+      <button onclick="openFilter()" style="background:none;border:1.5px solid #e8e8e8;border-radius:8px;padding:6px 10px;cursor:pointer;display:flex;align-items:center;gap:4px;font-size:12px;color:#555;flex-shrink:0">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        필터
+      </button>
+      <div style="display:flex;gap:2px">
+        <button id="view-grid" class="view-btn active" onclick="setView('grid')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="8"/><rect x="3" y="13" width="8" height="8"/><rect x="13" y="13" width="8" height="8"/></svg>
+        </button>
+        <button id="view-list" class="view-btn" onclick="setView('list')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1" fill="currentColor"/><circle cx="3" cy="12" r="1" fill="currentColor"/><circle cx="3" cy="18" r="1" fill="currentColor"/></svg>
+        </button>
+      </div>
+    </div>
+    <!-- Grid View -->
+    <div id="grid-view" class="campaign-grid">
+      <div class="campaign-card" onclick="openDetail(0)">
+        <div class="campaign-thumb"><div class="campaign-thumb-inner">💄</div><div class="campaign-badge">D-2</div><button class="campaign-save" onclick="event.stopPropagation();toggleSave(this)">🤍</button></div>
+        <div class="campaign-info"><div class="campaign-brand">MOONSHOT</div><div class="campaign-name">문샷 신규 립컬러 캠페인</div><div class="campaign-value">🎁 68,000원 상당</div><div class="campaign-tags"><span class="campaign-tag">뷰티</span><span class="campaign-tag">릴스</span></div></div>
+      </div>
+      <div class="campaign-card" onclick="openDetail(1)">
+        <div class="campaign-thumb"><div class="campaign-thumb-inner">👗</div><div class="campaign-badge">D-5</div><button class="campaign-save" onclick="event.stopPropagation();toggleSave(this)">🤍</button></div>
+        <div class="campaign-info"><div class="campaign-brand">MUSINSA</div><div class="campaign-name">무신사 26SS 코디 캠페인</div><div class="campaign-value">🎁 95,000원 상당</div><div class="campaign-tags"><span class="campaign-tag">패션</span><span class="campaign-tag">피드</span></div></div>
+      </div>
+      <div class="campaign-card" onclick="openDetail(2)">
+        <div class="campaign-thumb"><div class="campaign-thumb-inner">🧴</div><button class="campaign-save" onclick="event.stopPropagation();toggleSave(this)">🤍</button></div>
+        <div class="campaign-info"><div class="campaign-brand">AESTURA</div><div class="campaign-name">아토배리어 스킨케어 루틴</div><div class="campaign-value">🎁 55,000원 상당</div><div class="campaign-tags"><span class="campaign-tag">뷰티</span><span class="campaign-tag">릴스</span></div></div>
+      </div>
+      <div class="campaign-card" onclick="openDetail(3)">
+        <div class="campaign-thumb"><div class="campaign-thumb-inner">👒</div><div class="campaign-badge">D-7</div><button class="campaign-save" onclick="event.stopPropagation();toggleSave(this)">🤍</button></div>
+        <div class="campaign-info"><div class="campaign-brand">SOMSOC</div><div class="campaign-name">썸쏙 썸머 니트 협찬</div><div class="campaign-value">🎁 62,000원 상당</div><div class="campaign-tags"><span class="campaign-tag">패션</span><span class="campaign-tag">피드</span></div></div>
+      </div>
+      <div class="campaign-card" onclick="openDetail(4)">
+        <div class="campaign-thumb"><div class="campaign-thumb-inner">💋</div></div>
+        <div class="campaign-info"><div class="campaign-brand">3CE</div><div class="campaign-name">쓰리씨이 글로시 틴트 신제품</div><div class="campaign-value">🎁 48,000원 상당</div><div class="campaign-tags"><span class="campaign-tag">뷰티</span><span class="campaign-tag">릴스</span></div></div>
+      </div>
+      <div class="campaign-card" onclick="openDetail(5)">
+        <div class="campaign-thumb"><div class="campaign-thumb-inner">🧖</div><div class="campaign-badge">D-3</div></div>
+        <div class="campaign-info"><div class="campaign-brand">MEDIHEAL</div><div class="campaign-name">메디힐 마스크팩 릴스 캠페인</div><div class="campaign-value">🎁 35,000원 상당</div><div class="campaign-tags"><span class="campaign-tag">뷰티</span><span class="campaign-tag">릴스</span></div></div>
+      </div>
+    </div>
+    <!-- List View (hidden by default) -->
+    <div id="list-view" class="campaign-list" style="display:none">
+      <div class="campaign-list-item" onclick="openDetail(0)"><div class="campaign-list-thumb">💄</div><div class="campaign-list-body"><div class="campaign-list-brand">MOONSHOT</div><div class="campaign-list-name">문샷 신규 립컬러 캠페인</div><div class="campaign-list-value">🎁 68,000원 상당</div><div class="campaign-list-tags"><span class="campaign-list-tag">뷰티</span><span class="campaign-list-tag">릴스</span></div></div><div><div class="campaign-list-cash">D-2</div></div></div>
+      <div class="campaign-list-item" onclick="openDetail(1)"><div class="campaign-list-thumb">👗</div><div class="campaign-list-body"><div class="campaign-list-brand">MUSINSA</div><div class="campaign-list-name">무신사 26SS 코디 캠페인</div><div class="campaign-list-value">🎁 95,000원 상당</div><div class="campaign-list-tags"><span class="campaign-list-tag">패션</span><span class="campaign-list-tag">피드</span></div></div><div><div class="campaign-list-cash">D-5</div></div></div>
+      <div class="campaign-list-item" onclick="openDetail(2)"><div class="campaign-list-thumb">🧴</div><div class="campaign-list-body"><div class="campaign-list-brand">AESTURA</div><div class="campaign-list-name">아토배리어 스킨케어 루틴</div><div class="campaign-list-value">🎁 55,000원 상당</div><div class="campaign-list-tags"><span class="campaign-list-tag">뷰티</span><span class="campaign-list-tag">릴스</span></div></div><div><div class="campaign-list-cash"></div></div></div>
+      <div class="campaign-list-item" onclick="openDetail(3)"><div class="campaign-list-thumb">👒</div><div class="campaign-list-body"><div class="campaign-list-brand">SOMSOC</div><div class="campaign-list-name">썸쏙 썸머 니트 협찬</div><div class="campaign-list-value">🎁 62,000원 상당</div><div class="campaign-list-tags"><span class="campaign-list-tag">패션</span><span class="campaign-list-tag">피드</span></div></div><div><div class="campaign-list-cash">D-7</div></div></div>
+      <div class="campaign-list-item" onclick="openDetail(4)"><div class="campaign-list-thumb">💋</div><div class="campaign-list-body"><div class="campaign-list-brand">3CE</div><div class="campaign-list-name">쓰리씨이 글로시 틴트 신제품</div><div class="campaign-list-value">🎁 48,000원 상당</div><div class="campaign-list-tags"><span class="campaign-list-tag">뷰티</span><span class="campaign-list-tag">릴스</span></div></div><div></div></div>
+      <div class="campaign-list-item" onclick="openDetail(5)"><div class="campaign-list-thumb">🧖</div><div class="campaign-list-body"><div class="campaign-list-brand">MEDIHEAL</div><div class="campaign-list-name">메디힐 마스크팩 릴스 캠페인</div><div class="campaign-list-value">🎁 35,000원 상당</div><div class="campaign-list-tags"><span class="campaign-list-tag">뷰티</span><span class="campaign-list-tag">릴스</span></div></div><div><div class="campaign-list-cash">D-3</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DETAIL SCREEN ===== -->
+<div class="screen" id="screen-detail">
+  <div class="header">
+    <div class="header-row">
+      <button class="header-back" onclick="goBack()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      </button>
+      <button class="icon-btn" onclick="toggleSaveDetail(this)">🤍</button>
+    </div>
+  </div>
+  <div class="scroll-content" id="detail-content">
+    <!-- filled by JS -->
+  </div>
+  <div class="apply-bar">
+    <button class="btn-primary" id="apply-btn" onclick="openApplyModal()">캠페인 신청하기</button>
+  </div>
+</div>
+
+<!-- ===== SCHEDULE SCREEN ===== -->
+<div class="screen" id="screen-schedule">
+  <div class="header">
+    <div class="header-row">
+      <div class="header-title">스케줄</div>
+      <button onclick="showPastSchedule()" style="background:none;border:1.5px solid #e8e8e8;border-radius:99px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;color:#555">지난 스케줄</button>
+    </div>
+  </div>
+  <div class="scroll-content" id="schedule-content">
+    <div style="padding:20px">
+      <div class="schedule-month">2026년 6월</div>
+      <div class="campaign-list-item" style="padding:0;margin-bottom:10px;border-bottom:none" onclick="goToUpload()">
+        <div style="background:#f5f5f5;border-radius:12px;width:100%;padding:14px 16px;display:flex;align-items:center;gap:12px">
+          <div style="width:52px;height:52px;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px">💄</div>
+          <div style="flex:1">
+            <div style="font-size:10px;font-weight:700;color:#999;text-transform:uppercase">MOONSHOT</div>
+            <div style="font-size:13px;font-weight:700;margin-top:2px">문샷 신규 립컬러 캠페인</div>
+            <div style="font-size:11px;color:#555;margin-top:2px">릴스 업로드 <span class="dday-badge">D-2</span></div>
+          </div>
+          <div style="font-size:12px;color:#999;text-align:right">6월 5일<br>(목)</div>
+        </div>
+      </div>
+      <div style="background:#f5f5f5;border-radius:12px;width:100%;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:10px" onclick="goToUpload()">
+        <div style="width:52px;height:52px;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px">🧖</div>
+        <div style="flex:1">
+          <div style="font-size:10px;font-weight:700;color:#999;text-transform:uppercase">MEDIHEAL</div>
+          <div style="font-size:13px;font-weight:700;margin-top:2px">메디힐 마스크팩 릴스</div>
+          <div style="font-size:11px;color:#555;margin-top:2px">릴스 업로드 <span class="dday-badge">D-3</span></div>
+        </div>
+        <div style="font-size:12px;color:#999;text-align:right">6월 6일<br>(금)</div>
+      </div>
+      <div class="schedule-month">2026년 5월</div>
+      <div style="background:#f5f5f5;border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:10px">
+        <div style="width:52px;height:52px;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px">👗</div>
+        <div style="flex:1">
+          <div style="font-size:10px;font-weight:700;color:#999;text-transform:uppercase">MUSINSA</div>
+          <div style="font-size:13px;font-weight:700;margin-top:2px">무신사 26SS 코디 캠페인</div>
+          <div style="font-size:11px;color:#555;margin-top:2px">릴스 업로드 완료 ✓</div>
+        </div>
+        <div style="font-size:12px;color:#999;text-align:right">5월 29일<br>(목)</div>
+      </div>
+    </div>
+    <div style="padding:0 20px">
+      <button onclick="goToUpload()" style="width:100%;background:#111;color:#fff;border:none;border-radius:12px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        콘텐츠 링크 업로드
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MY SCREEN ===== -->
+<div class="screen" id="screen-my">
+  <div class="header">
+    <div class="header-row">
+      <div class="header-title">마이</div>
+      <div style="display:flex;gap:8px">
+        <button class="icon-btn" onclick="showScreen('screen-mypage-edit')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </button>
+        <button class="icon-btn" onclick="showScreen('screen-settings')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-content">
+    <!-- Profile -->
+    <div class="my-profile">
+      <div class="my-avatar">🙋</div>
+      <div class="my-info">
+        <div class="my-handle">@nooyk_h · 이용중</div>
+        <div class="my-name">황윤경</div>
+        <div style="margin-top:6px;display:flex;gap:16px">
+          <div><span style="font-size:14px;font-weight:700">25</span><span style="font-size:11px;color:#999;margin-left:3px">협업</span></div>
+          <div><span style="font-size:14px;font-weight:700">2</span><span style="font-size:11px;color:#999;margin-left:3px">파트너브랜드</span></div>
+          <div><span style="font-size:14px;font-weight:700">4,124</span><span style="font-size:11px;color:#999;margin-left:3px">팔로워</span></div>
+        </div>
+      </div>
+    </div>
+    <!-- Earnings -->
+    <div class="my-earnings">
+      <div class="earnings-label">최근 60일 총 수익</div>
+      <div class="earnings-total">5,285원</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:2px">2026.04.04 – 2026.06.03</div>
+      <div class="earnings-sub">
+        <div class="earnings-sub-item"><div class="earnings-sub-label">캠페인 업로드</div><div class="earnings-sub-val">2,000원</div></div>
+        <div class="earnings-sub-item"><div class="earnings-sub-label">확정 수익</div><div class="earnings-sub-val">5,285원</div></div>
+      </div>
+    </div>
+    <!-- Quick actions -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 20px 16px">
+      <button onclick="showScreen('screen-history')" style="background:#f5f5f5;border:none;border-radius:12px;padding:14px;text-align:left;cursor:pointer">
+        <div style="font-size:20px;margin-bottom:6px">📋</div>
+        <div style="font-size:13px;font-weight:700">캠페인 내역</div>
+        <div style="font-size:11px;color:#999;margin-top:2px">대기 6 · 진행 · 미진행</div>
+      </button>
+      <button onclick="goToUpload()" style="background:#f5f5f5;border:none;border-radius:12px;padding:14px;text-align:left;cursor:pointer">
+        <div style="font-size:20px;margin-bottom:6px">📤</div>
+        <div style="font-size:13px;font-weight:700">콘텐츠 업로드</div>
+        <div style="font-size:11px;color:#999;margin-top:2px">링크 입력하기</div>
+      </button>
+    </div>
+    <!-- Menu -->
+    <div style="border-top:8px solid #f5f5f5"></div>
+    <div class="my-section" style="padding-top:4px">
+      <div class="my-menu-item" onclick="showScreen('screen-mypage-edit')"><div class="my-menu-left"><span class="my-menu-icon">👤</span>프로필 편집</div><span class="chevron">›</span></div>
+      <div class="my-menu-item" onclick="showScreen('screen-account')"><div class="my-menu-left"><span class="my-menu-icon">🏦</span>정산 계좌 정보</div><span class="chevron">›</span></div>
+      <div class="my-menu-item" onclick="showScreen('screen-history')"><div class="my-menu-left"><span class="my-menu-icon">📋</span>캠페인 내역</div><span class="chevron">›</span></div>
+    </div>
+    <div style="border-top:8px solid #f5f5f5"></div>
+    <div class="my-section" style="padding-top:4px">
+      <div class="my-menu-item" onclick="showScreen('screen-guide')"><div class="my-menu-left"><span class="my-menu-icon">📖</span>콘텐츠 가이드</div><span class="chevron">›</span></div>
+      <div class="my-menu-item" onclick="showToast('FAQ 준비중')"><div class="my-menu-left"><span class="my-menu-icon">❓</span>FAQ</div><span class="chevron">›</span></div>
+      <div class="my-menu-item" onclick="showToast('공지사항 준비중')"><div class="my-menu-left"><span class="my-menu-icon">📢</span>공지사항</div><span class="chevron">›</span></div>
+    </div>
+    <div style="border-top:8px solid #f5f5f5"></div>
+    <div class="my-section" style="padding-top:4px">
+      <div class="my-menu-item" onclick="showScreen('screen-settings')"><div class="my-menu-left"><span class="my-menu-icon">⚙️</span>설정</div><span class="chevron">›</span></div>
+    </div>
+    <div style="height:20px"></div>
+  </div>
+</div>
+
+<!-- ===== PROFILE EDIT SCREEN ===== -->
+<div class="screen" id="screen-mypage-edit" style="padding-bottom:0">
+  <div class="header">
+    <div class="header-row">
+      <button class="header-back" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg><span>프로필 편집</span></button>
+      <button onclick="showToast('저장되었습니다 ✓')" style="background:none;border:none;font-size:14px;font-weight:700;cursor:pointer;color:#111">저장</button>
+    </div>
+  </div>
+  <div class="scroll-content">
+    <!-- Avatar -->
+    <div style="display:flex;justify-content:center;padding:24px 0 16px">
+      <div style="position:relative">
+        <div style="width:80px;height:80px;border-radius:50%;background:#e8e8e8;display:flex;align-items:center;justify-content:center;font-size:40px">🙋</div>
+        <button style="position:absolute;bottom:0;right:0;background:#111;color:#fff;border:none;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center">✏️</button>
+      </div>
+    </div>
+    <!-- Public info -->
+    <div class="profile-section-label">공개 정보</div>
+    <div class="profile-field" onclick="showToast('아이디 변경')"><div><div class="profile-field-label">아이디</div><div class="profile-field-value">nooyk_h</div></div><span class="chevron">›</span></div>
+    <div class="profile-field" onclick="showToast('SNS 계정 연동')"><div><div class="profile-field-label">SNS 계정</div><div class="profile-field-value">📷 nooyk_h</div></div><span class="chevron">›</span></div>
+    <div class="profile-field" onclick="showToast('카테고리 선택')"><div><div class="profile-field-label">콘텐츠 카테고리</div><div class="profile-field-value">뷰티 · 라이프스타일</div></div><span class="chevron">›</span></div>
+    <div class="profile-field" onclick="showToast('바이오 입력')"><div><div class="profile-field-label">바이오</div><div class="profile-field-value" style="color:#999">바이오를 입력해 주세요.</div></div><span class="chevron">›</span></div>
+    <!-- Collab info -->
+    <div class="profile-section-label" style="margin-top:8px">협업 정보</div>
+    <div class="profile-field" onclick="showToast('이름 수정')"><div><div class="profile-field-label">이름</div><div class="profile-field-value">황윤경</div></div><span class="chevron">›</span></div>
+    <div class="profile-field" onclick="showToast('단가 수정')"><div><div class="profile-field-label">단가</div><div class="profile-field-value">📷 피드 5-10만원 · 릴스 10-20만원</div></div><span class="chevron">›</span></div>
+    <div class="profile-field" onclick="showToast('릴스 제작 가능 여부')"><div><div class="profile-field-label">릴스 제작</div><div class="profile-field-value">가능</div></div><span class="chevron">›</span></div>
+    <div style="height:40px"></div>
+  </div>
+</div>
+
+<!-- ===== ACCOUNT SCREEN ===== -->
+<div class="screen" id="screen-account" style="padding-bottom:0">
+  <div class="header">
+    <div class="header-row">
+      <button class="header-back" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></button>
+      <div style="font-size:16px;font-weight:700">계좌 정보</div>
+      <div style="width:44px"></div>
+    </div>
+  </div>
+  <div class="scroll-content">
+    <div class="form-section">
+      <div class="form-title">계좌 정보를 입력해 주세요.</div>
+      <div class="form-group"><div class="form-label">예금주명</div><input class="form-input" type="text" value="황윤경"/></div>
+      <div class="form-group">
+        <div class="form-label">주민등록번호</div>
+        <div class="form-row">
+          <input class="form-input form-input-half" type="text" placeholder="앞 6자리" maxlength="6"/>
+          <div style="display:flex;align-items:center;color:#999;font-size:18px">-</div>
+          <input class="form-input form-input-half" type="password" placeholder="뒤 7자리" maxlength="7"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-label">은행</div>
+        <select class="form-select">
+          <option>은행 선택</option><option>카카오뱅크</option><option>토스뱅크</option><option>국민은행</option><option>신한은행</option><option>하나은행</option><option>우리은행</option><option>농협은행</option><option>기업은행</option>
+        </select>
+      </div>
+      <div class="form-group"><div class="form-label">계좌 번호</div><input class="form-input" type="text" placeholder="계좌 번호를 입력해 주세요"/></div>
+      <div style="height:20px"></div>
+      <button class="btn-primary" onclick="showToast('계좌 정보가 저장되었습니다 ✓')">입력 완료</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CAMPAIGN HISTORY SCREEN ===== -->
+<div class="screen" id="screen-history" style="padding-bottom:0">
+  <div class="header">
+    <div class="header-row">
+      <button class="header-back" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></button>
+      <div style="font-size:16px;font-weight:700">캠페인 내역</div>
+      <div style="width:44px"></div>
+    </div>
+    <div style="display:flex;gap:0;border-bottom:1px solid #e8e8e8;margin:0 -20px;padding:0 20px;margin-top:8px">
+      <div class="tab" onclick="setHistoryTab(this,'섭외')" style="color:#e03;border-bottom-color:#e03;font-weight:700">섭외</div>
+      <div class="tab" onclick="setHistoryTab(this,'대기')" style="position:relative">대기 <span style="color:#e65100;font-weight:700">6</span></div>
+      <div class="tab" onclick="setHistoryTab(this,'진행')">진행</div>
+      <div class="tab" onclick="setHistoryTab(this,'미진행')">미진행</div>
+    </div>
+  </div>
+  <div class="scroll-content" id="history-content">
+    <div style="padding:14px 20px;font-size:12px;color:#999;font-weight:500">26.06.02 대기</div>
+    <div class="history-item" onclick="openDetail(1)"><div class="history-thumb">👗</div><div class="history-body"><div class="history-brand">MUSINSA</div><div class="history-name">무신사 26SS 코디 캠페인</div><div class="history-type">아이템 협찬</div></div></div>
+    <div class="history-item" onclick="openDetail(0)"><div class="history-thumb">💄</div><div class="history-body"><div class="history-brand">MOONSHOT</div><div class="history-name">문샷 신규 립컬러 캠페인</div><div class="history-type">아이템 협찬</div></div></div>
+    <div style="padding:14px 20px;font-size:12px;color:#999;font-weight:500">26.05.19 대기</div>
+    <div class="history-item" onclick="openDetail(5)"><div class="history-thumb">🧖</div><div class="history-body"><div class="history-brand">MEDIHEAL</div><div class="history-name">메디힐 마스크팩 릴스 캠페인</div><div class="history-type">아이템 협찬</div></div></div>
+    <div class="history-item" onclick="openDetail(3)"><div class="history-thumb">👒</div><div class="history-body"><div class="history-brand">SOMSOC</div><div class="history-name">썸쏙 썸머 니트 협찬</div><div class="history-type">아이템 협찬</div></div></div>
+    <div class="history-item" onclick="openDetail(2)"><div class="history-thumb">🧴</div><div class="history-body"><div class="history-brand">AESTURA</div><div class="history-name">아토배리어 스킨케어 루틴</div><div class="history-type">아이템 협찬</div></div></div>
+    <div class="history-item" onclick="openDetail(4)"><div class="history-thumb">💋</div><div class="history-body"><div class="history-brand">3CE</div><div class="history-name">쓰리씨이 글로시 틴트</div><div class="history-type">아이템 협찬</div></div></div>
+  </div>
+</div>
+
+<!-- ===== UPLOAD SCREEN ===== -->
+<div class="screen" id="screen-upload" style="padding-bottom:0">
+  <div class="header">
+    <div class="header-row">
+      <button class="header-back" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></button>
+    </div>
+  </div>
+  <div class="scroll-content">
+    <div class="upload-screen">
+      <div class="upload-title">콘텐츠 링크를 입력해 주세요.</div>
+      <div class="upload-sub">링크를 통해 이미지와 브랜드 태그를 불러올게요.</div>
+      <!-- Campaign selector -->
+      <div style="margin-bottom:16px">
+        <div class="form-label">캠페인 선택</div>
+        <select class="form-select" style="margin-top:6px">
+          <option>문샷 신규 립컬러 캠페인 (D-2)</option>
+          <option>메디힐 마스크팩 릴스 캠페인 (D-3)</option>
+          <option>무신사 26SS 코디 캠페인 (D-5)</option>
+        </select>
+      </div>
+      <div class="form-label" style="margin-bottom:6px">콘텐츠 링크</div>
+      <div class="upload-input-wrap">
+        <textarea class="upload-input" id="upload-link-input" placeholder="링크를 입력해 주세요." rows="2"></textarea>
+      </div>
+      <div style="margin-top:8px;margin-bottom:24px">
+        <a href="#" style="font-size:12px;color:#999;text-decoration:underline" onclick="showToast('어떤 링크를 입력해야 하나요?')">어떤 링크를 입력해야 하나요?</a>
+      </div>
+      <button class="btn-primary" onclick="submitUpload()" id="upload-btn" disabled>다음</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== GUIDE SCREEN ===== -->
+<div class="screen" id="screen-guide" style="padding-bottom:0">
+  <div class="header">
+    <div class="header-row">
+      <button class="header-back" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></button>
+      <div style="font-size:16px;font-weight:700">콘텐츠 가이드</div>
+      <div style="width:44px"></div>
+    </div>
+  </div>
+  <div class="scroll-content">
+    <div class="guide-warn">⚠️ 가이드를 지키지 않는 경우 특정 브랜드의 협업이 제한되거나 정산이 불가할 수 있어요.</div>
+    <div class="guide-hero" style="padding-top:24px">
+      <div class="guide-hero-icon">📤</div>
+      <div class="guide-hero-title">업로드 가이드</div>
+      <div class="guide-hero-sub">캠페인 업로드 전 꼭 확인해 주세요</div>
+    </div>
+    <div class="guide-item">
+      <div class="guide-item-icon">📅</div>
+      <div class="guide-item-title">업로드 기한을 반드시 지켜주세요.</div>
+      <div class="guide-item-text">업로드 기한은 캠페인 상세 페이지와 스케줄에서 확인할 수 있습니다.</div>
+      <div class="guide-item-sub">기한 초과 업로드 시 정산이 불가합니다. 미업로드 시 제품가가 청구될 수 있습니다.</div>
+    </div>
+    <div class="guide-item">
+      <div class="guide-item-icon">✅</div>
+      <div class="guide-item-title">업로드 후 12시간 이내에 링크를 등록해 주세요.</div>
+      <div class="guide-item-text">업로드 후 12시간이 지나서 등록하는 경우 미인증 처리될 수 있습니다.</div>
+    </div>
+    <div class="guide-item">
+      <div class="guide-item-icon">📷</div>
+      <div class="guide-item-title">인증된 SNS 채널로 업로드해 주세요.</div>
+      <div class="guide-item-text">인증되지 않은 SNS 채널로는 업로드가 불가합니다. 채널 인증은 프로필 편집에서 진행해 주세요.</div>
+    </div>
+    <div style="height:24px;background:#f5f5f5;margin-top:16px"></div>
+    <div class="guide-hero" style="padding-top:24px">
+      <div class="guide-hero-icon">🏷️</div>
+      <div class="guide-hero-title">태그 가이드</div>
+    </div>
+    <div class="guide-item">
+      <div class="guide-item-icon">📌</div>
+      <div class="guide-item-title">SNS 최초 업로드 시 @브랜드 계정 인물 태그를 추가하고 한 달 이상 유지해 주세요.</div>
+      <div class="guide-item-text">태그를 유지하지 않을 경우 향후 해당 브랜드 협업이 제한될 수 있습니다.</div>
+    </div>
+    <div class="guide-item">
+      <div class="guide-item-icon">📍</div>
+      <div class="guide-item-title">인스타그램 뒷장 태그를 자제해 주세요.</div>
+      <div class="guide-item-text">최소 5번째 장 이내에 브랜드를 태그해 주세요. 뒷장 태그 시 해당 브랜드 대여가 제한될 수 있습니다.</div>
+    </div>
+    <div class="guide-item">
+      <div class="guide-item-icon">🚫</div>
+      <div class="guide-item-title">다른 태그와 겹치지 않도록 제품 위에 @브랜드 계정 인물 태그를 추가해 주세요.</div>
+    </div>
+    <div style="height:24px"></div>
+  </div>
+</div>
+
+<!-- ===== SETTINGS SCREEN ===== -->
+<div class="screen" id="screen-settings" style="padding-bottom:0">
+  <div class="header">
+    <div class="header-row">
+      <button class="header-back" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></button>
+      <div style="font-size:16px;font-weight:700">설정</div>
+      <div style="width:44px"></div>
+    </div>
+  </div>
+  <div class="scroll-content">
+    <div style="padding:12px 20px">
+      <div style="background:#f5f5f5;border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:10px;cursor:pointer" onclick="showToast('1:1 문의 채널 준비중')">
+        <span style="font-size:20px">💬</span>
+        <span style="font-size:14px;font-weight:600">1:1 문의</span>
+      </div>
+    </div>
+    <div class="my-section">
+      <div class="my-menu-item" onclick="showScreen('screen-mypage-edit')"><div class="my-menu-left"><span>👤</span>계정 정보</div><span class="chevron">›</span></div>
+      <div class="my-menu-item" onclick="showToast('푸시 알림 설정')"><div class="my-menu-left"><span>🔔</span>푸시 알림</div><span class="chevron">›</span></div>
+    </div>
+    <div style="border-top:8px solid #f5f5f5"></div>
+    <div class="my-section">
+      <div class="my-menu-item" onclick="showScreen('screen-history')"><div class="my-menu-left"><span>📋</span>캠페인 내역</div><span class="chevron">›</span></div>
+      <div class="my-menu-item" onclick="showScreen('screen-account')"><div class="my-menu-left"><span>🏦</span>정산 계좌 관리</div><span class="chevron">›</span></div>
+    </div>
+    <div style="border-top:8px solid #f5f5f5"></div>
+    <div class="my-section">
+      <div class="my-menu-item" onclick="showScreen('screen-guide')"><div class="my-menu-left"><span>📖</span>이용 가이드</div><span class="chevron">›</span></div>
+      <div class="my-menu-item" onclick="showToast('FAQ 준비중')"><div class="my-menu-left"><span>❓</span>FAQ</div><span class="chevron">›</span></div>
+      <div class="my-menu-item" onclick="showToast('공지사항 준비중')"><div class="my-menu-left"><span>📢</span>공지사항</div><span class="chevron">›</span></div>
+    </div>
+    <div style="border-top:8px solid #f5f5f5"></div>
+    <div class="my-section">
+      <div class="my-menu-item" onclick="showToast('로그아웃 되었습니다')"><div class="my-menu-left" style="color:#e03"><span>🚪</span>로그아웃</div></div>
+    </div>
+    <div style="height:20px"></div>
+  </div>
+</div>
+
+<!-- ===== BOTTOM NAV ===== -->
+<nav class="bottom-nav" id="bottom-nav">
+  <button class="nav-item active" onclick="navTo('home',this)" id="nav-home">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    홈
+  </button>
+  <button class="nav-item" onclick="navTo('schedule',this)" id="nav-schedule">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    스케줄
+  </button>
+  <button class="nav-item" onclick="goToUpload()" id="nav-upload" style="position:relative">
+    <div style="width:44px;height:44px;background:#111;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-top:-20px;box-shadow:0 4px 12px rgba(0,0,0,.25)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    </div>
+    업로드
+  </button>
+  <button class="nav-item" onclick="navTo('history',this)" id="nav-history">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+    내역
+  </button>
+  <button class="nav-item" onclick="navTo('my',this)" id="nav-my">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    마이
+  </button>
+</nav>
+
+<!-- ===== FILTER MODAL ===== -->
+<div class="modal-overlay" id="filter-modal" onclick="closeFilter(event)">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">필터</div>
+    <div class="filter-section">
+      <div class="filter-section-label">카테고리</div>
+      <div class="filter-chips">
+        <button class="filter-chip-lg active" onclick="toggleFilter(this)">전체</button>
+        <button class="filter-chip-lg" onclick="toggleFilter(this)">뷰티 <span class="count">22</span></button>
+        <button class="filter-chip-lg" onclick="toggleFilter(this)">패션 <span class="count">104</span></button>
+        <button class="filter-chip-lg" onclick="toggleFilter(this)">라이프 <span class="count">18</span></button>
+      </div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-section-label">콘텐츠</div>
+      <div class="filter-chips">
+        <button class="filter-chip-lg" onclick="toggleFilter(this)">릴스 <span class="count">62</span></button>
+        <button class="filter-chip-lg" onclick="toggleFilter(this)">피드 <span class="count">120</span></button>
+      </div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-section-label">보상</div>
+      <div class="filter-chips">
+        <button class="filter-chip-lg" onclick="toggleFilter(this)">아이템 협찬 <span class="count">167</span></button>
+        <button class="filter-chip-lg" onclick="toggleFilter(this)">캐시 지급 <span class="count">67</span></button>
+      </div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-reset" onclick="resetFilter()">초기화</button>
+      <button class="btn-apply" onclick="closeFilter()">캠페인 보기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== APPLY MODAL ===== -->
+<div class="modal-overlay" id="apply-modal" onclick="closeApply(event)">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">캠페인 신청</div>
+    <div id="apply-campaign-info" style="background:#f5f5f5;border-radius:12px;padding:14px 16px;margin-bottom:20px;display:flex;gap:12px;align-items:center">
+      <div style="font-size:28px">💄</div>
+      <div><div style="font-size:11px;color:#999;font-weight:600">MOONSHOT</div><div style="font-size:13px;font-weight:700;margin-top:2px">문샷 신규 립컬러 캠페인</div><div style="font-size:12px;color:#555;margin-top:2px">🎁 68,000원 상당 · 릴스</div></div>
+    </div>
+    <!-- Address form -->
+    <div class="form-group"><div class="form-label">배송지 주소</div><input class="form-input" type="text" placeholder="도로명 주소를 입력해 주세요" id="addr-input"/></div>
+    <div class="form-group"><div class="form-label">상세 주소</div><input class="form-input" type="text" placeholder="상세 주소 (동, 호수 등)"/></div>
+    <div class="form-group"><div class="form-label">요청사항 (선택)</div><input class="form-input" type="text" placeholder="공동현관 비밀번호 등"/></div>
+    <div style="background:#fff5f5;border-radius:10px;padding:12px 14px;font-size:12px;color:#e03;line-height:1.5;margin-bottom:20px">
+      ⚠️ 배송지는 매 캠페인마다 새로 확인합니다. 정확히 입력해 주세요.
+    </div>
+    <button class="btn-primary" onclick="submitApply()">신청 완료</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const campaigns = [
+  {emoji:'💄',brand:'MOONSHOT',name:'문샷 신규 립컬러 캠페인',value:'68,000원 상당',tags:['뷰티','릴스','아이템 협찬'],deadline:'2026년 6월 5일 (목)',guide:'· 브랜드 태그: @moonshot_official\n· 릴스 최소 15초 이상\n· 제품이 화면에 3초 이상 노출\n· 스킨케어 루틴 or 메이크업 과정 포함',dday:'D-2'},
+  {emoji:'👗',brand:'MUSINSA',name:'무신사 26SS 코디 캠페인',value:'95,000원 상당',tags:['패션','피드','아이템 협찬'],deadline:'2026년 6월 8일 (일)',guide:'· 브랜드 태그: @musinsa\n· 피드 게시물 1장 이상\n· 전신 또는 상반신 착용컷 포함\n· 제품 태그 필수',dday:'D-5'},
+  {emoji:'🧴',brand:'AESTURA',name:'아토배리어 스킨케어 루틴',value:'55,000원 상당',tags:['뷰티','릴스','아이템 협찬'],deadline:'2026년 6월 12일 (목)',guide:'· 브랜드 태그: @aestura_official\n· 릴스 20초 이상\n· 아침 or 저녁 루틴에 제품 포함\n· 피부 전·후 표현 권장',dday:'D-9'},
+  {emoji:'👒',brand:'SOMSOC',name:'썸쏙 썸머 니트 협찬',value:'62,000원 상당',tags:['패션','피드','아이템 협찬'],deadline:'2026년 6월 10일 (화)',guide:'· 브랜드 태그: @somsoc_official\n· 피드 1장 이상\n· 야외 or 자연광 착용컷 권장',dday:'D-7'},
+  {emoji:'💋',brand:'3CE',name:'쓰리씨이 글로시 틴트 신제품',value:'48,000원 상당',tags:['뷰티','릴스','아이템 협찬'],deadline:'2026년 6월 15일 (일)',guide:'· 브랜드 태그: @3ce_official\n· 틴트 발색 클로즈업 필수\n· 릴스 or 피드 선택 가능',dday:'D-12'},
+  {emoji:'🧖',brand:'MEDIHEAL',name:'메디힐 마스크팩 릴스 캠페인',value:'35,000원 상당',tags:['뷰티','릴스','아이템 협찬'],deadline:'2026년 6월 6일 (금)',guide:'· 브랜드 태그: @mediheal_official\n· 릴스 최소 15초\n· 마스크팩 사용 장면 포함\n· 기분·감정 표현 권장',dday:'D-3'},
+];
+
+let currentScreen = 'screen-home';
+let screenStack = [];
+let currentDetailIdx = 0;
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const noNav = ['screen-detail','screen-mypage-edit','screen-account','screen-history','screen-guide','screen-settings','screen-upload'];
+  document.getElementById('bottom-nav').style.display = noNav.includes(id) ? 'none' : 'flex';
+  screenStack.push(currentScreen);
+  currentScreen = id;
+  window.scrollTo(0,0);
+}
+
+function goBack() {
+  const prev = screenStack.pop() || 'screen-home';
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(prev).classList.add('active');
+  const noNav = ['screen-detail','screen-mypage-edit','screen-account','screen-history','screen-guide','screen-settings','screen-upload'];
+  document.getElementById('bottom-nav').style.display = noNav.includes(prev) ? 'none' : 'flex';
+  currentScreen = prev;
+}
+
+function navTo(tab, btn) {
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const map = {home:'screen-home', schedule:'screen-schedule', history:'screen-history', my:'screen-my'};
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(map[tab]).classList.add('active');
+  document.getElementById('bottom-nav').style.display = 'flex';
+  screenStack = [];
+  currentScreen = map[tab];
+}
+
+function openDetail(idx) {
+  currentDetailIdx = idx;
+  const c = campaigns[idx];
+  document.getElementById('detail-content').innerHTML = `
+    <div class="detail-hero">${c.emoji}</div>
+    <div class="detail-body">
+      <div class="detail-brand">${c.brand}</div>
+      <div class="detail-name">${c.name}</div>
+      <div class="detail-value">🎁 ${c.value}</div>
+      <div class="detail-tags">${c.tags.map(t=>`<span class="detail-tag">${t}</span>`).join('')}${c.dday?`<span class="detail-tag" style="background:#fff0f0;border-color:#fcc;color:#e03;font-weight:700">${c.dday}</span>`:''}</div>
+    </div>
+    <div class="divider"></div>
+    <div style="padding:0 20px">
+      <div class="section-label">캠페인 정보</div>
+      <div class="info-row"><span class="info-label">브랜드</span><span class="info-value">${c.brand}</span></div>
+      <div class="info-row"><span class="info-label">업로드 기한</span><span class="info-value" style="color:#e03;font-weight:700">${c.deadline}</span></div>
+      <div class="info-row"><span class="info-label">콘텐츠 형식</span><span class="info-value">${c.tags.filter(t=>['릴스','피드'].includes(t)).join(' · ')}</span></div>
+      <div class="info-row"><span class="info-label">협찬 형태</span><span class="info-value">아이템 협찬</span></div>
+    </div>
+    <div class="divider"></div>
+    <div style="padding:0 20px">
+      <div class="section-label">콘텐츠 가이드</div>
+      <div class="guide-box" style="white-space:pre-line">${c.guide}</div>
+    </div>
+    <div class="divider"></div>
+    <div style="padding:0 20px 20px">
+      <div class="section-label">유의사항</div>
+      <div class="guide-box">· 업로드 기한을 초과하면 정산이 불가합니다.\n· 미업로드 시 제품가가 청구될 수 있습니다.\n· 브랜드 태그는 1개월 이상 유지해 주세요.</div>
+    </div>
+  `;
+  // Update apply modal info
+  document.getElementById('apply-campaign-info').innerHTML = `<div style="font-size:28px">${c.emoji}</div><div><div style="font-size:11px;color:#999;font-weight:600">${c.brand}</div><div style="font-size:13px;font-weight:700;margin-top:2px">${c.name}</div><div style="font-size:12px;color:#555;margin-top:2px">🎁 ${c.value} · ${c.tags.filter(t=>['릴스','피드'].includes(t)).join('/')}</div></div>`;
+  showScreen('screen-detail');
+}
+
+function openFilter() {
+  document.getElementById('filter-modal').classList.add('open');
+}
+function closeFilter(e) {
+  if(!e || e.target === document.getElementById('filter-modal')) {
+    document.getElementById('filter-modal').classList.remove('open');
+  }
+}
+function resetFilter() {
+  document.querySelectorAll('#filter-modal .filter-chip-lg').forEach(c => c.classList.remove('active'));
+  showToast('필터가 초기화되었습니다');
+}
+function toggleFilter(el) {
+  el.classList.toggle('active');
+}
+
+function openApplyModal() {
+  document.getElementById('apply-modal').classList.add('open');
+}
+function closeApply(e) {
+  if(!e || e.target === document.getElementById('apply-modal')) {
+    document.getElementById('apply-modal').classList.remove('open');
+  }
+}
+function submitApply() {
+  const addr = document.getElementById('addr-input').value;
+  if(!addr.trim()) { showToast('배송지 주소를 입력해 주세요'); return; }
+  document.getElementById('apply-modal').classList.remove('open');
+  document.getElementById('detail-content').innerHTML = `
+    <div class="success-screen">
+      <div class="success-icon">✅</div>
+      <div class="success-title">신청이 완료되었습니다!</div>
+      <div class="success-sub">브랜드 검토 후 선정 결과를 알려드릴게요.<br>선정 시 문자로 안내가 발송됩니다.</div>
+      <div style="margin-top:32px;padding:16px;background:#f5f5f5;border-radius:12px;width:100%;text-align:left">
+        <div style="font-size:11px;color:#999;font-weight:600">${campaigns[currentDetailIdx].brand}</div>
+        <div style="font-size:14px;font-weight:700;margin-top:4px">${campaigns[currentDetailIdx].name}</div>
+        <div style="font-size:12px;color:#555;margin-top:6px">📍 ${addr}</div>
+      </div>
+    </div>
+  `;
+  document.getElementById('apply-btn').textContent = '신청 완료';
+  document.getElementById('apply-btn').disabled = true;
+}
+
+function goToUpload() {
+  showScreen('screen-upload');
+  document.getElementById('bottom-nav').style.display = 'none';
+}
+
+function submitUpload() {
+  const link = document.getElementById('upload-link-input').value;
+  if(!link.trim()) return;
+  showToast('콘텐츠가 등록되었습니다 ✓');
+  document.getElementById('upload-link-input').value = '';
+  document.getElementById('upload-btn').disabled = true;
+  setTimeout(goBack, 1000);
+}
+
+document.getElementById('upload-link-input').addEventListener('input', function() {
+  document.getElementById('upload-btn').disabled = !this.value.trim();
+});
+
+function setView(v) {
+  document.getElementById('grid-view').style.display = v === 'grid' ? 'grid' : 'none';
+  document.getElementById('list-view').style.display = v === 'list' ? 'block' : 'none';
+  document.getElementById('view-grid').classList.toggle('active', v === 'grid');
+  document.getElementById('view-list').classList.toggle('active', v === 'list');
+}
+
+function filterToggle(el) {
+  document.querySelectorAll('.filter-row .filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function setHomeTab(el, tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function setHistoryTab(el, tab) {
+  document.querySelectorAll('#screen-history .tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  const statuses = {섭외:'🟠',대기:'🟡',진행:'🟢',미진행:'🔴'};
+}
+
+function toggleSave(btn) {
+  btn.textContent = btn.textContent === '🤍' ? '❤️' : '🤍';
+}
+function toggleSaveDetail(btn) {
+  btn.textContent = btn.textContent === '🤍' ? '❤️' : '🤍';
+}
+
+function showPastSchedule() { showToast('지난 스케줄 준비중'); }
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+</script>
+</body>
+</html>
