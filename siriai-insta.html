@@ -271,7 +271,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div>
         <div class="post-card-name">siriai.ai</div>
       </div>
-      <button style="margin-left:auto;background:none;border:none;cursor:pointer;font-size:18px" onclick="showToast('더보기')">···</button>
+      <button style="margin-left:auto;background:none;border:none;cursor:pointer;font-size:18px" onclick="openPostMenu()">···</button>
     </div>
     <img class="post-card-img" id="detail-img" src="" alt=""/>
     <div class="post-card-actions">
@@ -282,6 +282,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
     <div class="post-card-caption"><strong>siriai.ai</strong><span id="detail-caption"></span></div>
     <div class="post-card-time" id="detail-time"></div>
+  </div>
+</div>
+
+<!-- 삭제 메뉴 시트 -->
+<div class="modal" id="menu-modal" onclick="closePostMenu(event)">
+  <div style="position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-radius:16px 16px 0 0;overflow:hidden;transform-origin:bottom;transition:transform .25s" onclick="event.stopPropagation()" id="menu-sheet">
+    <div style="width:40px;height:4px;background:#dbdbdb;border-radius:2px;margin:12px auto 4px"></div>
+    <button onclick="confirmDelete()" style="width:100%;padding:16px;background:none;border:none;border-top:1px solid #dbdbdb;font-size:15px;font-weight:700;color:#ed4956;cursor:pointer;text-align:center">
+      삭제
+    </button>
+    <button onclick="showToast('수정 기능 준비중');closePostMenu()" style="width:100%;padding:16px;background:none;border:none;border-top:1px solid #dbdbdb;font-size:15px;color:#000;cursor:pointer;text-align:center">
+      수정
+    </button>
+    <button onclick="closePostMenu()" style="width:100%;padding:16px;background:none;border:none;border-top:1px solid #dbdbdb;font-size:15px;color:#000;cursor:pointer;text-align:center;margin-bottom:env(safe-area-inset-bottom)">
+      취소
+    </button>
   </div>
 </div>
 
@@ -416,7 +432,10 @@ function submitPost() {
 }
 
 // 포스트 상세
+let currentPostIdx = -1;
+
 function openPostModal(idx) {
+  currentPostIdx = idx;
   const post = posts[idx];
   document.getElementById('detail-img').src = post.img;
   document.getElementById('detail-caption').textContent = post.caption || '';
@@ -429,6 +448,29 @@ function openPostModal(idx) {
 function closePostModal() {
   document.getElementById('post-modal').classList.remove('open');
   document.body.style.overflow = '';
+  currentPostIdx = -1;
+}
+
+// 삭제 메뉴
+function openPostMenu() {
+  document.getElementById('menu-modal').classList.add('open');
+}
+
+function closePostMenu(e) {
+  if (e && e.target !== document.getElementById('menu-modal')) return;
+  document.getElementById('menu-modal').classList.remove('open');
+}
+
+function confirmDelete() {
+  if (currentPostIdx < 0) return;
+  if (!confirm('이 게시물을 삭제하시겠습니까?')) return;
+  posts.splice(currentPostIdx, 1);
+  localStorage.setItem('siriai-posts', JSON.stringify(posts));
+  document.getElementById('menu-modal').classList.remove('open');
+  closePostModal();
+  updatePostCount();
+  renderPosts();
+  showToast('게시물이 삭제되었습니다');
 }
 
 // 좋아요
