@@ -286,16 +286,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 
 <!-- 삭제 메뉴 시트 -->
-<div class="modal" id="menu-modal" onclick="closePostMenu(event)">
-  <div style="position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-radius:16px 16px 0 0;overflow:hidden;transform-origin:bottom;transition:transform .25s" onclick="event.stopPropagation()" id="menu-sheet">
-    <div style="width:40px;height:4px;background:#dbdbdb;border-radius:2px;margin:12px auto 4px"></div>
-    <button onclick="confirmDelete()" style="width:100%;padding:16px;background:none;border:none;border-top:1px solid #dbdbdb;font-size:15px;font-weight:700;color:#ed4956;cursor:pointer;text-align:center">
+<div id="menu-modal" onclick="closePostMenu()" style="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:none;align-items:flex-end;justify-content:center">
+  <div onclick="event.stopPropagation()" style="width:100%;max-width:480px;background:#fff;border-radius:16px 16px 0 0;overflow:hidden;padding-bottom:env(safe-area-inset-bottom)">
+    <div style="width:40px;height:4px;background:#dbdbdb;border-radius:2px;margin:12px auto 16px"></div>
+    <button onclick="confirmDelete()" style="width:100%;padding:16px;background:none;border:none;border-top:1px solid #dbdbdb;font-size:15px;font-weight:700;color:#ed4956;cursor:pointer;text-align:center;display:block">
       삭제
     </button>
-    <button onclick="showToast('수정 기능 준비중');closePostMenu()" style="width:100%;padding:16px;background:none;border:none;border-top:1px solid #dbdbdb;font-size:15px;color:#000;cursor:pointer;text-align:center">
-      수정
-    </button>
-    <button onclick="closePostMenu()" style="width:100%;padding:16px;background:none;border:none;border-top:1px solid #dbdbdb;font-size:15px;color:#000;cursor:pointer;text-align:center;margin-bottom:env(safe-area-inset-bottom)">
+    <button onclick="closePostMenu()" style="width:100%;padding:16px;background:none;border:none;border-top:1px solid #dbdbdb;font-size:15px;color:#000;cursor:pointer;text-align:center;display:block">
       취소
     </button>
   </div>
@@ -453,21 +450,20 @@ function closePostModal() {
 
 // 삭제 메뉴
 function openPostMenu() {
-  document.getElementById('menu-modal').classList.add('open');
+  const m = document.getElementById('menu-modal');
+  m.style.display = 'flex';
 }
 
-function closePostMenu(e) {
-  if (e && e.target !== document.getElementById('menu-modal')) return;
-  document.getElementById('menu-modal').classList.remove('open');
+function closePostMenu() {
+  document.getElementById('menu-modal').style.display = 'none';
 }
 
 function confirmDelete() {
   if (currentPostIdx < 0) return;
-  if (!confirm('이 게시물을 삭제하시겠습니까?')) return;
+  closePostMenu();
+  closePostModal();
   posts.splice(currentPostIdx, 1);
   localStorage.setItem('siriai-posts', JSON.stringify(posts));
-  document.getElementById('menu-modal').classList.remove('open');
-  closePostModal();
   updatePostCount();
   renderPosts();
   showToast('게시물이 삭제되었습니다');
