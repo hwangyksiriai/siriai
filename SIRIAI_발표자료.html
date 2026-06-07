@@ -1,0 +1,1232 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SIRIAI · 인플루언서 마케팅 운영 시스템 — 발표자료</title>
+<style>
+  :root{
+    --ink:#211A33; --cream:#F3EEE2; --paper:#FBF9F3; --white:#ffffff;
+    --line:rgba(33,26,51,.14); --line2:rgba(33,26,51,.08);
+    --muted:rgba(33,26,51,.60); --faint:rgba(33,26,51,.42);
+    --blue:#2A6FDB; --orange:#e65100; --green:#2e7d32; --red:#c62828; --purple:#6B4DCE; --pink:#C1436D;
+    --sans:'Helvetica Neue',Helvetica,Arial,'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕',sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Consolas,'D2Coding',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:var(--sans); color:var(--ink); background:#0e0b16;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; overflow:hidden;
+  }
+
+  /* ===== Deck shell ===== */
+  .deck{position:fixed; inset:0;}
+  .slide{
+    position:absolute; inset:0; padding:clamp(34px,5.2vw,92px) clamp(30px,6vw,108px) clamp(58px,7vh,90px);
+    display:flex; flex-direction:column; justify-content:center;
+    opacity:0; visibility:hidden; transform:translateY(14px) scale(.994);
+    transition:opacity .5s ease, transform .5s ease, visibility .5s;
+    overflow:hidden;
+    background:
+      radial-gradient(58% 48% at 13% 4%, rgba(246,201,168,.50), transparent 60%),
+      radial-gradient(48% 42% at 88% 8%, rgba(221,208,239,.46), transparent 56%),
+      var(--cream);
+  }
+  .slide.active{opacity:1; visibility:visible; transform:none; z-index:2}
+  .slide.prev{transform:translateY(-14px) scale(.994)}
+  .slide-inner{width:100%; max-width:1180px; margin:0 auto; position:relative}
+
+  /* dark variants */
+  .slide.dark{
+    color:var(--cream);
+    background:
+      radial-gradient(60% 60% at 12% 6%, rgba(180,120,90,.34), transparent 60%),
+      radial-gradient(54% 54% at 90% 96%, rgba(120,98,170,.40), transparent 58%),
+      #1a1426;
+  }
+  .slide.dark .kicker{color:rgba(243,238,226,.62)}
+  .slide.dark .muted{color:rgba(243,238,226,.72)}
+  .slide.dark .faint{color:rgba(243,238,226,.5)}
+
+  /* ===== Typography ===== */
+  .kicker{font-family:var(--mono); font-size:clamp(10px,.86vw,12.5px); letter-spacing:.26em; text-transform:uppercase; color:var(--faint); display:flex; align-items:center; gap:12px}
+  .kicker .num{font-weight:700; color:var(--ink)}
+  .slide.dark .kicker .num{color:var(--cream)}
+  .kicker::before{content:""; width:30px; height:1px; background:currentColor; opacity:.5; display:inline-block}
+
+  h1.title{font-size:clamp(40px,7.4vw,108px); font-weight:600; letter-spacing:-.03em; line-height:.98}
+  h2{font-size:clamp(27px,3.7vw,50px); font-weight:600; letter-spacing:-.022em; line-height:1.08}
+  h3{font-size:clamp(17px,1.5vw,21px); font-weight:700; letter-spacing:-.01em; line-height:1.25}
+  .lead{font-size:clamp(15px,1.32vw,19px); line-height:1.62; color:var(--muted); font-weight:400}
+  .big-quote{font-size:clamp(26px,3.6vw,50px); font-weight:600; letter-spacing:-.02em; line-height:1.18}
+  .accent{color:var(--orange)}
+  .mono{font-family:var(--mono)}
+  .muted{color:var(--muted)} .faint{color:var(--faint)}
+  strong{font-weight:700}
+  .hl{background:linear-gradient(transparent 58%, rgba(246,201,168,.7) 58%); padding:0 2px}
+
+  /* ===== Layout helpers ===== */
+  .row{display:flex} .col{display:flex; flex-direction:column}
+  .gap-s{gap:10px}.gap{gap:18px}.gap-l{gap:28px}
+  .mt-s{margin-top:12px}.mt{margin-top:22px}.mt-l{margin-top:34px}.mt-xl{margin-top:48px}
+  .grid{display:grid; gap:clamp(12px,1.1vw,18px)}
+  .g2{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)} .g5{grid-template-columns:repeat(5,1fr)}
+  .center{align-items:center} .between{justify-content:space-between}
+  .wrap{flex-wrap:wrap}
+
+  /* ===== Cards ===== */
+  .card{background:rgba(255,255,255,.66); border:1px solid var(--line); border-radius:18px; padding:clamp(16px,1.5vw,24px); backdrop-filter:blur(2px)}
+  .card.tight{padding:14px 16px; border-radius:14px}
+  .card .ico{font-size:22px; line-height:1}
+  .card h3{margin-bottom:7px}
+  .card p{font-size:clamp(12.5px,1.04vw,14.5px); line-height:1.55; color:var(--muted)}
+  .slide.dark .card{background:rgba(255,255,255,.07); border-color:rgba(243,238,226,.16)}
+  .slide.dark .card p{color:rgba(243,238,226,.74)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; padding:5px 12px; border-radius:100px; border:1px solid var(--line); color:var(--muted); background:rgba(255,255,255,.5); white-space:nowrap}
+  .tag{display:inline-block; font-size:11px; font-weight:700; padding:3px 9px; border-radius:6px; color:#fff}
+  .dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex:none}
+
+  /* stat */
+  .stat .n{font-size:clamp(30px,3.6vw,52px); font-weight:700; letter-spacing:-.03em; line-height:1}
+  .stat .l{font-size:12.5px; color:var(--muted); margin-top:6px}
+
+  /* ===== Pipeline ===== */
+  .pipe{display:flex; align-items:stretch; gap:0; width:100%}
+  .pipe .step{flex:1; text-align:center; position:relative; padding:0 6px}
+  .pipe .bubble{display:flex; flex-direction:column; align-items:center; gap:9px}
+  .pipe .circ{width:clamp(46px,4.4vw,64px); height:clamp(46px,4.4vw,64px); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:clamp(20px,2vw,28px); background:#fff; border:1.5px solid var(--line); box-shadow:0 6px 18px rgba(33,26,51,.06)}
+  .pipe .st-name{font-size:clamp(12px,1.05vw,15px); font-weight:700}
+  .pipe .st-sub{font-size:11px; color:var(--faint); line-height:1.4}
+  .pipe .arrow{position:absolute; top:clamp(23px,2.2vw,32px); right:-12px; color:var(--faint); font-size:20px; z-index:3}
+  .pipe .step:last-child .arrow{display:none}
+
+  /* ===== Problem / solution split ===== */
+  .ps{display:grid; grid-template-columns:1fr 1fr; gap:clamp(14px,1.3vw,22px)}
+  .panel{border-radius:18px; padding:clamp(16px,1.5vw,24px); border:1px solid var(--line)}
+  .panel.bad{background:rgba(198,40,40,.055); border-color:rgba(198,40,40,.2)}
+  .panel.good{background:rgba(46,125,50,.06); border-color:rgba(46,125,50,.22)}
+  .panel .ph{font-family:var(--mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase; margin-bottom:12px; display:flex; align-items:center; gap:8px}
+  .panel.bad .ph{color:var(--red)} .panel.good .ph{color:var(--green)}
+  .li{display:flex; gap:10px; align-items:flex-start; font-size:clamp(12.5px,1.06vw,15px); line-height:1.5; color:var(--ink); padding:6px 0}
+  .li .mk{flex:none; margin-top:.18em; font-size:13px}
+  .panel.bad .mk{color:var(--red)} .panel.good .mk{color:var(--green)}
+  .panel .li .t{color:var(--ink)} .panel.bad .li{color:rgba(33,26,51,.82)}
+
+  /* ===== Map table ===== */
+  table.map{width:100%; border-collapse:collapse; font-size:clamp(12px,1.04vw,15px)}
+  table.map th{font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--faint); font-weight:500; text-align:left; padding:0 14px 12px 0; border-bottom:1px solid var(--line)}
+  table.map td{padding:13px 14px 13px 0; border-bottom:1px solid var(--line2); vertical-align:top; line-height:1.5}
+  table.map .stage{font-weight:700; white-space:nowrap}
+  table.map .was{color:var(--red); font-weight:500}
+  table.map .now{color:var(--ink); font-weight:600}
+  table.map tr:last-child td{border-bottom:none}
+
+  /* ===== Mock: phone ===== */
+  .phone{width:clamp(230px,20vw,270px); border-radius:34px; background:#211A33; padding:11px; box-shadow:0 30px 60px rgba(33,26,51,.28); flex:none}
+  .phone .scr{background:var(--cream); border-radius:24px; overflow:hidden; height:clamp(396px,44vh,496px); display:flex; flex-direction:column; position:relative}
+  .phone .pbar{height:26px; display:flex; align-items:center; justify-content:space-between; padding:0 16px; font-size:10px; font-weight:700; color:var(--ink)}
+  .phone .pbody{flex:1; overflow:hidden; padding:6px 12px 12px}
+  .phone .pnav{height:46px; border-top:1px solid var(--line); display:flex; align-items:center; justify-content:space-around; background:rgba(255,255,255,.5); font-size:9px; color:var(--faint)}
+  .phone .pnav .on{color:var(--ink); font-weight:700}
+
+  .ccard{background:#fff; border-radius:8px; overflow:hidden; border:1px solid var(--line2)}
+  .ccard .thumb{aspect-ratio:3/4; background:linear-gradient(135deg,#efe9dd,#e3ddcf); position:relative; display:flex; align-items:center; justify-content:center; font-size:9px; color:var(--faint); font-family:var(--mono); letter-spacing:.1em}
+  .ccard .badge{position:absolute; top:6px; left:6px; font-size:8px; font-weight:800; color:#fff; padding:2px 5px; border-radius:4px}
+  .ccard .ci{padding:7px 8px 9px}
+  .ccard .cb{font-size:8.5px; color:var(--faint); text-transform:uppercase; letter-spacing:.04em; font-weight:600}
+  .ccard .cn{font-size:11px; font-weight:800; line-height:1.25; margin:1px 0 3px}
+  .ccard .cf{font-size:11px; font-weight:800; color:var(--orange)}
+  .ccard .cg{font-size:9px; color:var(--muted)}
+
+  /* ===== Mock: admin window ===== */
+  .win{background:var(--cream); border:1px solid var(--line); border-radius:14px; overflow:hidden; box-shadow:0 26px 56px rgba(33,26,51,.18); width:100%}
+  .win .wbar{height:34px; display:flex; align-items:center; gap:7px; padding:0 14px; border-bottom:1px solid var(--line); background:rgba(255,255,255,.5)}
+  .win .wdot{width:10px;height:10px;border-radius:50%}
+  .win .wt{margin-left:10px; font-size:11px; color:var(--faint); font-family:var(--mono); letter-spacing:.06em}
+  .win .wbody{padding:clamp(12px,1.2vw,18px)}
+  .tbl{width:100%; border-collapse:collapse; font-size:11.5px}
+  .tbl th{font-family:var(--mono); font-size:8.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); font-weight:500; text-align:left; padding:0 10px 8px 0; border-bottom:1px solid var(--line)}
+  .tbl td{padding:9px 10px 9px 0; border-bottom:1px solid var(--line2); color:var(--ink)}
+  .tbl .h{color:var(--blue); font-family:var(--mono); font-size:10.5px}
+
+  .folder{background:rgba(255,255,255,.7); border:1px solid var(--line); border-radius:14px; padding:14px 16px}
+  .folder .fb{height:6px; background:rgba(33,26,51,.09); border-radius:100px; overflow:hidden; margin-top:8px}
+  .folder .fbi{height:100%; border-radius:100px}
+
+  .bubbles{display:flex; flex-direction:column; gap:7px}
+  .bub{max-width:78%; font-size:11.5px; line-height:1.4; padding:8px 11px; border-radius:13px}
+  .bub.a{align-self:flex-start; background:#fff; border:1px solid var(--line2)}
+  .bub.b{align-self:flex-end; background:var(--ink); color:var(--cream)}
+  .noti{display:flex; gap:9px; align-items:center; padding:9px 4px; border-bottom:1px solid var(--line2); font-size:11px}
+  .noti .ni{font-size:17px}
+
+  .tabs{display:flex; gap:5px; flex-wrap:wrap}
+  .tabx{font-size:10.5px; padding:5px 11px; border-radius:100px; border:1px solid var(--line); color:var(--muted)}
+  .tabx.on{background:var(--ink); color:var(--cream); border-color:var(--ink)}
+
+  .flowline{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+  .flowline .node{background:rgba(255,255,255,.7); border:1px solid var(--line); border-radius:10px; padding:8px 12px; font-size:12.5px; font-weight:600}
+  .flowline .ar{color:var(--faint); font-weight:700}
+
+  /* arch diagram */
+  .arch{display:grid; grid-template-columns:1fr auto 1fr; gap:16px; align-items:center}
+  .node-lg{border:1.5px solid var(--line); border-radius:16px; padding:18px; background:rgba(255,255,255,.7); text-align:center}
+  .node-lg .t{font-weight:800; font-size:15px} .node-lg .s{font-size:11px; color:var(--faint); margin-top:3px}
+  .db{background:var(--ink); color:var(--cream); border-radius:16px; padding:18px 16px; text-align:center}
+  .db .t{font-weight:800; font-size:14px}
+
+  /* ===== Chrome: progress, counter, nav ===== */
+  .progress{position:fixed; top:0; left:0; height:3px; background:var(--ink); z-index:50; transition:width .45s ease; opacity:.85}
+  .slide.dark ~ .progress{} /* noop */
+  .counter{position:fixed; bottom:22px; right:26px; z-index:40; font-family:var(--mono); font-size:11px; letter-spacing:.12em; color:var(--faint)}
+  .counter b{color:var(--ink); font-weight:700}
+  .brandmark{position:fixed; bottom:20px; left:28px; z-index:40; font-family:var(--sans); font-weight:600; font-size:13px; letter-spacing:.14em; color:var(--ink)}
+  .brandmark .sq{display:inline-block; width:9px; height:9px; background:var(--orange); border-radius:2px; margin-right:8px; transform:translateY(0)}
+  .footlabel{position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:40; font-size:11px; color:var(--faint); font-family:var(--mono); letter-spacing:.08em}
+  /* invert chrome on dark slides via body class */
+  body.on-dark .counter b{color:var(--cream)} body.on-dark .counter{color:rgba(243,238,226,.55)}
+  body.on-dark .brandmark{color:var(--cream)} body.on-dark .progress{background:var(--cream)}
+  body.on-dark .footlabel{color:rgba(243,238,226,.5)}
+
+  .nav{position:fixed; bottom:18px; right:120px; z-index:45; display:flex; gap:8px}
+  .nav button{width:34px; height:34px; border-radius:50%; border:1px solid var(--line); background:rgba(255,255,255,.7); color:var(--ink); cursor:pointer; font-size:15px; display:flex; align-items:center; justify-content:center; transition:.15s}
+  .nav button:hover{background:var(--ink); color:var(--cream)}
+  body.on-dark .nav button{border-color:rgba(243,238,226,.3); background:rgba(255,255,255,.12); color:var(--cream)}
+
+  .hint{position:absolute; bottom:34px; left:50%; transform:translateX(-50%); font-size:12px; color:rgba(243,238,226,.6); font-family:var(--mono); letter-spacing:.1em; animation:fade 2.4s ease-in-out infinite}
+  @keyframes fade{0%,100%{opacity:.35}50%{opacity:.85}}
+
+  .toc{display:flex; flex-direction:column; gap:2px}
+  .toc .ti{display:flex; align-items:baseline; gap:18px; padding:14px 4px; border-bottom:1px solid var(--line); }
+  .toc .ti .tn{font-family:var(--mono); font-size:13px; color:var(--faint); width:34px; flex:none}
+  .toc .ti .tt{font-size:clamp(16px,1.7vw,23px); font-weight:600; letter-spacing:-.01em}
+  .toc .ti .td{font-size:12.5px; color:var(--faint); margin-left:auto; text-align:right}
+
+  .leadbar{width:46px; height:4px; border-radius:3px; background:var(--orange); margin-bottom:18px}
+
+  ul.clean{list-style:none} ul.clean li{display:flex; gap:11px; align-items:flex-start; padding:7px 0; font-size:clamp(13px,1.1vw,16px); line-height:1.5; color:var(--ink)}
+  ul.clean li .mk{flex:none; margin-top:.16em; color:var(--orange); font-weight:800}
+  .slide.dark ul.clean li{color:rgba(243,238,226,.9)}
+
+  .quotemark{font-size:80px; line-height:.4; color:var(--orange); font-family:Georgia,serif; opacity:.5}
+
+  @media print{
+    body{overflow:visible}
+    .slide{position:relative; opacity:1!important; visibility:visible!important; transform:none!important; height:100vh; page-break-after:always; break-after:page}
+    .progress,.counter,.nav,.hint,.brandmark,.footlabel{display:none!important}
+  }
+  @media (max-width:760px){
+    .ps,.arch{grid-template-columns:1fr} .g3,.g4,.g5{grid-template-columns:1fr 1fr}
+    .phone{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="progress" id="bar"></div>
+
+<div class="deck" id="deck">
+
+  <!-- 1 · COVER -->
+  <section class="slide dark active" data-label="표지">
+    <div class="slide-inner">
+      <div class="kicker"><span>SIRIAI</span> · OPERATIONS PLATFORM · 2026</div>
+      <h1 class="title" style="margin-top:14px">인플루언서 마케팅,<br>이제 <span style="color:#F6C9A8">시스템</span>으로<br>운영합니다.</h1>
+      <p class="lead" style="color:rgba(243,238,226,.82); max-width:42em; margin-top:24px">
+        1년간 매니저 한 명이 손으로 돌리던 모집·연락·배송·정산·검수를,<br>
+        <strong style="color:#fff">어드민 웹 · 인플루언서 앱 · AI 자동화</strong>로 다시 설계했습니다.
+      </p>
+      <div class="row gap center" style="margin-top:34px; flex-wrap:wrap">
+        <span class="chip" style="background:rgba(255,255,255,.1); border-color:rgba(243,238,226,.25); color:rgba(243,238,226,.85)">SIRIAI 어드민</span>
+        <span class="chip" style="background:rgba(255,255,255,.1); border-color:rgba(243,238,226,.25); color:rgba(243,238,226,.85)">SIRIAI 인플루언서 앱</span>
+        <span class="chip" style="background:rgba(255,255,255,.1); border-color:rgba(243,238,226,.25); color:rgba(243,238,226,.85)">AI 자동화 레이어</span>
+      </div>
+      <p class="mono" style="margin-top:38px; font-size:12px; letter-spacing:.12em; color:rgba(243,238,226,.55)">
+        발표자 ____________ · SIRIAI · 2026.06.07
+      </p>
+    </div>
+    <div class="hint">← / → 또는 스페이스바로 이동</div>
+  </section>
+
+  <!-- 2 · AGENDA -->
+  <section class="slide" data-label="목차">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">CONTENTS</span></div>
+      <h2 style="margin-top:18px">오늘 말씀드릴 순서</h2>
+      <div class="toc mt-l">
+        <div class="ti"><span class="tn">01</span><span class="tt">배경 — 우리가 풀어야 했던 문제</span><span class="td">왜 지금 이걸 만들었나</span></div>
+        <div class="ti"><span class="tn">02</span><span class="tt">현황 진단 — 5단계에서 무엇이 무너지고 있었나</span><span class="td">모집·연락·배송·정산·검수</span></div>
+        <div class="ti"><span class="tn">03</span><span class="tt">솔루션 — 두 개의 앱 + AI 자동화</span><span class="td">전체 구조와 문제→해결 매핑</span></div>
+        <div class="ti"><span class="tn">04</span><span class="tt">단계별 해결 &amp; 실제 화면</span><span class="td">데모 흐름</span></div>
+        <div class="ti"><span class="tn">05</span><span class="tt">운영 실행 — 어떻게 운영하고 키울 것인가</span><span class="td">연락 · 인바운드 모집 · 인스타 채널</span></div>
+        <div class="ti"><span class="tn">06</span><span class="tt">효율 · 기술 · 향후 로드맵</span><span class="td">Before/After와 다음 단계</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · 배경 -->
+  <section class="slide" data-label="배경">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">01</span> 배경</div>
+      <h2 style="margin-top:16px; max-width:18em">규모는 커졌는데,<br>일하는 방식은 1년 전 그대로였습니다.</h2>
+      <div class="grid g3 mt-l">
+        <div class="card">
+          <div class="ico">🤝</div>
+          <h3 class="mt-s">우리가 하는 일</h3>
+          <p>브랜드와 인플루언서를 잇는 <strong>인플루언서 마케팅 대행</strong>. 무신사 등 고정 클라이언트부터 신규 대행 캠페인까지.</p>
+        </div>
+        <div class="card">
+          <div class="ico">📈</div>
+          <h3 class="mt-s">무엇이 달라졌나</h3>
+          <p>고정 클라이언트와 대행 캠페인이 <strong>몇 배로 급증</strong>. 한 번에 다뤄야 할 인플루언서가 수백 명 규모로.</p>
+        </div>
+        <div class="card">
+          <div class="ico">🧍</div>
+          <h3 class="mt-s">그런데 운영은</h3>
+          <p>여전히 <strong>매니저 1인이 전 과정을 수기로</strong> 처리. 검색·문자·시트·송금·다운로드를 사람이 일일이.</p>
+        </div>
+      </div>
+      <div class="card mt" style="background:rgba(198,40,40,.06); border-color:rgba(198,40,40,.2)">
+        <div class="row gap center wrap">
+          <span class="tag" style="background:var(--red)">결과</span>
+          <p style="font-size:clamp(14px,1.3vw,18px); color:var(--ink); font-weight:600; margin:0">
+            클라이언트 <span class="hl">만족도</span>와 회사의 <span class="hl">성장성</span>이 동시에 임계점에 도달 — “더 받고 싶어도 더 못 받는” 구조.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · 진단 한눈에 -->
+  <section class="slide" data-label="진단 개요">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">02</span> 현황 진단 · 한눈에</div>
+      <h2 style="margin-top:14px">인플루언서 마케팅 파이프라인 5단계,<br>모든 단계에 수작업 병목이 있었습니다.</h2>
+      <div class="pipe mt-xl">
+        <div class="step"><div class="bubble"><div class="circ" style="border-color:var(--blue)">📣</div><div class="st-name">01 모집</div><div class="st-sub">후보 찾기·매칭</div></div><span class="arrow">›</span></div>
+        <div class="step"><div class="bubble"><div class="circ" style="border-color:var(--purple)">💬</div><div class="st-name">02 연락</div><div class="st-sub">제안·안내·리마인드</div></div><span class="arrow">›</span></div>
+        <div class="step"><div class="bubble"><div class="circ" style="border-color:var(--green)">📦</div><div class="st-name">03 선정·배송</div><div class="st-sub">주소·발송</div></div><span class="arrow">›</span></div>
+        <div class="step"><div class="bubble"><div class="circ" style="border-color:var(--orange)">💸</div><div class="st-name">04 정산</div><div class="st-sub">서류·송금</div></div><span class="arrow">›</span></div>
+        <div class="step"><div class="bubble"><div class="circ" style="border-color:var(--pink)">🎬</div><div class="st-name">05 검수·아카이빙</div><div class="st-sub">확인·저장</div></div></div>
+      </div>
+      <p class="kicker" style="margin-top:48px"><span class="num">근본 원인</span></p>
+      <div class="grid g3 mt">
+        <div class="card tight"><h3>① 1인 수동 처리 구조</h3><p>모든 단계를 사람이 직접. 인원이 늘수록 선형으로 공수 폭증.</p></div>
+        <div class="card tight"><h3>② 데이터 자산화 부재</h3><p>누가 색조에 강한지, 주소·계좌가 최신인지 — 기억과 흩어진 파일에 의존.</p></div>
+        <div class="card tight"><h3>③ 공식 시스템·채널 부재</h3><p>개인 폰·메일·슬랙·시트로 분산. 표준 프로세스가 없음.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · 문제 1 모집 -->
+  <section class="slide" data-label="문제·모집">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">02 — 1</span> 모집 단계</div>
+      <div class="row between center wrap" style="margin-top:12px; gap:16px">
+        <h2 style="max-width:15em">Pool 고갈과 감도 하락</h2>
+        <span class="chip" style="border-color:var(--blue); color:var(--blue)"><span class="dot" style="background:var(--blue)"></span> 모집</span>
+      </div>
+      <div class="leadbar" style="background:var(--blue); margin-top:20px"></div>
+      <div class="grid g2 mt" style="gap:14px">
+        <div class="panel bad"><div class="li"><span class="mk">✕</span><div><strong>아웃바운드(DM)에만 의존</strong> — 인스타 뷰티 태그 검색 + DM. “보내던 사람에게만 또 보내는” 모수 고갈.</div></div></div>
+        <div class="panel bad"><div class="li"><span class="mk">✕</span><div><strong>장기 클라이언트 만족도 저하</strong> — 풀이 1년간 순환되지 않아, 무신사 등에서 “감도 높은 인원 재구성” 불만 누적.</div></div></div>
+        <div class="panel bad"><div class="li"><span class="mk">✕</span><div><strong>크리에이터 성향 자산화 부재</strong> — 누가 색조에 강한지, 스킨케어 릴스를 잘 만드는지 분류가 없어 매번 기억에 의존한 수기 매칭.</div></div></div>
+        <div class="panel bad"><div class="li"><span class="mk">✕</span><div><strong>1:1 개별 제안의 리소스 낭비</strong> — 캠페인마다 적합해 보이는 사람에게 일일이 연락해 선호·고료를 개별 확인.</div></div></div>
+      </div>
+      <p class="lead mt" style="font-size:15px">→ 신규 캠페인이 생길 때마다 <strong>태그 검색과 수기 1:1 컨택을 처음부터 반복</strong>하는 비효율이 고착화.</p>
+    </div>
+  </section>
+
+  <!-- 6 · 문제 2 연락 -->
+  <section class="slide" data-label="문제·연락">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">02 — 2</span> 연락 단계</div>
+      <div class="row between center wrap" style="margin-top:12px; gap:16px">
+        <h2 style="max-width:15em">수작업 커뮤니케이션으로 인한 과부하</h2>
+        <span class="chip" style="border-color:var(--purple); color:var(--purple)"><span class="dot" style="background:var(--purple)"></span> 연락</span>
+      </div>
+      <div class="leadbar" style="background:var(--purple); margin-top:20px"></div>
+      <div class="grid g2 mt" style="gap:14px">
+        <div class="panel bad"><div class="li"><span class="mk">✕</span><div><strong>공식 채널 부재 · 개인 폰 사용</strong> — 회사 공식 채널이 없어 담당자 개인 휴대폰에 번호를 일일이 저장해 소통.</div></div></div>
+        <div class="panel bad"><div class="li"><span class="mk">✕</span><div><strong>다단계 1:1 연락으로 마비</strong> — 캠페인당 [피처체크 → 선정안내 → 가이드 배송 → 리마인더 3회]를 전부 수동 문자.</div></div></div>
+        <div class="panel bad"><div class="li"><span class="mk">✕</span><div><strong>라포 ↔ 효율의 충돌</strong> — 친절한 1:1 응대·고료 협의를 유지하고 싶지만 단체 시스템이 없어 효율 급락. (오픈채팅은 감도와 안 맞음)</div></div></div>
+        <div class="panel bad"><div class="li"><span class="mk">✕</span><div><strong>정보 공개의 딜레마</strong> — 공공 채널에 올리면 고료(평균 5만 원)가 투명 노출 → 고단가 A급의 참여가 제한됨.</div></div></div>
+      </div>
+      <p class="lead mt" style="font-size:15px">→ 클라이언트 수가 몇 배로 늘어난 지금, <strong>담당자 혼자 감당 불가능한 임계점</strong>에 도달.</p>
+    </div>
+  </section>
+
+  <!-- 7 · 문제 3 배송 -->
+  <section class="slide" data-label="문제·배송">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">02 — 3</span> 선정 후 배송 단계</div>
+      <div class="row between center wrap" style="margin-top:12px; gap:16px">
+        <h2 style="max-width:15em">데이터 최신화 부재로 인한 배송 사고</h2>
+        <span class="chip" style="border-color:var(--green); color:var(--green)"><span class="dot" style="background:var(--green)"></span> 배송</span>
+      </div>
+      <div class="leadbar" style="background:var(--green); margin-top:20px"></div>
+      <div class="grid g2 mt-l" style="gap:14px">
+        <div class="panel bad">
+          <div class="ph">🚫 문제 A</div>
+          <div class="li"><span class="mk">✕</span><div><strong>과거 데이터 재활용</strong> — 이전에 참여한 인플루언서의 주소를 확인 없이 그대로 브랜드사에 전달.</div></div>
+          <div class="li"><span class="mk">✕</span><div>이사 등으로 <strong>오배송이 주기적으로 발생</strong> → 브랜드 신뢰 손상.</div></div>
+        </div>
+        <div class="panel bad">
+          <div class="ph">🚫 문제 B</div>
+          <div class="li"><span class="mk">✕</span><div>이를 막으려고 <strong>한 명 한 명 주소를 수동 재확인</strong>하는 전수조사식 프로세스가 추가됨.</div></div>
+          <div class="li"><span class="mk">✕</span><div>결국 <strong>사고를 막으려다 공수가 또 늘어나는</strong> 악순환.</div></div>
+        </div>
+      </div>
+      <p class="lead mt-l" style="font-size:15px">→ “최신 데이터를 자동으로 받을 방법”이 없어, <strong>틀리거나 / 매번 다시 묻거나</strong> 둘 중 하나였습니다.</p>
+    </div>
+  </section>
+
+  <!-- 8 · 문제 4 정산 -->
+  <section class="slide" data-label="문제·정산">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">02 — 4</span> 정산 단계</div>
+      <div class="row between center wrap" style="margin-top:12px; gap:16px">
+        <h2 style="max-width:15em">중복 공수 &amp; 패널티 통제 불능</h2>
+        <span class="chip" style="border-color:var(--orange); color:var(--orange)"><span class="dot" style="background:var(--orange)"></span> 정산</span>
+      </div>
+      <div class="leadbar" style="background:var(--orange); margin-top:20px"></div>
+      <div class="grid g2 mt" style="gap:14px">
+        <div class="panel bad"><div class="li"><span class="mk">✕</span><div><strong>중복 서류 제출 피로</strong> — 여러 번 참여해도 매 캠페인마다 신분증·통장사본을 메일로 새로 수취.</div></div></div>
+        <div class="panel bad"><div class="li"><span class="mk">✕</span><div><strong>수기 송금의 비효율</strong> — 담당자가 메일로 취합 → 슬랙 공유 → 대표가 하나하나 수기 송금·체크. 인원↑ 시 누락·지연 위험.</div></div></div>
+        <div class="panel bad"><div class="li"><span class="mk">✕</span><div><strong>낮은 고료로 잠수(노쇼)</strong> — “5만 원 안 받고 말지”로 기한 미준수·연락 두절이 다수.</div></div></div>
+        <div class="panel bad"><div class="li"><span class="mk">✕</span><div><strong>패널티 기준 부재</strong> — 늦게 올려도 대부분 정산 → 책임감 결여. 미업로드 인원 설득에 감정 소모.</div></div></div>
+      </div>
+      <p class="lead mt" style="font-size:15px">→ 정산이 <strong>‘돈 주는 일’이 아니라 ‘사람 쫓아다니는 일’</strong>이 되어 있었습니다.</p>
+    </div>
+  </section>
+
+  <!-- 9 · 문제 5 검수 -->
+  <section class="slide" data-label="문제·검수">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">02 — 5</span> 콘텐츠 검수 · 아카이빙 단계</div>
+      <div class="row between center wrap" style="margin-top:12px; gap:16px">
+        <h2 style="max-width:16em">단순 반복 수작업으로 인한 과부하</h2>
+        <span class="chip" style="border-color:var(--pink); color:var(--pink)"><span class="dot" style="background:var(--pink)"></span> 검수</span>
+      </div>
+      <div class="leadbar" style="background:var(--pink); margin-top:20px"></div>
+      <div class="grid g2 mt-l" style="gap:14px">
+        <div class="panel bad">
+          <div class="ph">🚫 업로드 링크 수기 입력</div>
+          <div class="li"><span class="mk">✕</span><div>수십~수백 명이 개별 업로드한 릴스 링크를 담당자가 <strong>일일이 확인하고 시트에 복사·붙여넣기</strong>.</div></div>
+        </div>
+        <div class="panel bad">
+          <div class="ph">🚫 전수 다운로드·아카이빙</div>
+          <div class="li"><span class="mk">✕</span><div>브랜드 보고·자산화를 위해 릴스 영상을 <strong>일일이 다운로드해 드라이브에 수동 분류·저장</strong>.</div></div>
+        </div>
+      </div>
+      <p class="lead mt-l" style="font-size:15px">→ 가장 단순한 일에 <strong>가장 많은 손</strong>이 들어가, 정작 ‘콘텐츠 품질을 보는 일’엔 시간을 못 썼습니다.</p>
+    </div>
+  </section>
+
+  <!-- 10 · 전환 -->
+  <section class="slide dark" data-label="전환">
+    <div class="slide-inner" style="text-align:center">
+      <div class="quotemark">“</div>
+      <p class="big-quote" style="max-width:20em; margin:0 auto">
+        문제는 <span style="color:#F6C9A8">사람</span>이 아니라<br><span style="color:#F6C9A8">‘시스템의 부재’</span>였습니다.
+      </p>
+      <p class="lead" style="color:rgba(243,238,226,.8); max-width:38em; margin:30px auto 0">
+        그래서 단순 반복은 시스템과 AI가 대신하고, 사람은 ‘감도’와 ‘관계’에만 집중하도록 —
+        <strong style="color:#fff">두 개의 웹앱과 AI 자동화 레이어</strong>를 직접 만들었습니다.
+      </p>
+      <div class="row gap center" style="justify-content:center; margin-top:40px; flex-wrap:wrap">
+        <span class="chip" style="background:rgba(255,255,255,.1); border-color:rgba(243,238,226,.25); color:#fff; font-size:13px; padding:9px 16px">🖥️ SIRIAI 어드민 — 운영자</span>
+        <span class="chip" style="background:rgba(255,255,255,.1); border-color:rgba(243,238,226,.25); color:#fff; font-size:13px; padding:9px 16px">📱 SIRIAI 인플루언서 앱 — 크리에이터</span>
+        <span class="chip" style="background:rgba(255,255,255,.1); border-color:rgba(243,238,226,.25); color:#fff; font-size:13px; padding:9px 16px">🤖 AI 자동화 — 반복 업무</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 · 구조도 -->
+  <section class="slide" data-label="시스템 구조">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">03</span> 솔루션 · 전체 구조</div>
+      <h2 style="margin-top:14px">하나의 데이터베이스를 두 앱이 공유합니다.</h2>
+      <p class="lead mt-s" style="max-width:48em">인플루언서가 앱에서 입력하면 어드민에 <strong>즉시 반영</strong>되고, 그 반대도 마찬가지. 다시 묻거나 옮겨 적을 필요가 없습니다.</p>
+
+      <div class="arch mt-l">
+        <div class="node-lg">
+          <div style="font-size:26px">📱</div>
+          <div class="t mt-s">인플루언서 앱</div>
+          <div class="s">모바일 · 크리에이터용</div>
+          <div class="col gap-s" style="margin-top:12px; text-align:left">
+            <span class="chip" style="font-size:10.5px; padding:4px 9px">캠페인 탐색·신청</span>
+            <span class="chip" style="font-size:10.5px; padding:4px 9px">콘텐츠 업로드</span>
+            <span class="chip" style="font-size:10.5px; padding:4px 9px">정산·메시지·알림</span>
+          </div>
+        </div>
+        <div class="col center gap-s">
+          <span class="ar mono" style="color:var(--faint)">⇄</span>
+          <div class="db">
+            <div style="font-size:22px">🗄️</div>
+            <div class="t mt-s">공용 DB</div>
+            <div style="font-size:10.5px; color:rgba(243,238,226,.7); margin-top:4px">Supabase<br>Postgres · Auth · Storage</div>
+          </div>
+          <span class="ar mono" style="color:var(--faint)">⇄</span>
+        </div>
+        <div class="node-lg">
+          <div style="font-size:26px">🖥️</div>
+          <div class="t mt-s">SIRIAI 어드민</div>
+          <div class="s">웹 · 운영자용</div>
+          <div class="col gap-s" style="margin-top:12px; text-align:left">
+            <span class="chip" style="font-size:10.5px; padding:4px 9px">브랜드·캠페인·인플루언서</span>
+            <span class="chip" style="font-size:10.5px; padding:4px 9px">신청·검수·정산</span>
+            <span class="chip" style="font-size:10.5px; padding:4px 9px">콘텐츠 아카이브</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid g4 mt-l" style="gap:10px">
+        <div class="card tight" style="text-align:center"><div class="ico">🤖</div><h3 class="mt-s" style="font-size:13px">AI 자동화 레이어</h3><p style="font-size:11.5px">스카우팅·메시지·검수·정산·리포트</p></div>
+        <div class="card tight" style="text-align:center"><div class="ico">🗂️</div><h3 class="mt-s" style="font-size:13px">Google Drive</h3><p style="font-size:11.5px">콘텐츠 자동 아카이빙</p></div>
+        <div class="card tight" style="text-align:center"><div class="ico">📮</div><h3 class="mt-s" style="font-size:13px">우편번호 API</h3><p style="font-size:11.5px">배송지 최신 수집</p></div>
+        <div class="card tight" style="text-align:center"><div class="ico">🚀</div><h3 class="mt-s" style="font-size:13px">Vercel 자동배포</h3><p style="font-size:11.5px">코드 반영 → 즉시 운영</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 · 문제→해결 매핑 -->
+  <section class="slide" data-label="문제→해결 매핑">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">03</span> 문제 → 해결 · 한눈에</div>
+      <h2 style="margin-top:14px">5단계의 문제를, 5개의 해결로.</h2>
+      <table class="map mt-l">
+        <thead><tr><th style="width:14%">단계</th><th style="width:39%">기존 (문제)</th><th style="width:47%">지금 (해결)</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="stage"><span class="dot" style="background:var(--blue)"></span> 모집</td>
+            <td class="was">DM 의존 · 기억에 의존한 수기 매칭으로 Pool 고갈</td>
+            <td class="now">인플루언서 앱 <strong>공개 모집(인바운드)</strong> + 카테고리·지역·팔로워·단가까지 <strong>구조화된 DB·필터</strong> + AI 섭외 스크리닝</td>
+          </tr>
+          <tr>
+            <td class="stage"><span class="dot" style="background:var(--purple)"></span> 연락</td>
+            <td class="was">개인 폰 다단계 수동 문자 · 고료 공개 딜레마</td>
+            <td class="now"><strong>자동 알림</strong> + 앱 내 <strong>1:1 DM</strong> + AI 메시지 초안. 고료는 <strong>앱 안에서만</strong> 노출</td>
+          </tr>
+          <tr>
+            <td class="stage"><span class="dot" style="background:var(--green)"></span> 배송</td>
+            <td class="was">과거 주소 재사용 → 오배송 / 전수 수기 재확인</td>
+            <td class="now">신청할 때마다 <strong>주소 직접 입력(우편번호 검색)</strong> → 항상 최신 배송지가 자동 수집</td>
+          </tr>
+          <tr>
+            <td class="stage"><span class="dot" style="background:var(--orange)"></span> 정산</td>
+            <td class="was">중복 서류 · 메일→슬랙→수기 송금 누락</td>
+            <td class="now">계좌·서류 <strong>1회 등록 재사용</strong> + 선정 시 <strong>정산 자동 생성</strong> + 캠페인별 대시보드 + 일괄이체 파일</td>
+          </tr>
+          <tr>
+            <td class="stage"><span class="dot" style="background:var(--pink)"></span> 검수</td>
+            <td class="was">링크 일일이 복붙 · 영상 수동 다운로드</td>
+            <td class="now">인플루언서가 <strong>직접 링크 업로드</strong> + <strong>드라이브 자동 저장</strong> + AI 가이드 준수 검수</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="lead mt" style="font-size:14.5px">→ 다음 장부터, 각 해결을 <strong>실제 화면</strong>으로 보여드리겠습니다.</p>
+    </div>
+  </section>
+
+  <!-- 13 · 해결 1 모집 -->
+  <section class="slide" data-label="해결·모집">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">04 — 1</span> 해결 · 모집</div>
+      <div class="row between center wrap" style="margin-top:10px; gap:16px">
+        <h2 style="max-width:18em">‘찾아 나서는 모집’에서 ‘찾아오게 하는 모집’으로</h2>
+        <span class="chip" style="border-color:var(--blue); color:var(--blue)"><span class="dot" style="background:var(--blue)"></span> 모집</span>
+      </div>
+      <div class="grid mt" style="grid-template-columns:1.08fr .92fr; gap:30px; align-items:center">
+        <div>
+          <div style="display:flex; gap:10px; align-items:stretch; margin-bottom:16px">
+            <div style="flex:1; background:rgba(198,40,40,.06); border:1px solid rgba(198,40,40,.18); border-radius:12px; padding:10px 13px"><div class="mono" style="font-size:9.5px; letter-spacing:.12em; color:var(--red); margin-bottom:4px">기존</div><div style="font-size:12.5px; line-height:1.4">태그 검색 → DM → 기억으로 매칭</div></div>
+            <div style="display:flex; align-items:center; color:var(--faint); font-weight:700">→</div>
+            <div style="flex:1; background:rgba(46,125,50,.07); border:1px solid rgba(46,125,50,.2); border-radius:12px; padding:10px 13px"><div class="mono" style="font-size:9.5px; letter-spacing:.12em; color:var(--green); margin-bottom:4px">지금</div><div style="font-size:12.5px; line-height:1.4">앱 공개 모집 + 필터로 매칭</div></div>
+          </div>
+          <ul class="clean">
+            <li><span class="mk">＋</span><div><strong>인플루언서 앱 공개 모집</strong> — 승인된 크리에이터가 모집중 캠페인을 직접 보고 ‘신청’. 아웃바운드를 <strong>인바운드</strong>로 전환.</div></li>
+            <li><span class="mk">＋</span><div><strong>구조화된 인플루언서 DB</strong> — 카테고리(복수)·성별·지역·팔로워·협업 단가(피드/릴스/쇼츠/롱폼)까지 저장.</div></li>
+            <li><span class="mk">＋</span><div><strong>검색·필터 매칭</strong> — 어드민에서 이름·핸들·카테고리 검색 + 성별/지역/상태 필터. ‘기억’ 대신 ‘조건’으로 추린다.</div></li>
+            <li><span class="mk">＋</span><div><strong>AI 섭외 스크리닝</strong> — 핸들만 넣으면 팔로워·카테고리·적합도(fit score)를 정리해 DB 후보로.</div></li>
+          </ul>
+        </div>
+        <div class="row center" style="justify-content:center">
+          <div class="phone">
+            <div class="scr">
+              <div class="pbar"><span>9:41</span><span>SIRIAI</span></div>
+              <div class="pbody">
+                <div class="row between center" style="margin-bottom:8px"><span style="font-size:14px; font-weight:800">캠페인</span><span class="tabx on" style="font-size:9px">필터 2</span></div>
+                <div class="grid g2" style="gap:6px">
+                  <div class="ccard"><div class="thumb">MOONSHOT<div class="badge" style="background:var(--blue); top:6px; left:6px">공동작업</div></div><div class="ci"><div class="cb">무신사</div><div class="cn">립컬러 신규 릴스</div><div class="cg">🎁 5만원 상당</div><div class="cf">💵 50,000원</div></div></div>
+                  <div class="ccard"><div class="thumb">TOCOBO<div class="badge" style="background:var(--orange); top:6px; left:6px">2차활용</div></div><div class="ci"><div class="cb">토코보</div><div class="cn">선크림 피드 체험</div><div class="cg">🎁 3만원 상당</div><div class="cf">💵 50,000원</div></div></div>
+                  <div class="ccard"><div class="thumb">YADAH</div><div class="ci"><div class="cb">야다</div><div class="cn">토너패드 릴스</div><div class="cf">💵 40,000원</div></div></div>
+                  <div class="ccard"><div class="thumb">FORHERZ</div><div class="ci"><div class="cb">포헤르츠</div><div class="cn">세럼 릴스+피드</div><div class="cf">💵 60,000원</div></div></div>
+                </div>
+              </div>
+              <div class="pnav"><span class="on">홈</span><span>스케줄</span><span>업로드</span><span>내역</span><span>마이</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14 · 해결 2 연락 -->
+  <section class="slide" data-label="해결·연락">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">04 — 2</span> 해결 · 연락</div>
+      <div class="row between center wrap" style="margin-top:10px; gap:16px">
+        <h2 style="max-width:18em">개인 폰을 닫고, 앱 안에서 ‘친절하게 &amp; 한꺼번에’</h2>
+        <span class="chip" style="border-color:var(--purple); color:var(--purple)"><span class="dot" style="background:var(--purple)"></span> 연락</span>
+      </div>
+      <div class="grid mt" style="grid-template-columns:1.08fr .92fr; gap:30px; align-items:center">
+        <div>
+          <div style="display:flex; gap:10px; align-items:stretch; margin-bottom:16px">
+            <div style="flex:1; background:rgba(198,40,40,.06); border:1px solid rgba(198,40,40,.18); border-radius:12px; padding:10px 13px"><div class="mono" style="font-size:9.5px; letter-spacing:.12em; color:var(--red); margin-bottom:4px">기존</div><div style="font-size:12.5px; line-height:1.4">개인 폰으로 단계마다 수동 문자</div></div>
+            <div style="display:flex; align-items:center; color:var(--faint); font-weight:700">→</div>
+            <div style="flex:1; background:rgba(46,125,50,.07); border:1px solid rgba(46,125,50,.2); border-radius:12px; padding:10px 13px"><div class="mono" style="font-size:9.5px; letter-spacing:.12em; color:var(--green); margin-bottom:4px">지금</div><div style="font-size:12.5px; line-height:1.4">앱 자동 알림 + 1:1 DM</div></div>
+          </div>
+          <ul class="clean">
+            <li><span class="mk">＋</span><div><strong>자동 알림</strong> — 선정 🎉 / 업로드 일정 📅 / 심사 중 ⏳ / 미선정 🙏 이 상태에 따라 종 아이콘에 자동 표시.</div></li>
+            <li><span class="mk">＋</span><div><strong>앱 내 관리자 ↔ 인플루언서 1:1 DM</strong> — 캠페인별 대화 스레드. 개인 폰 없이도 라포 유지 + 효율.</div></li>
+            <li><span class="mk">＋</span><div><strong>고료 공개 딜레마 해소</strong> — 캠페인·고료는 로그인한 회원에게만 노출. 공공 채널 노출이 없다.</div></li>
+            <li><span class="mk">＋</span><div><strong>AI 단계별 메시지</strong> — 섭외·선정·가이드·리마인드·정산·감사 메시지를 톤 맞춰 자동 초안(이름/핸들 일괄 치환).</div></li>
+          </ul>
+        </div>
+        <div class="col gap" style="justify-content:center">
+          <div class="card tight" style="padding:12px 14px">
+            <div class="mono" style="font-size:9px; letter-spacing:.14em; color:var(--faint); margin-bottom:8px">알림 · 인플루언서 앱</div>
+            <div class="noti"><span class="ni">🎉</span><div><strong style="font-size:11.5px">문샷 립컬러 선정!</strong><div class="faint" style="font-size:10.5px">캠페인에 선정되었어요. 내역에서 확인하세요.</div></div></div>
+            <div class="noti"><span class="ni">📅</span><div><strong style="font-size:11.5px">업로드 일정 안내</strong><div class="faint" style="font-size:10.5px">06.10 ~ 06.17 · 스케줄에서 보기</div></div></div>
+            <div class="noti" style="border-bottom:none"><span class="ni">⏳</span><div><strong style="font-size:11.5px">토코보 선크림 심사 중</strong><div class="faint" style="font-size:10.5px">신청이 검토되고 있어요.</div></div></div>
+          </div>
+          <div class="card tight" style="padding:12px 14px">
+            <div class="mono" style="font-size:9px; letter-spacing:.14em; color:var(--faint); margin-bottom:8px">1:1 메시지 · 관리자 ↔ 인플루언서</div>
+            <div class="bubbles">
+              <div class="bub a">선정 축하드려요! 제품은 이번 주 내 발송돼요 😊</div>
+              <div class="bub b">감사합니다! 배송지 그대로면 될까요?</div>
+              <div class="bub a">앱에서 새로 입력해 주신 주소로 보낼게요 👍</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15 · 해결 3 배송 -->
+  <section class="slide" data-label="해결·배송">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">04 — 3</span> 해결 · 배송</div>
+      <div class="row between center wrap" style="margin-top:10px; gap:16px">
+        <h2 style="max-width:18em">주소는 ‘물어보는 것’이 아니라 ‘자동으로 최신화되는 것’</h2>
+        <span class="chip" style="border-color:var(--green); color:var(--green)"><span class="dot" style="background:var(--green)"></span> 배송</span>
+      </div>
+      <div class="grid mt" style="grid-template-columns:1.08fr .92fr; gap:30px; align-items:center">
+        <div>
+          <div style="display:flex; gap:10px; align-items:stretch; margin-bottom:16px">
+            <div style="flex:1; background:rgba(198,40,40,.06); border:1px solid rgba(198,40,40,.18); border-radius:12px; padding:10px 13px"><div class="mono" style="font-size:9.5px; letter-spacing:.12em; color:var(--red); margin-bottom:4px">기존</div><div style="font-size:12.5px; line-height:1.4">과거 주소 재사용 → 오배송 / 전수 재확인</div></div>
+            <div style="display:flex; align-items:center; color:var(--faint); font-weight:700">→</div>
+            <div style="flex:1; background:rgba(46,125,50,.07); border:1px solid rgba(46,125,50,.2); border-radius:12px; padding:10px 13px"><div class="mono" style="font-size:9.5px; letter-spacing:.12em; color:var(--green); margin-bottom:4px">지금</div><div style="font-size:12.5px; line-height:1.4">신청 시마다 최신 주소 자동 수집</div></div>
+          </div>
+          <ul class="clean">
+            <li><span class="mk">＋</span><div><strong>신청 = 주소 입력</strong> — 캠페인을 신청하는 순간, 다음 우편번호 검색으로 <strong>그때의 주소</strong>를 직접 입력.</div></li>
+            <li><span class="mk">＋</span><div><strong>“매 캠페인 새로 확인” 안내</strong> — 화면에서 명확히 고지해, 오래된 주소가 섞일 여지를 없앰.</div></li>
+            <li><span class="mk">＋</span><div><strong>어드민 신청관리에 자동 표기</strong> — 신청자별 배송지가 목록에 바로 보여, 한 명 한 명 다시 묻는 전수조사가 사라짐.</div></li>
+            <li><span class="mk">＋</span><div><strong>브랜드 전달도 그대로</strong> — 최신 주소를 모아 그대로 넘기면 끝.</div></li>
+          </ul>
+        </div>
+        <div class="row center" style="justify-content:center">
+          <div class="phone">
+            <div class="scr">
+              <div class="pbar"><span>9:41</span><span>신청</span></div>
+              <div class="pbody">
+                <div style="font-size:13px; font-weight:800; margin:4px 0 10px">캠페인 신청</div>
+                <div style="background:#fff; border:1px solid var(--line); border-radius:10px; padding:10px 12px; font-size:11px; color:var(--muted); margin-bottom:8px; display:flex; justify-content:space-between; align-items:center">서울 성동구 ○○로 12 <span style="background:var(--ink); color:var(--cream); font-size:9px; padding:3px 8px; border-radius:7px">주소 검색</span></div>
+                <div style="background:#fff; border:1px solid var(--line); border-radius:10px; padding:10px 12px; font-size:11px; color:var(--faint); margin-bottom:8px">상세 주소 (동·호수)</div>
+                <div style="background:#fff; border:1px solid var(--line); border-radius:10px; padding:10px 12px; font-size:11px; color:var(--faint); margin-bottom:8px">요청사항 (선택)</div>
+                <div style="background:#fff5f5; border-radius:10px; padding:10px 12px; font-size:10px; color:var(--red); line-height:1.5">⚠️ 배송지는 매 캠페인마다 새로 확인합니다. 정확히 입력해 주세요.</div>
+                <div style="background:var(--ink); color:var(--cream); border-radius:11px; padding:12px; text-align:center; font-size:12px; font-weight:700; margin-top:10px">신청 완료</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 16 · 해결 4 정산 (강조) -->
+  <section class="slide" data-label="해결·정산">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">04 — 4</span> 해결 · 정산 <span style="color:var(--orange); font-weight:700">★ 핵심</span></div>
+      <div class="row between center wrap" style="margin-top:10px; gap:16px">
+        <h2 style="max-width:18em">‘사람 쫓아다니는 정산’을 ‘자동으로 굴러가는 정산’으로</h2>
+        <span class="chip" style="border-color:var(--orange); color:var(--orange)"><span class="dot" style="background:var(--orange)"></span> 정산</span>
+      </div>
+      <div class="grid mt" style="grid-template-columns:1.02fr .98fr; gap:28px; align-items:center">
+        <div>
+          <ul class="clean">
+            <li><span class="mk">＋</span><div><strong>계좌·주민번호 1회 등록 재사용</strong> — 인플루언서가 마이페이지에서 한 번 등록(주민번호는 분리 보관·서버 조회). 중복 서류 수취 제거.</div></li>
+            <li><span class="mk">＋</span><div><strong>선정 → 정산 자동 생성</strong> — 신청관리에서 ‘진행’으로 선정하면 정산 항목이 <strong>고료 기본값으로 자동 생성</strong>(중복 방지).</div></li>
+            <li><span class="mk">＋</span><div><strong>캠페인별 정산 대시보드</strong> — “12명 중 5명 정산완료” 진행바 + 지급예정 합계로 한눈에.</div></li>
+            <li><span class="mk">＋</span><div><strong>1클릭 지급 처리</strong> — 금액 수정 → 지급완료 → 인플루언서 앱 ‘정산 내역’에 즉시 반영.</div></li>
+            <li><span class="mk">＋</span><div><strong>AI 정산 보조</strong> — 3.3% 원천징수·실지급액 계산, 은행 일괄이체 CSV·명세서 생성.</div></li>
+          </ul>
+        </div>
+        <div class="col gap">
+          <div class="win">
+            <div class="wbar"><span class="wdot" style="background:#ff5f57"></span><span class="wdot" style="background:#febc2e"></span><span class="wdot" style="background:#28c840"></span><span class="wt">SIRIAI 어드민 · 정산 관리</span></div>
+            <div class="wbody">
+              <div class="row gap-s" style="margin-bottom:12px; flex-wrap:wrap">
+                <div class="card tight" style="flex:1; padding:10px 12px; min-width:120px"><div class="mono faint" style="font-size:8.5px; letter-spacing:.1em">지급 예정 합계</div><div style="font-size:18px; font-weight:800; color:var(--orange)">350,000원</div></div>
+                <div class="card tight" style="flex:1; padding:10px 12px; min-width:90px"><div class="mono faint" style="font-size:8.5px; letter-spacing:.1em">캠페인</div><div style="font-size:18px; font-weight:800">3개</div></div>
+              </div>
+              <div class="folder" style="margin-bottom:9px">
+                <div class="row between center"><div><span style="font-size:18px">📁</span> <strong style="font-size:12.5px">문샷 립컬러 신규</strong> <span class="mono faint" style="font-size:9px">· 무신사</span></div><span style="font-size:11px; color:var(--orange); font-weight:700">12명 중 5명 완료</span></div>
+                <div class="fb"><div class="fbi" style="width:42%; background:var(--orange)"></div></div>
+              </div>
+              <div class="folder">
+                <div class="row between center"><div><span style="font-size:18px">📁</span> <strong style="font-size:12.5px">토코보 선크림</strong> <span class="mono faint" style="font-size:9px">· 토코보</span></div><span style="font-size:11px; color:var(--green); font-weight:700">8명 전원 완료</span></div>
+                <div class="fb"><div class="fbi" style="width:100%; background:var(--green)"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="flowline" style="justify-content:center">
+            <span class="node" style="font-size:11.5px">신청 ‘진행’ 선정</span><span class="ar">→</span>
+            <span class="node" style="font-size:11.5px; border-color:var(--orange); color:var(--orange)">정산 자동 생성</span><span class="ar">→</span>
+            <span class="node" style="font-size:11.5px">지급완료 1클릭</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 17 · 해결 5 검수·아카이빙 -->
+  <section class="slide" data-label="해결·검수">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">04 — 5</span> 해결 · 검수 · 아카이빙</div>
+      <div class="row between center wrap" style="margin-top:10px; gap:16px">
+        <h2 style="max-width:18em">복붙과 다운로드를, 업로드 한 번과 자동 저장으로</h2>
+        <span class="chip" style="border-color:var(--pink); color:var(--pink)"><span class="dot" style="background:var(--pink)"></span> 검수</span>
+      </div>
+      <div class="grid mt" style="grid-template-columns:1.02fr .98fr; gap:28px; align-items:center">
+        <div>
+          <ul class="clean">
+            <li><span class="mk">＋</span><div><strong>인플루언서가 직접 링크 업로드</strong> — 캠페인 선택 후 콘텐츠 링크 제출. 담당자의 복붙 작업이 사라짐.</div></li>
+            <li><span class="mk">＋</span><div><strong>업로드 전 자가 체크</strong> — “브랜드 태그했어요 / 공동작업자 추가했어요” 확인해야 제출 가능.</div></li>
+            <li><span class="mk">＋</span><div><strong>어드민 검수 탭</strong> — 미인증 / 인증완료로 분류, 링크 바로 열어 확인 후 인증 토글.</div></li>
+            <li><span class="mk">＋</span><div><strong>콘텐츠 아카이브 자동화</strong> — 링크를 붙여넣으면 릴스는 <span class="mono">@핸들.mp4</span>, 피드는 <span class="mono">@핸들/</span> 폴더로 <strong>Google Drive에 캠페인·연월별 자동 저장</strong>.</div></li>
+            <li><span class="mk">＋</span><div><strong>AI 콘텐츠 검수</strong> — 해시태그·브랜드 멘션·공동작업자·금지사항을 가이드와 자동 대조, 수정요청 메시지까지.</div></li>
+          </ul>
+        </div>
+        <div class="col gap">
+          <div class="win">
+            <div class="wbar"><span class="wdot" style="background:#ff5f57"></span><span class="wdot" style="background:#febc2e"></span><span class="wdot" style="background:#28c840"></span><span class="wt">SIRIAI 어드민 · 콘텐츠 아카이브</span></div>
+            <div class="wbody">
+              <table class="tbl">
+                <thead><tr><th>링크</th><th>상태</th><th>결과</th></tr></thead>
+                <tbody>
+                  <tr><td class="h">instagram.com/reel/Ab…</td><td style="color:var(--green); font-weight:700">완료</td><td>릴스 → @minji.mp4</td></tr>
+                  <tr><td class="h">instagram.com/p/Cd…</td><td style="color:var(--green); font-weight:700">완료</td><td>피드 4/4장 → @sora/</td></tr>
+                  <tr><td class="h">instagram.com/reel/Ef…</td><td style="color:var(--orange); font-weight:700">처리중…</td><td class="faint">—</td></tr>
+                </tbody>
+              </table>
+              <div class="mono faint" style="font-size:9.5px; margin-top:10px">저장 위치: SIRIAI_콘텐츠 / 문샷 립컬러 2026.06 /</div>
+            </div>
+          </div>
+          <div class="card tight" style="padding:11px 13px">
+            <div class="mono" style="font-size:9px; letter-spacing:.14em; color:var(--faint); margin-bottom:7px">업로드 전 확인 · 인플루언서 앱</div>
+            <div style="font-size:11.5px; line-height:1.9"><span style="color:var(--green)">☑</span> 게시물에 브랜드 계정을 태그했어요<br><span style="color:var(--green)">☑</span> 공동작업자(브랜드 계정)를 추가했어요</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 18 · AI 레이어 -->
+  <section class="slide" data-label="AI 자동화">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">04 — 6</span> AI 자동화 레이어</div>
+      <h2 style="margin-top:12px">반복되는 ‘쓰기·계산·대조’는 AI가 초안을, 사람은 결정을.</h2>
+      <div class="grid g4 mt-l" style="gap:12px">
+        <div class="card tight"><div class="ico">🔎</div><h3 class="mt-s" style="font-size:13.5px">influencer-scout</h3><p>핸들 → 팔로워·카테고리·적합도 스크리닝, DB 추가용 정리</p></div>
+        <div class="card tight"><div class="ico">✉️</div><h3 class="mt-s" style="font-size:13.5px">influencer-dm</h3><p>섭외·선정·리마인드·정산 등 단계별 DM 자동 작성</p></div>
+        <div class="card tight"><div class="ico">🧾</div><h3 class="mt-s" style="font-size:13.5px">campaign-setup</h3><p>브랜드 브리프 → 캠페인 등록 + 모집 공고 + 가이드 연결</p></div>
+        <div class="card tight"><div class="ico">📋</div><h3 class="mt-s" style="font-size:13.5px">brand-guide</h3><p>크리에이터용 촬영·업로드 가이드 페이지 자동 생성</p></div>
+        <div class="card tight"><div class="ico">✅</div><h3 class="mt-s" style="font-size:13.5px">content-review</h3><p>해시태그·멘션·금지사항 가이드 대조 검수 + 수정요청</p></div>
+        <div class="card tight"><div class="ico">💰</div><h3 class="mt-s" style="font-size:13.5px">settlement-helper</h3><p>3.3% 원천징수·실지급액·은행 일괄이체 CSV·명세서</p></div>
+        <div class="card tight"><div class="ico">📊</div><h3 class="mt-s" style="font-size:13.5px">campaign-report</h3><p>브랜드 보고용 캠페인 성과 리포트 자동 정리</p></div>
+        <div class="card tight"><div class="ico">📌</div><h3 class="mt-s" style="font-size:13.5px">ops-digest</h3><p>리마인드·검수·정산·마감 임박 등 ‘오늘 할 일’ 매일 점검</p></div>
+      </div>
+      <p class="lead mt" style="font-size:14.5px">→ 캠페인 셋업부터 섭외·메시지·검수·정산·보고까지 — <strong>라이프사이클 전체에 자동화 도우미</strong>가 붙습니다.</p>
+    </div>
+  </section>
+
+  <!-- 운영 개요 -->
+  <section class="slide" data-label="운영·개요">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">05</span> 운영 실행 · 개요</div>
+      <h2 style="margin-top:14px">앱을 만든 게 끝이 아닙니다 — 이렇게 운영하고 키웁니다.</h2>
+      <p class="lead mt-s" style="max-width:52em">회사에서 가장 궁금해할 부분 — 시스템을 <strong>실제로 어떻게 굴리고</strong>, 신규 인플루언서를 <strong>어떻게 모으고</strong>, 채널을 <strong>어떻게 키울지</strong>를 3개 축으로 정리했습니다.</p>
+      <div class="grid g3 mt-l">
+        <div class="card"><span class="tag" style="background:var(--purple)">축 1</span><h3 class="mt-s">대량 연락</h3><p>개인 폰 대신 문자 API·카카오 알림톡으로, 앱 DB와 연동해 단계별 자동·일괄 발송.</p></div>
+        <div class="card"><span class="tag" style="background:var(--blue)">축 2</span><h3 class="mt-s">인바운드 모집</h3><p>인스타 허브 + 레퍼럴 + 기존 DB로 ‘찾아오게’ 만드는 신규 유입 엔진.</p></div>
+        <div class="card"><span class="tag" style="background:var(--green)">축 3</span><h3 class="mt-s">인스타 채널</h3><p>저장하고 싶은 콘텐츠로 브랜딩 → 앱 유입·락인 → 다시 모집으로 순환.</p></div>
+      </div>
+      <p class="kicker" style="margin-top:28px"><span class="num">운영 원칙 3</span></p>
+      <div class="grid g3 mt-s">
+        <div class="card tight"><h3 style="font-size:13.5px">① 단순 반복은 자동화</h3><p>문자·검수·정산·콘텐츠 초안은 시스템·AI가. 사람은 판단·관계에 집중.</p></div>
+        <div class="card tight"><h3 style="font-size:13.5px">② 아웃바운드 → 인바운드</h3><p>찾아 나서는 모집을, 찾아오는 구조로 전환.</p></div>
+        <div class="card tight"><h3 style="font-size:13.5px">③ 한 번 만들어 여러 번</h3><p>결과물·콘텐츠를 재활용(아카이브·크로스미디어)해 적은 손으로 운영.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 19 · 운영 ① 대량 연락 -->
+  <section class="slide" data-label="운영·연락">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">05</span> 운영 실행 · 대량 연락</div>
+      <h2 style="margin-top:14px">개인 폰 없이, 수백 명에게 한 번에.</h2>
+      <p class="lead mt-s" style="max-width:48em">인플루언서 앱 DB(상태·단계)와 연동해 <strong>맞춤 대량 발송</strong>. 선정·리마인드·정산 안내를 단계에 맞춰 버튼 한 번으로.</p>
+      <div class="grid g2 mt-l" style="gap:18px">
+        <div class="card">
+          <div class="ico">📨</div>
+          <h3 class="mt-s">방법 1 · 단체 문자 발송 API</h3>
+          <ul class="clean" style="margin-top:4px">
+            <li style="padding:5px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13.5px">알리고 · 문자나라 · 솔라피 등 문자 API 연동</div></li>
+            <li style="padding:5px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13.5px">한 번에 수십~수백 명, <strong>이름·캠페인 자동 치환</strong> 맞춤 문자</div></li>
+            <li style="padding:5px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13.5px">비용 <strong>월 몇만 원</strong> 수준</div></li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="ico">💬</div>
+          <h3 class="mt-s">방법 2 · 카카오 알림톡</h3>
+          <ul class="clean" style="margin-top:4px">
+            <li style="padding:5px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13.5px">카카오 비즈니스 채널 개설 후 발송</div></li>
+            <li style="padding:5px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13.5px">카톡 형식이라 친숙 · <strong>개인 번호 노출 없이</strong> 대량</div></li>
+            <li style="padding:5px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13.5px">읽힘률이 일반 문자보다 <strong>높음</strong></div></li>
+          </ul>
+        </div>
+      </div>
+      <div class="card mt" style="background:rgba(42,111,219,.07); border-color:rgba(42,111,219,.2)">
+        <p style="font-size:15px; font-weight:600; color:var(--ink); margin:0">현재 앱 내 알림 → 문자·알림톡으로 <span class="hl">휴대폰까지 도달</span> 강화. 둘 다 앱과 연동해 단체 발송이 핵심.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 운영·연락 단계별 시나리오 -->
+  <section class="slide" data-label="운영·연락 시나리오">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">05</span> 운영 실행 · 단계별 자동 발송</div>
+      <h2 style="margin-top:14px">캠페인 한 건의 연락, 이렇게 자동화됩니다.</h2>
+      <p class="lead mt-s" style="max-width:52em">예전엔 캠페인당 [피처체크 → 선정 → 가이드 → 리마인더 3회 → 정산]을 전부 손으로 문자. 이제는 앱 상태에 맞춰 <strong>템플릿 + 버튼 한 번</strong>으로.</p>
+      <table class="map mt-l">
+        <thead><tr><th style="width:20%">단계</th><th style="width:32%">발송 내용</th><th style="width:24%">채널</th><th style="width:24%">자동화 포인트</th></tr></thead>
+        <tbody>
+          <tr><td class="stage">① 섭외·모집 안내</td><td>캠페인 오픈 · 신청 유도</td><td>알림톡 · 문자</td><td class="now">DB 필터 대상에 일괄</td></tr>
+          <tr><td class="stage">② 선정 안내</td><td>“선정되셨어요” + 일정</td><td>앱 알림 + 알림톡</td><td class="now">‘진행’ 선정 시 자동 트리거</td></tr>
+          <tr><td class="stage">③ 가이드 전달</td><td>촬영·업로드 가이드 링크</td><td>앱 + 알림톡</td><td class="now">캠페인 가이드 자동 첨부</td></tr>
+          <tr><td class="stage">④ 리마인드 ×3</td><td>3일 전 · 1일 전 · 당일</td><td>알림톡 · 문자</td><td class="now">업로드 마감 기준 예약</td></tr>
+          <tr><td class="stage">⑤ 정산 안내</td><td>지급 예정 · 완료 통지</td><td>앱 + 알림톡</td><td class="now">지급완료 처리 시 자동</td></tr>
+        </tbody>
+      </table>
+      <p class="lead mt" style="font-size:14px">→ AI <span class="mono">influencer-dm</span> 스킬이 각 단계 메시지 초안을 톤 맞춰 작성, 담당자는 확인·발송만.</p>
+    </div>
+  </section>
+
+  <!-- 20 · 운영 ② 인바운드 모집 엔진 -->
+  <section class="slide" data-label="운영·모집엔진">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">05</span> 운영 실행 · 인바운드 모집 · 개요</div>
+      <h2 style="margin-top:12px">찾아 나서지 않고, 찾아오게 만든다.</h2>
+      <div class="grid g4 mt" style="gap:12px">
+        <div class="card tight"><div class="ico">🏢</div><h3 class="mt-s" style="font-size:14px">인스타 = 인바운드 허브</h3><p>“감도 높은 뷰티·패션 브랜드 × 크리에이터” 포지셔닝. 프로필에 앱 링크(링크바이오).</p></div>
+        <div class="card tight"><div class="ico">📲</div><h3 class="mt-s" style="font-size:14px">상시 노출</h3><p>진행 결과물(공동작업자 릴스·피드) 자연 노출 + 스토리에 ‘모집중 캠페인’ 정기 업로드.</p></div>
+        <div class="card tight"><div class="ico">🤝</div><h3 class="mt-s" style="font-size:14px">레퍼럴(지인 추천)</h3><p>기존 인플루언서에게 ‘비슷한 감도 지인’ 추천 요청. 진행 성사 시 <strong>소개 리워드</strong>.</p></div>
+        <div class="card tight"><div class="ico">🔔</div><h3 class="mt-s" style="font-size:14px">기존 DB 활성화</h3><p>기존 협업 인플루언서에게 메일·문자·알림톡으로 <strong>앱 가입 유도</strong>.</p></div>
+      </div>
+      <p class="kicker" style="margin-top:30px"><span class="num">성장 플라이휠</span></p>
+      <div class="flowline mt-s" style="gap:8px; flex-wrap:wrap">
+        <span class="node" style="font-size:12.5px">① 인스타 노출·결과물</span><span class="ar">→</span>
+        <span class="node" style="font-size:12.5px">② 앱 가입·캠페인 신청</span><span class="ar">→</span>
+        <span class="node" style="font-size:12.5px">③ 캠페인 진행</span><span class="ar">→</span>
+        <span class="node" style="font-size:12.5px">④ 고퀄 결과물 확보</span><span class="ar">↻</span>
+        <span class="node" style="font-size:12.5px; border-color:var(--blue); color:var(--blue)">다시 콘텐츠 + 레퍼럴</span>
+      </div>
+      <p class="lead mt" style="font-size:14px">→ 광고비에 기대지 않고, <strong>결과물이 다음 모집을 부르는 선순환</strong>으로 검증된 신규 풀을 늘립니다.</p>
+    </div>
+  </section>
+
+  <!-- 운영·모집 ① 인스타 허브 -->
+  <section class="slide" data-label="모집·인스타 허브">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">05</span> 운영 실행 · 모집 ① 인스타 허브</div>
+      <h2 style="margin-top:14px">회사 인스타그램 = 인바운드의 중심.</h2>
+      <div class="grid g2 mt-l" style="gap:18px; align-items:start">
+        <div>
+          <ul class="clean">
+            <li><span class="mk">＋</span><div><strong>포지셔닝</strong> — “감도 높은 뷰티·패션 브랜드와 크리에이터를 잇는다”를 한 줄로 각인.</div></li>
+            <li><span class="mk">＋</span><div><strong>프로필 = 전환 장치</strong> — 소개문 + 링크바이오에 <strong>인플루언서 앱 링크</strong>(가입·모집중 캠페인) 고정.</div></li>
+            <li><span class="mk">＋</span><div><strong>운영 목표</strong> — 팔로워(=잠재 인플루언서 풀)를 모으고 자연스럽게 앱으로 유입.</div></li>
+            <li><span class="mk">＋</span><div><strong>두 대상 동시 공략</strong> — 인플루언서에겐 “여기서 협업하고 싶다”, 브랜드엔 “대행 맡기고 싶다”.</div></li>
+          </ul>
+        </div>
+        <div class="card">
+          <p class="kicker"><span class="num">프로필 예시</span></p>
+          <div class="mt-s" style="font-size:14px; line-height:1.85">
+            <strong>SIRIAI</strong> · 뷰티·패션 인플루언서 마케팅<br>
+            ─ 감도 높은 브랜드 × 크리에이터 매칭<br>
+            ─ 진행 캠페인 포트폴리오 큐레이션<br>
+            ─ 지금 모집중 캠페인 신청 👇<br>
+            <span style="color:var(--blue)">🔗 link.in/siriai-app</span>
+          </div>
+        </div>
+      </div>
+      <div class="card mt" style="background:rgba(46,125,50,.06); border-color:rgba(46,125,50,.2)">
+        <p style="font-size:14.5px; font-weight:600; margin:0">핵심 — 인스타는 ‘광고판’이 아니라 <span class="hl">앱으로 가는 입구</span>. 모든 콘텐츠 끝에 “앱에서 신청·확인” 동선을 둔다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 운영·모집 ② 노출 전략 -->
+  <section class="slide" data-label="모집·노출 전략">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">05</span> 운영 실행 · 모집 ② 노출 전략</div>
+      <h2 style="margin-top:14px">결과물 자체가 광고가 되게 한다.</h2>
+      <div class="grid g3 mt-l">
+        <div class="card"><div class="ico">🤝</div><h3 class="mt-s">공동작업자(협업) 노출</h3><p>진행 인플루언서 게시물에 회사 계정을 <strong>공동작업자</strong>로 → 그들의 피드에 우리 계정이 함께 노출. 그 게시물로 <strong>광고 집행</strong>까지 가능.</p></div>
+        <div class="card"><div class="ico">🎞️</div><h3 class="mt-s">결과물 재업로드</h3><p>진행한 릴스·피드를 <strong>인플루언서 태그 포함</strong>해 회사 계정에 재업로드 → 포트폴리오 + 자연 도달.</p></div>
+        <div class="card"><div class="ico">📲</div><h3 class="mt-s">스토리 상시 모집</h3><p>“현재 모집중 캠페인” 스토리를 <strong>정기 업로드</strong> → 팔로우 중인 기존 인플루언서가 보고 바로 신청.</p></div>
+      </div>
+      <p class="lead mt-l" style="font-size:14.5px">→ 별도 제작물 없이 <strong>이미 가진 캠페인 결과물</strong>로 노출을 만들고, 그 노출이 다시 신청으로 이어집니다.</p>
+    </div>
+  </section>
+
+  <!-- 운영·모집 ③ 레퍼럴 + DB -->
+  <section class="slide" data-label="모집·레퍼럴·DB">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">05</span> 운영 실행 · 모집 ③ 레퍼럴 · 기존 DB</div>
+      <h2 style="margin-top:14px">검증된 사람이, 검증된 사람을 데려온다.</h2>
+      <div class="grid g2 mt-l" style="gap:18px; align-items:start">
+        <div class="panel good">
+          <div class="ph">🤝 레퍼럴 (지인 추천)</div>
+          <div class="li"><span class="mk">✓</span><div>진행 이력 있는 인플루언서에게 “비슷한 감도의 지인 추천” 요청.</div></div>
+          <div class="li"><span class="mk">✓</span><div><strong>소개 인센티브</strong> — 추천한 지인이 가입·승인 + 실제 캠페인 진행 시 <strong>소정의 리워드</strong>.</div></div>
+          <div class="li"><span class="mk">✓</span><div>‘성과 연동’이라 비용 효율적 + 감도 검증된 풀이 들어옴.</div></div>
+        </div>
+        <div class="panel good">
+          <div class="ph">🔔 기존 DB 활성화</div>
+          <div class="li"><span class="mk">✓</span><div>그동안 협업한 인플루언서 전체에게 <strong>앱 가입 안내</strong> 발송(메일·문자·카톡).</div></div>
+          <div class="li"><span class="mk">✓</span><div>“이제 신청·정산·소통이 앱 한 곳에서” 가치를 전달.</div></div>
+          <div class="li"><span class="mk">✓</span><div>잠들어 있던 풀을 <strong>활성 사용자</strong>로 전환.</div></div>
+        </div>
+      </div>
+      <p class="lead mt" style="font-size:14px">→ 광고 의존 없이 <strong>신뢰 기반</strong>으로 풀을 늘리고, 자발적 추천 시스템으로 지속 유입.</p>
+    </div>
+  </section>
+
+  <!-- 21 · 운영 ③ 인스타 콘텐츠 전략 -->
+  <section class="slide" data-label="운영·콘텐츠">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">05</span> 운영 실행 · 인스타 채널 · 개요</div>
+      <h2 style="margin-top:10px">팔리는 광고가 아니라, ‘저장하고 싶은 채널’.</h2>
+      <p class="kicker" style="margin-top:18px"><span class="num">콘텐츠 4기둥</span></p>
+      <div class="grid g4 mt-s" style="gap:11px">
+        <div class="card tight"><span class="tag" style="background:var(--blue)">포트폴리오</span><p class="mt-s">크리에이터 아카이브 — 진행 결과물 큐레이션. “여기서 하면 퀄리티 브랜드를 만난다” 증명 + “나도 협찬받고 싶다” 자극.</p></div>
+        <div class="card tight"><span class="tag" style="background:var(--green)">트렌드·매거진</span><p class="mt-s">분기 뷰티·패션 트렌드 리포트, “성수 라이징 브랜드 5” 류 카드뉴스. 마지막 장 ‘친구 공유’로 바이럴.</p></div>
+        <div class="card tight"><span class="tag" style="background:var(--purple)">교육형</span><p class="mt-s">3초 후킹·GRWM·조명·자막·‘잘 되는 캡션 공식’·트렌드 사운드. 크리에이터 성장 지원으로 락인.</p></div>
+        <div class="card tight"><span class="tag" style="background:var(--orange)">모집·전환</span><p class="mt-s">“신청하면 이렇게 진행돼요” 3단계, 모집중 캠페인 티저, 레퍼럴 이벤트.</p></div>
+      </div>
+      <div class="grid g3 mt" style="gap:11px">
+        <div class="card tight"><h3 style="font-size:13px">🔁 크로스미디어</h3><p style="margin-top:4px">인스타엔 핵심 요약 → “전체는 앱에서” CTA → 앱 유입. 앱 내 뉴스레터로 상시 열람·락인.</p></div>
+        <div class="card tight"><h3 style="font-size:13px">📢 소액 광고</h3><p style="margin-top:4px">뷰티·패션 크리에이터 타깃, 일 1~2만 원 ‘협업 모집’ 광고 + 공동작업자 노출로 도달 확대.</p></div>
+        <div class="card tight"><h3 style="font-size:13px">🤖 올인원 자동화</h3><p style="margin-top:4px">AI가 주제 선정·트렌드 데이터 수집·카드뉴스 이미지+캡션까지 자동 생성.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 운영·콘텐츠 기둥1 포트폴리오 -->
+  <section class="slide" data-label="콘텐츠·포트폴리오">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">05</span> 운영 실행 · 콘텐츠 기둥 ① 포트폴리오</div>
+      <h2 style="margin-top:14px">“여기서 하면 퀄리티 브랜드를 만난다”를 증명.</h2>
+      <div class="grid g2 mt-l" style="gap:18px; align-items:start">
+        <div>
+          <ul class="clean">
+            <li><span class="mk">＋</span><div><strong>크리에이터 아카이브</strong> — 매칭된 인플루언서들이 촬영한 고퀄 피드·릴스를 큐레이션해 업로드.</div></li>
+            <li><span class="mk">＋</span><div><strong>포트폴리오 증명</strong> — “이 브랜드의 이 제품을 이렇게 감각적으로 소화” → 브랜드사엔 <strong>대행 능력</strong> 증명.</div></li>
+            <li><span class="mk">＋</span><div><strong>욕구 자극</strong> — 다른 인플루언서에겐 “나도 저기서 협찬받아 예쁜 피드를 만들고 싶다”.</div></li>
+            <li><span class="mk">＋</span><div><strong>비주얼 브랜드 소개</strong> — 진행 브랜드(때로는 하이엔드 룩북)도 감성 이미지로 소개해 계정 격을 올림.</div></li>
+          </ul>
+        </div>
+        <div class="card" style="align-self:stretch">
+          <p class="kicker"><span class="num">게시물 예시</span></p>
+          <ul class="clean" style="margin-top:8px">
+            <li style="padding:5px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">“[브랜드] 신상 립 — 우리 크리에이터들의 해석”</div></li>
+            <li style="padding:5px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">릴스 모음: 이번 달 베스트 콘텐츠 5</div></li>
+            <li style="padding:5px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">비포&애프터: 같은 제품, 다른 무드</div></li>
+            <li style="padding:5px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">협업 브랜드 신제품·행사 소개</div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 운영·콘텐츠 기둥2 트렌드 -->
+  <section class="slide" data-label="콘텐츠·트렌드">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">05</span> 운영 실행 · 콘텐츠 기둥 ② 트렌드·매거진</div>
+      <h2 style="margin-top:14px">‘저장’과 ‘공유’를 부르는 정보성 콘텐츠.</h2>
+      <p class="lead mt-s" style="max-width:52em">광고만 올리면 계정 매력도가 떨어집니다. 유저가 저장하고 싶어 하는 매거진형 콘텐츠로 도달·팔로워를 키웁니다. (기획 중인 <strong>자체 뷰티 트렌드 리포트</strong>와 직결)</p>
+      <div class="grid g2 mt-l" style="gap:18px; align-items:start">
+        <div class="card">
+          <h3>주제 예시</h3>
+          <ul class="clean" style="margin-top:6px">
+            <li style="padding:5px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">“올여름 파우치 치트키, 젤리 립 플럼퍼 Top 5”</div></li>
+            <li style="padding:5px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">“요즘 성수에서 가장 핫한 라이징 브랜드 5”</div></li>
+            <li style="padding:5px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">“올여름 주목할 뷰티 트렌드 키워드”</div></li>
+            <li style="padding:5px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">“브랜드가 요즘 찾는 인플루언서 유형”</div></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>운영 포인트</h3>
+          <ul class="clean" style="margin-top:6px">
+            <li style="padding:5px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px"><strong>분기별 트렌드 리포트</strong>를 카드뉴스로 제작·발행</div></li>
+            <li style="padding:5px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">시즌·테마별 큐레이션으로 ‘저장’ 유도</div></li>
+            <li style="padding:5px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">마지막 장: “같이 작업하고 싶은 친구에게 공유” → 바이럴</div></li>
+            <li style="padding:5px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">앱 내 <strong>뉴스레터</strong>로도 상시 열람 제공</div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 운영·콘텐츠 기둥3·4 교육+모집 -->
+  <section class="slide" data-label="콘텐츠·교육·모집">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">05</span> 운영 실행 · 콘텐츠 기둥 ③ 교육 · ④ 모집</div>
+      <h2 style="margin-top:14px">크리에이터를 키우고(락인), 신청으로 전환한다.</h2>
+      <div class="grid g2 mt-l" style="gap:18px; align-items:start">
+        <div class="card">
+          <span class="tag" style="background:var(--purple)">기둥 ③ 교육형</span>
+          <p style="font-size:12.5px; color:var(--faint); margin-top:6px">크리에이터에게 도움 → 팔로우·앱 락인</p>
+          <ul class="clean" style="margin-top:4px">
+            <li style="padding:4px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">“3초 후킹 만드는 법” · GRWM 촬영 가이드</div></li>
+            <li style="padding:4px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">조명·각도 꿀팁 · 무료 편집앱·템플릿</div></li>
+            <li style="padding:4px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">자막 스타일 · “잘 되는 캡션 공식”</div></li>
+            <li style="padding:4px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">트렌드 사운드 · 알고리즘·도달 올리는 법</div></li>
+            <li style="padding:4px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">선정 확률 높이는 프로필 관리법(=앱 활용)</div></li>
+          </ul>
+        </div>
+        <div class="card">
+          <span class="tag" style="background:var(--orange)">기둥 ④ 모집·전환</span>
+          <p style="font-size:12.5px; color:var(--faint); margin-top:6px">관심을 실제 신청으로</p>
+          <ul class="clean" style="margin-top:4px">
+            <li style="padding:4px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">“신청하면 이렇게 진행돼요” 3단계 안내</div></li>
+            <li style="padding:4px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">한정 캠페인 티저 · 마감 임박 리마인드</div></li>
+            <li style="padding:4px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">레퍼럴 이벤트(“좋은 동료를 추천해주세요”)</div></li>
+            <li style="padding:4px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">앱 활용 꿀팁 + “자세한 건 앱에서” CTA</div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 운영·콘텐츠 크로스미디어·자동화 -->
+  <section class="slide" data-label="콘텐츠·크로스미디어·자동화">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">05</span> 운영 실행 · 크로스미디어 · 자동화</div>
+      <h2 style="margin-top:14px">인스타 → 앱 유입, 그리고 운영은 자동화.</h2>
+      <div class="grid g3 mt-l">
+        <div class="card"><div class="ico">🔁</div><h3 class="mt-s">크로스미디어 전략</h3><p>같은 가이드를 인스타용 카드뉴스로 요약 → “전체 내용은 앱에서” 링크 삽입 → 팔로워를 <strong>앱으로 유입</strong>.</p></div>
+        <div class="card"><div class="ico">📱</div><h3 class="mt-s">앱 락인</h3><p>성장 가이드·콘텐츠 팁·뉴스레터를 <strong>앱 내 상시</strong> 제공 → 다운로드·재방문 유도.</p></div>
+        <div class="card"><div class="ico">📢</div><h3 class="mt-s">소액 광고</h3><p>뷰티·패션 크리에이터 타깃 “협업 모집” 광고를 <strong>일 1~2만 원</strong> 소액으로 → 신규 인바운드.</p></div>
+      </div>
+      <p class="kicker" style="margin-top:26px"><span class="num">올인원 자동화 시스템</span></p>
+      <div class="grid g3 mt-s">
+        <div class="card tight"><h3 style="font-size:13px">① 기획</h3><p>업로드할 최적의 주제·아이템을 AI가 선정.</p></div>
+        <div class="card tight"><h3 style="font-size:13px">② 수집</h3><p>트렌드 분석용 데이터를 시스템이 자동 수집.</p></div>
+        <div class="card tight"><h3 style="font-size:13px">③ 제작</h3><p>카드뉴스 이미지 + 본문 캡션까지 AI·시스템이 자동 생성.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 22 · Before/After -->
+  <section class="slide" data-label="Before / After">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">06</span> 업무 효율 · Before / After</div>
+      <h2 style="margin-top:12px">같은 일을, 더 적은 손으로.</h2>
+      <table class="map mt-l">
+        <thead><tr><th style="width:18%">항목</th><th style="width:41%">Before · 수작업</th><th style="width:41%">After · 시스템 + AI</th></tr></thead>
+        <tbody>
+          <tr><td class="stage">모집</td><td class="was">태그 검색 + 1:1 DM, 기억으로 매칭</td><td class="now">앱 공개 모집(인바운드) + 조건 필터 + AI 스카우트</td></tr>
+          <tr><td class="stage">소통</td><td class="was">개인 폰으로 단계마다 수동 문자 × 인원수</td><td class="now">자동 알림 + 앱 1:1 DM (+ AI 메시지 초안)</td></tr>
+          <tr><td class="stage">배송지</td><td class="was">전수 수기 재확인 / 과거 주소 사고</td><td class="now">신청 시 최신 주소 자동 수집</td></tr>
+          <tr><td class="stage">서류</td><td class="was">매 캠페인 신분증·통장 재수취</td><td class="now">1회 등록 후 재사용</td></tr>
+          <tr><td class="stage">송금</td><td class="was">메일 취합 → 슬랙 → 수기 송금·체크</td><td class="now">선정 시 자동 생성 + 대시보드 + 일괄이체 파일</td></tr>
+          <tr><td class="stage">검수·저장</td><td class="was">링크 복붙 + 영상 수동 다운로드·분류</td><td class="now">직접 업로드 + 드라이브 자동 저장 + AI 검수</td></tr>
+          <tr><td class="stage">운영 주체</td><td class="was">1인이 전 과정 수작업</td><td class="now">시스템·AI가 반복 처리, 사람은 판단·관계</td></tr>
+        </tbody>
+      </table>
+      <div class="card mt" style="background:rgba(46,125,50,.07); border-color:rgba(46,125,50,.22)">
+        <p style="font-size:clamp(14px,1.3vw,18px); font-weight:700; color:var(--ink); margin:0">핵심 효과 — <span class="hl">인원이 늘어도 매니저 공수는 선형으로 늘지 않는다.</span> 규모를 키울 수 있는 구조.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 20 · 기술·보안·운영 -->
+  <section class="slide" data-label="기술·보안">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">06</span> 기술 · 보안 · 운영</div>
+      <h2 style="margin-top:12px">검증된 표준 스택 위에, 안전하게.</h2>
+      <div class="grid g3 mt-l">
+        <div class="card">
+          <div class="ico">🧱</div>
+          <h3 class="mt-s">기술 스택</h3>
+          <ul class="clean" style="margin-top:4px">
+            <li style="padding:4px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">Next.js + TypeScript</div></li>
+            <li style="padding:4px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">Supabase (DB·인증·스토리지)</div></li>
+            <li style="padding:4px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">Vercel 자동 배포</div></li>
+            <li style="padding:4px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">Google Drive · 우편번호 API</div></li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="ico">🔒</div>
+          <h3 class="mt-s">보안 · 개인정보</h3>
+          <ul class="clean" style="margin-top:4px">
+            <li style="padding:4px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">주민번호 <strong>별도 테이블 분리</strong> 보관</div></li>
+            <li style="padding:4px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">서버에서 권한 키로만 조회</div></li>
+            <li style="padding:4px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">가입은 <strong>검토 후 승인</strong>제</div></li>
+            <li style="padding:4px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">정산 정보는 본인·담당자만</div></li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="ico">⚙️</div>
+          <h3 class="mt-s">운영</h3>
+          <ul class="clean" style="margin-top:4px">
+            <li style="padding:4px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">코드 반영 → <strong>즉시 자동 배포</strong></div></li>
+            <li style="padding:4px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">개발 현황 페이지로 진척 관리</div></li>
+            <li style="padding:4px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">웹앱이라 설치 없이 링크로 접속</div></li>
+            <li style="padding:4px 0"><span class="mk" style="font-size:12px">·</span><div style="font-size:13px">두 앱 + AI를 자체 운영</div></li>
+          </ul>
+        </div>
+      </div>
+      <p class="lead mt" style="font-size:14px">→ 외부 솔루션 구독이 아니라 <strong>우리 업무에 정확히 맞춘 자체 시스템</strong>. 필요한 기능을 우리가 바로 추가합니다.</p>
+    </div>
+  </section>
+
+  <!-- 21 · 로드맵 -->
+  <section class="slide" data-label="로드맵">
+    <div class="slide-inner">
+      <div class="kicker"><span class="num">06</span> 향후 로드맵</div>
+      <h2 style="margin-top:12px">지금도 돌아가고, 더 단단해집니다.</h2>
+      <div class="grid g3 mt-l">
+        <div class="card">
+          <span class="tag" style="background:var(--blue)">알림 강화</span>
+          <p class="mt-s">현재 앱 내 알림 → <strong>카카오 알림톡 · 문자 · 웹푸시</strong>로 도달률 향상.</p>
+        </div>
+        <div class="card">
+          <span class="tag" style="background:var(--green)">자동 검증</span>
+          <p class="mt-s">인스타 게시물의 <strong>태그·공동작업자 자동 검증</strong> (Meta 연동). 현재는 자가 체크.</p>
+        </div>
+        <div class="card">
+          <span class="tag" style="background:var(--purple)">권한 분리</span>
+          <p class="mt-s">팀원 <strong>개별 로그인·권한</strong> (현재 공용 접속).</p>
+        </div>
+        <div class="card">
+          <span class="tag" style="background:var(--pink)">데이터 고도화</span>
+          <p class="mt-s"><strong>카테고리 세분화</strong>(뷰티→색조/스킨케어), 브랜드별 <strong>중복 전달 방지</strong>.</p>
+        </div>
+        <div class="card">
+          <span class="tag" style="background:var(--orange)">매출 관리</span>
+          <p class="mt-s">캠페인 <strong>매출·순이익·마진</strong>과 브랜드 예산 연동으로 수익성까지 한 화면.</p>
+        </div>
+        <div class="card">
+          <span class="tag" style="background:#444">고객 경험</span>
+          <p class="mt-s">FAQ·1:1 문의 고도화, 업로드 마감 자동 제어, 정산 주민번호 암호화.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 22 · 마무리 -->
+  <section class="slide dark" data-label="마무리">
+    <div class="slide-inner" style="text-align:center">
+      <div class="kicker" style="justify-content:center"><span>SIRIAI</span></div>
+      <p class="big-quote" style="margin:22px auto 0; max-width:22em">
+        수작업으로는 못 키우던 규모를,<br><span style="color:#F6C9A8">시스템으로 키웁니다.</span>
+      </p>
+      <div class="grid g3 mt-xl" style="max-width:780px; margin-left:auto; margin-right:auto; gap:14px">
+        <div class="card" style="text-align:center"><div class="stat"><div class="n" style="color:#F6C9A8">↓</div><div class="l" style="color:rgba(243,238,226,.8)">매니저 반복 공수</div></div></div>
+        <div class="card" style="text-align:center"><div class="stat"><div class="n" style="color:#F6C9A8">↑</div><div class="l" style="color:rgba(243,238,226,.8)">클라이언트 감도·만족</div></div></div>
+        <div class="card" style="text-align:center"><div class="stat"><div class="n" style="color:#F6C9A8">∞</div><div class="l" style="color:rgba(243,238,226,.8)">데이터 자산화·확장성</div></div></div>
+      </div>
+      <p class="lead" style="color:rgba(243,238,226,.82); margin-top:38px">감사합니다. &nbsp;·&nbsp; 질문을 받겠습니다.</p>
+    </div>
+  </section>
+
+
+</div><!-- /deck -->
+
+<div class="counter" id="counter"><b>01</b> / 34</div>
+<div class="brandmark"><span class="sq"></span>SIRIAI</div>
+<div class="footlabel" id="footlabel">표지</div>
+<div class="nav">
+  <button id="prev" aria-label="이전">‹</button>
+  <button id="next" aria-label="다음">›</button>
+</div>
+
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var total = slides.length;
+  var i = 0;
+  var bar = document.getElementById('bar');
+  var counter = document.getElementById('counter');
+  var footlabel = document.getElementById('footlabel');
+  var deck = document.getElementById('deck');
+
+  function pad(n){return (n<10?'0':'')+n;}
+  function render(){
+    slides.forEach(function(s,idx){
+      s.classList.remove('active','prev');
+      if(idx===i) s.classList.add('active');
+      else if(idx<i) s.classList.add('prev');
+    });
+    var cur = slides[i];
+    document.body.classList.toggle('on-dark', cur.classList.contains('dark'));
+    bar.style.width = (total<=1?100:(i/(total-1))*100)+'%';
+    counter.innerHTML = '<b>'+pad(i+1)+'</b> / '+pad(total);
+    footlabel.textContent = cur.getAttribute('data-label')||'';
+    if(location.hash !== '#'+(i+1)) history.replaceState(null,'','#'+(i+1));
+  }
+  function go(n){ i = Math.max(0, Math.min(total-1, n)); render(); }
+  function next(){ go(i+1); } function prev(){ go(i-1); }
+
+  document.getElementById('next').onclick = next;
+  document.getElementById('prev').onclick = prev;
+
+  document.addEventListener('keydown', function(e){
+    if(['ArrowRight','PageDown',' ','Spacebar','Enter'].indexOf(e.key)>-1){ e.preventDefault(); next(); }
+    else if(['ArrowLeft','PageUp','Backspace'].indexOf(e.key)>-1){ e.preventDefault(); prev(); }
+    else if(e.key==='Home'){ go(0); } else if(e.key==='End'){ go(total-1); }
+  });
+
+  // touch
+  var x0=null;
+  deck.addEventListener('touchstart',function(e){x0=e.touches[0].clientX;},{passive:true});
+  deck.addEventListener('touchend',function(e){
+    if(x0===null) return; var dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>50){ dx<0?next():prev(); } x0=null;
+  },{passive:true});
+
+  // start from hash
+  var h = parseInt((location.hash||'').replace('#',''),10);
+  if(h && h>=1 && h<=total) i=h-1;
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SIRIAI 발표 대본 · 스피커노트</title>
+<style>
+  :root{
+    --ink:#211A33; --cream:#F3EEE2; --paper:#FBF9F3; --line:rgba(33,26,51,.14); --line2:rgba(33,26,51,.08);
+    --muted:rgba(33,26,51,.62); --faint:rgba(33,26,51,.45);
+    --blue:#2A6FDB; --orange:#e65100; --green:#2e7d32; --red:#c62828; --purple:#6B4DCE; --pink:#C1436D;
+    --sans:'Helvetica Neue',Helvetica,Arial,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--sans); color:var(--ink); line-height:1.6;
+    background:radial-gradient(60% 40% at 12% 0%, rgba(246,201,168,.30), transparent 60%), radial-gradient(46% 36% at 92% 2%, rgba(221,208,239,.30), transparent 55%), var(--cream);
+    padding:clamp(28px,5vw,72px) clamp(20px,5vw,80px);}
+  .wrap{max-width:880px; margin:0 auto}
+  .kicker{font-family:var(--mono); font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:var(--faint)}
+  h1{font-size:clamp(28px,4.5vw,46px); font-weight:600; letter-spacing:-.025em; line-height:1.05; margin:10px 0 0}
+  .sub{font-size:16px; color:var(--muted); margin-top:14px}
+  .meta{display:flex; gap:10px; flex-wrap:wrap; margin-top:22px}
+  .pill{font-size:12px; font-weight:600; padding:6px 13px; border-radius:100px; border:1px solid var(--line); background:rgba(255,255,255,.6); color:var(--muted)}
+  h2.sec{font-size:13px; font-family:var(--mono); letter-spacing:.16em; text-transform:uppercase; color:var(--orange); margin:46px 0 6px; padding-top:22px; border-top:1px solid var(--line)}
+  .card{background:rgba(255,255,255,.72); border:1px solid var(--line); border-radius:16px; padding:20px 22px; margin-top:16px}
+  .slideno{display:inline-flex; align-items:center; justify-content:center; min-width:30px; height:30px; padding:0 9px; border-radius:8px; background:var(--ink); color:var(--cream); font-family:var(--mono); font-size:13px; font-weight:700; flex:none}
+  .sh{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+  .sh .t{font-size:18px; font-weight:700; letter-spacing:-.01em}
+  .sh .time{margin-left:auto; font-family:var(--mono); font-size:11px; color:var(--faint); background:rgba(33,26,51,.05); padding:3px 9px; border-radius:6px}
+  .say{margin-top:12px; font-size:15.5px; line-height:1.72}
+  .say::before{content:"🗣  "; }
+  .pt{margin-top:10px; font-size:13.5px; color:var(--muted); background:rgba(42,111,219,.07); border-left:3px solid var(--blue); border-radius:0 8px 8px 0; padding:8px 13px}
+  .pt b{color:var(--ink)}
+  .qa{margin-top:16px}
+  .q{font-weight:700; font-size:15px; margin-top:16px} .q::before{content:"Q. "; color:var(--orange); font-weight:800}
+  .a{font-size:14.5px; color:var(--muted); margin-top:5px} .a::before{content:"A. "; color:var(--green); font-weight:800}
+  ul{margin:8px 0 0 2px; list-style:none} li{padding:5px 0 5px 20px; position:relative; font-size:14.5px}
+  li::before{content:"–"; position:absolute; left:2px; color:var(--orange); font-weight:700}
+  .tipgrid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px}
+  .tip{background:rgba(255,255,255,.7); border:1px solid var(--line); border-radius:12px; padding:13px 15px; font-size:14px}
+  .tip b{display:block; margin-bottom:4px}
+  .hl{background:linear-gradient(transparent 58%, rgba(246,201,168,.7) 58%)}
+  @media print{ body{background:#fff} .card,.tip{break-inside:avoid} }
+  @media (max-width:680px){ .tipgrid{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">SIRIAI · PRESENTER SCRIPT</div>
+  <h1>발표 대본 &amp; 스피커노트</h1>
+  <p class="sub">「인플루언서 마케팅, 이제 시스템으로 운영합니다」 — 슬라이드별 말할 내용·강조 포인트·예상 질문</p>
+  <div class="meta">
+    <span class="pill">⏱ 총 18~22분 (Q&amp;A 별도)</span>
+    <span class="pill">🖥 함께 보기: SIRIAI_발표자료.html</span>
+    <span class="pill">👥 청중: 회사 동료·경영진</span>
+  </div>
+
+  <div class="card" style="margin-top:24px; background:rgba(33,26,51,.04)">
+    <b>발표 한 줄 목표</b>
+    <p style="margin-top:6px; font-size:15px; color:var(--muted)">“우리가 겪던 인플루언서 마케팅의 <span class="hl">5단계 수작업 병목</span>을, <span class="hl">두 개의 앱과 AI</span>로 어떻게 풀었는지”를 문제→해결 순서로 보여주고, <span class="hl">규모를 키울 수 있는 구조</span>가 됐음을 설득한다.</p>
+  </div>
+
+  <!-- PART 1 -->
+  <h2 class="sec">Part 1 · 도입 (약 2분)</h2>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">1</span><span class="t">표지 — 인플루언서 마케팅, 이제 시스템으로</span><span class="time">0:30</span></div>
+    <p class="say">안녕하세요. 오늘은 그동안 우리가 인플루언서 마케팅을 진행하면서 겪었던 문제들을, 제가 직접 만든 두 개의 웹앱과 AI 자동화로 어떻게 해결했는지 보여드리려고 합니다. 결론부터 말씀드리면, ‘사람이 손으로 하던 일’을 ‘시스템이 굴리는 일’로 바꿨습니다.</p>
+    <div class="pt"><b>강조</b> — 첫 문장에서 ‘문제 해결’ 프레임을 건다. 자랑이 아니라 ‘병목을 없앤 이야기’임을 분명히.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">2</span><span class="t">목차</span><span class="time">0:20</span></div>
+    <p class="say">순서는 이렇습니다. 먼저 우리가 왜 이걸 만들어야 했는지 배경을, 그다음 5단계 현황 진단으로 문제를 짚고, 솔루션 구조와 단계별 해결을 실제 화면으로 보여드린 뒤, 효율과 향후 계획으로 마무리하겠습니다.</p>
+    <div class="pt"><b>강조</b> — “문제 → 해결 → 효과” 흐름임을 예고해 청중이 따라오기 쉽게.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">3</span><span class="t">배경 — 규모는 커졌는데 방식은 그대로</span><span class="time">1:00</span></div>
+    <p class="say">우리는 브랜드와 인플루언서를 잇는 마케팅을 대행합니다. 무신사 같은 고정 클라이언트부터 신규 대행까지 캠페인이 몇 배로 늘었습니다. 그런데 운영 방식은 1년 전 그대로, 매니저 한 명이 검색·문자·시트·송금·다운로드를 전부 손으로 했습니다. 그 결과 클라이언트 만족도와 회사 성장성이 동시에 한계에 부딪혔습니다. ‘더 받고 싶어도 더 못 받는’ 구조였던 거죠.</p>
+    <div class="pt"><b>강조</b> — 빨간 ‘결과’ 박스를 짚으며 위기감을 만든다. 여기가 발표의 ‘왜’.</div>
+  </div>
+
+  <!-- PART 2 -->
+  <h2 class="sec">Part 2 · 현황 진단 — 5단계 문제 (약 3분 30초)</h2>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">4</span><span class="t">진단 한눈에 — 파이프라인 5단계</span><span class="time">0:40</span></div>
+    <p class="say">인플루언서 마케팅은 모집 → 연락 → 선정·배송 → 정산 → 검수·아카이빙, 이 다섯 단계로 흘러갑니다. 문제는 이 모든 단계에 수작업 병목이 있었다는 겁니다. 근본 원인은 세 가지였어요. 1인 수동 처리 구조, 데이터 자산화 부재, 그리고 공식 시스템과 채널의 부재.</p>
+    <div class="pt"><b>강조</b> — 이 5단계가 이후 발표의 ‘뼈대’임을 각인. 손가락으로 다섯 단계를 짚어가며.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">5</span><span class="t">문제 1 · 모집 — Pool 고갈</span><span class="time">0:40</span></div>
+    <p class="say">첫째, 모집입니다. 인스타 태그 검색하고 DM 보내는 방식에만 의존하다 보니 ‘보내던 사람한테 또 보내는’ 모수 고갈이 왔습니다. 풀이 1년간 순환이 안 되니 무신사 같은 곳에서 ‘감도 높은 사람으로 다시 짜달라’는 불만이 쌓였고요. 누가 색조에 강한지 같은 성향 데이터가 정리돼 있지 않아 매번 기억에 의존해 손으로 매칭했습니다.</p>
+    <div class="pt"><b>강조</b> — “기억에 의존한 수기 매칭” 이 표현이 핵심. 데이터 부재의 대표 증상.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">6</span><span class="t">문제 2 · 연락 — 수작업 과부하</span><span class="time">0:40</span></div>
+    <p class="say">둘째, 연락입니다. 공식 채널이 없어 담당자 개인 폰에 번호를 일일이 저장해 소통했어요. 캠페인 하나당 피처체크, 선정 안내, 가이드 배송, 리마인더 세 번까지 전부 수동 문자였습니다. 클라이언트가 몇 배로 늘어난 지금은 혼자 감당이 불가능한 수준이었고요. 게다가 공개 채널에 올리면 고료가 그대로 노출돼서, 고단가 A급 인플루언서 참여가 막히는 딜레마도 있었습니다.</p>
+    <div class="pt"><b>강조</b> — ‘다단계 × 인원수’로 곱셈 폭증한다는 점을 강조.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">7</span><span class="t">문제 3 · 선정·배송 — 데이터 최신화 부재</span><span class="time">0:30</span></div>
+    <p class="say">셋째, 배송입니다. 예전에 참여했던 사람의 주소를 확인 없이 그대로 넘기다 보니, 이사 같은 이유로 오배송이 주기적으로 났습니다. 그걸 막으려고 또 한 명 한 명 주소를 다시 묻는 전수조사를 하게 됐죠. 결국 사고를 막으려다 공수가 또 느는 악순환이었습니다.</p>
+    <div class="pt"><b>강조</b> — “틀리거나 / 매번 다시 묻거나 둘 중 하나” — 양자택일의 답답함.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">8</span><span class="t">문제 4 · 정산 — 중복 공수 &amp; 노쇼</span><span class="time">0:40</span></div>
+    <p class="say">넷째, 정산입니다. 여러 번 참여한 사람도 매번 신분증·통장사본을 새로 받았습니다. 담당자가 메일로 모아 슬랙에 올리면 대표님이 하나하나 수기로 송금하고 체크했고요. 인원이 늘수록 누락과 지연 위험이 커졌습니다. 또 고료가 5만 원 정도다 보니 ‘안 받고 말지’ 하고 잠수 타는 경우가 많았는데, 패널티 기준이 없어 늦게 올려도 대부분 정산해주니 책임감이 떨어졌습니다.</p>
+    <div class="pt"><b>강조</b> — “정산이 돈 주는 일이 아니라 사람 쫓아다니는 일이 됐다” 한 문장으로 정리.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">9</span><span class="t">문제 5 · 검수·아카이빙 — 단순 반복</span><span class="time">0:30</span></div>
+    <p class="say">다섯째, 검수와 아카이빙입니다. 수십, 수백 명이 올린 링크를 일일이 확인해서 시트에 복사·붙여넣기 했고, 보고와 자산화를 위해 릴스를 하나하나 다운받아 드라이브에 수동으로 분류·저장했습니다. 가장 단순한 일에 가장 많은 손이 들어가서, 정작 콘텐츠 품질을 보는 데는 시간을 못 썼습니다.</p>
+    <div class="pt"><b>강조</b> — “단순한 일에 가장 많은 손” — 자동화의 당위성으로 자연스럽게 연결.</div>
+  </div>
+
+  <!-- PART 3 -->
+  <h2 class="sec">Part 3 · 솔루션 개요 (약 2분)</h2>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">10</span><span class="t">전환 — 문제는 ‘시스템의 부재’</span><span class="time">0:30</span></div>
+    <p class="say">제가 내린 결론은 이겁니다. 문제는 사람이 아니라 ‘시스템의 부재’였다. 그래서 단순 반복은 시스템과 AI가 맡고, 사람은 감도와 관계에만 집중하도록 두 개의 앱과 AI 자동화를 직접 만들었습니다.</p>
+    <div class="pt"><b>강조</b> — 잠깐 멈춤(pause) 후 “시스템의 부재”를 또박또박. 발표의 전환점.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">11</span><span class="t">전체 구조 — 하나의 DB를 두 앱이 공유</span><span class="time">0:50</span></div>
+    <p class="say">구조는 단순합니다. 인플루언서용 모바일 앱과 운영자용 어드민 웹이 하나의 데이터베이스를 공유합니다. 그래서 인플루언서가 앱에서 주소나 계좌를 입력하면 어드민에 바로 반영되고, 다시 물어볼 필요가 없습니다. 여기에 구글 드라이브 자동 저장, 주소 검색, 그리고 캠페인 셋업·메시지·검수·정산을 돕는 AI 레이어가 붙고, 코드를 고치면 즉시 자동 배포됩니다.</p>
+    <div class="pt"><b>강조</b> — “한 번 입력하면 다시 안 묻는다”가 핵심 가치. 데이터 공유의 힘.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">12</span><span class="t">문제 → 해결 매핑 (핵심 슬라이드)</span><span class="time">0:50</span></div>
+    <p class="say">이 표 한 장이 오늘 발표의 요약입니다. 앞에서 본 5단계 문제 각각에, 정확히 대응하는 해결책을 붙였습니다. 모집은 공개 모집과 데이터 필터로, 연락은 자동 알림과 1:1 DM으로, 배송은 신청 시 최신 주소 수집으로, 정산은 자동 생성과 대시보드로, 검수는 직접 업로드와 자동 저장으로. 이제 각각을 실제 화면으로 보여드리겠습니다.</p>
+    <div class="pt"><b>강조</b> — 시간이 부족하면 이 슬라이드만으로도 전체를 전달 가능. ‘앵커’ 슬라이드.</div>
+  </div>
+
+  <!-- PART 4 -->
+  <h2 class="sec">Part 4 · 단계별 해결 &amp; 화면 (약 4분 30초)</h2>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">13</span><span class="t">해결 1 · 모집 — 찾아오게 하는 모집</span><span class="time">0:50</span></div>
+    <p class="say">먼저 모집입니다. 오른쪽이 인플루언서 앱 화면인데, 승인된 크리에이터가 모집 중인 캠페인을 직접 보고 신청합니다. 우리가 찾아 나서던 걸, 찾아오게 만든 거죠. 동시에 인플루언서 DB에는 카테고리, 지역, 팔로워, 협업 단가까지 구조화해서 저장됩니다. 그래서 어드민에서 기억이 아니라 필터로 매칭합니다. AI는 핸들만 넣으면 팔로워와 적합도를 정리해 후보를 추려줍니다.</p>
+    <div class="pt"><b>데모 팁</b> — 가능하면 실제 인플루언서 앱을 띄워 캠페인 그리드를 직접 스크롤해 보여주면 효과가 큼.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">14</span><span class="t">해결 2 · 연락 — 앱 안에서 친절하게 &amp; 한꺼번에</span><span class="time">0:50</span></div>
+    <p class="say">연락은 개인 폰을 닫고 앱 안으로 들였습니다. 선정, 일정, 심사 중, 미선정 같은 알림이 상태에 따라 자동으로 뜨고요. 관리자와 인플루언서가 캠페인별로 1:1 메시지를 주고받습니다. 친절한 1:1 응대는 유지하면서 효율은 올린 거죠. 고료는 로그인한 회원에게만 보이니 공개 노출 딜레마도 사라졌고, AI가 단계별 메시지 초안을 만들어줍니다.</p>
+    <div class="pt"><b>강조</b> — ‘라포 유지 + 효율’ 두 마리 토끼. 기존의 딜레마를 해소했음을 짚기.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">15</span><span class="t">해결 3 · 배송 — 자동으로 최신화되는 주소</span><span class="time">0:40</span></div>
+    <p class="say">배송은 발상을 바꿨습니다. 주소를 ‘물어보는 것’에서 ‘신청할 때 자동으로 최신화되는 것’으로요. 캠페인을 신청하는 순간 우편번호 검색으로 그때의 주소를 직접 입력하게 했고, ‘매번 새로 확인한다’고 화면에 명시했습니다. 그 주소가 어드민 신청 목록에 바로 뜨니, 한 명 한 명 다시 묻던 전수조사가 사라졌습니다.</p>
+    <div class="pt"><b>강조</b> — 오배송이라는 ‘사고’를 구조적으로 없앴다는 점.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">16</span><span class="t">해결 4 · 정산 ★ 핵심 — 자동으로 굴러가는 정산</span><span class="time">1:10</span></div>
+    <p class="say">정산은 오늘의 핵심입니다. 첫째, 계좌와 주민번호는 인플루언서가 한 번만 등록하면 재사용됩니다. 매번 서류 받던 게 사라졌어요. 둘째, 신청 관리에서 ‘진행’으로 선정만 하면 정산 항목이 고료 기본값으로 자동 생성됩니다. 셋째, 캠페인별로 ‘12명 중 5명 정산완료’ 같은 진행바로 한눈에 보고, 지급완료는 클릭 한 번이면 인플루언서 앱에도 바로 반영됩니다. 여기에 AI가 3.3% 원천징수 계산과 은행 일괄이체 파일까지 만들어줍니다.</p>
+    <div class="pt"><b>데모 팁</b> — 정산 대시보드의 진행바를 꼭 보여주기. ‘선정 → 자동 생성 → 1클릭 지급’ 흐름을 손으로 짚기.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">17</span><span class="t">해결 5 · 검수·아카이빙 — 업로드 한 번, 자동 저장</span><span class="time">0:50</span></div>
+    <p class="say">마지막으로 검수와 저장입니다. 인플루언서가 직접 콘텐츠 링크를 올리는데, ‘브랜드 태그했어요, 공동작업자 추가했어요’를 체크해야 제출됩니다. 담당자의 복붙이 사라졌죠. 그리고 콘텐츠 아카이브에 링크를 넣으면 릴스는 핸들.mp4로, 피드는 핸들 폴더로 구글 드라이브에 캠페인·연월별로 자동 저장됩니다. AI는 해시태그나 금지사항을 가이드와 자동으로 대조해 검수까지 해줍니다.</p>
+    <div class="pt"><b>강조</b> — ‘가장 단순한 일에 가장 많은 손’이라던 9번과 수미상관으로 연결.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">18</span><span class="t">AI 자동화 레이어 — 8개 도우미</span><span class="time">0:40</span></div>
+    <p class="say">방금 단계마다 ‘AI가’라고 말씀드렸는데, 이게 그 정체입니다. 섭외 스크리닝, 단계별 메시지, 캠페인 셋업, 가이드 생성, 콘텐츠 검수, 정산 계산, 성과 리포트, 그리고 매일 할 일 점검까지. 캠페인 라이프사이클 전체에 자동화 도우미가 붙어서, 반복되는 쓰기·계산·대조는 AI가 초안을 잡고 사람은 결정만 합니다.</p>
+    <div class="pt"><b>강조</b> — ‘사람을 대체’가 아니라 ‘초안은 AI, 결정은 사람’이라는 균형.</div>
+  </div>
+
+  <!-- PART 5 -->
+  <h2 class="sec">Part 5 · 운영 실행 — 어떻게 운영하고 키울 것인가 (약 5분)</h2>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">19</span><span class="t">운영 개요 — 3개 축 · 3개 원칙</span><span class="time">0:30</span></div>
+    <p class="say">이제 가장 궁금하실 운영 이야기입니다. 크게 세 축이에요 — 연락, 모집, 인스타 채널. 그리고 세 가지 원칙으로 굴립니다. 단순 반복은 자동화하고, 찾아 나서던 모집을 찾아오게 바꾸고, 한 번 만든 결과물·콘텐츠를 여러 번 재활용한다. 이 틀로 하나씩 보여드릴게요.</p>
+    <div class="pt"><b>강조</b> — 이 ‘3축·3원칙’이 이후 운영 슬라이드 전체의 뼈대.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">20</span><span class="t">연락 — 문자 API · 카카오 알림톡</span><span class="time">0:40</span></div>
+    <p class="say">먼저 연락입니다. 개인 폰 대신, 인플루언서 앱 DB와 연동해 두 가지로 한꺼번에 보냅니다. 하나는 알리고·솔라피 같은 문자 API인데, 이름과 캠페인이 자동으로 들어간 맞춤 문자를 한 번에 수백 명에게 보내고 비용은 월 몇만 원 수준입니다. 다른 하나는 카카오 알림톡인데, 카톡이라 친숙하고 개인 번호 노출 없이 대량 발송이 되고, 읽힘률도 문자보다 높습니다.</p>
+    <div class="pt"><b>강조</b> — “지금은 앱 안 알림, 여기에 문자·알림톡을 더해 휴대폰까지 확실히 도달”. 둘 다 앱 연동 단체 발송이 핵심.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">21</span><span class="t">연락 — 단계별 자동 발송 시나리오</span><span class="time">0:40</span></div>
+    <p class="say">그럼 한 캠페인의 연락이 실제로 어떻게 흐르냐. 표를 보시면 섭외·모집 안내부터 선정, 가이드, 리마인더 세 번, 정산까지 — 각 단계에 어떤 메시지를 어떤 채널로 보내는지 정해뒀습니다. 핵심은 ‘진행 선정하면 선정 안내 자동, 업로드 마감 기준으로 리마인더 예약’처럼 앱 상태에 묶여 자동으로 나간다는 거예요. AI가 각 단계 문구 초안까지 잡아줍니다.</p>
+    <div class="pt"><b>데모 팁</b> — 표의 ‘자동화 포인트’ 열을 손으로 짚으며 설명.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">22</span><span class="t">인바운드 모집 — 개요 · 4갈래 · 플라이휠</span><span class="time">0:50</span></div>
+    <p class="say">둘째, 모집입니다. 핵심은 ‘찾아 나서는’ 게 아니라 ‘찾아오게 만드는’ 구조예요. 회사 인스타를 허브로 운영하고, 결과물로 노출을 만들고, 레퍼럴로 검증된 신규를 받고, 기존 DB를 깨웁니다. 이게 ‘노출 → 가입·신청 → 진행 → 결과물 → 다시 콘텐츠와 레퍼럴’로 도는 성장 플라이휠입니다. 다음 장부터 네 갈래를 하나씩 보겠습니다.</p>
+    <div class="pt"><b>강조</b> — 여기가 “장기 성장 어떻게 할 거냐”의 구체적 답. <b>결과물이 다음 모집을 부르는 선순환.</b></div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">23</span><span class="t">모집 ① 인스타 = 인바운드 허브</span><span class="time">0:35</span></div>
+    <p class="say">첫째, 회사 인스타그램을 인바운드 허브로 만듭니다. ‘감도 높은 브랜드와 크리에이터를 잇는다’는 포지셔닝을 한 줄로 걸고, 프로필 링크에 앱 링크를 고정해요. 인플루언서에겐 ‘여기서 협업하고 싶다’, 브랜드엔 ‘대행 맡기고 싶다’를 동시에 노립니다. 인스타는 광고판이 아니라 앱으로 가는 입구라고 보시면 됩니다.</p>
+    <div class="pt"><b>강조</b> — 모든 콘텐츠 끝에 ‘앱에서 신청·확인’ 동선을 둔다.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">24</span><span class="t">모집 ② 노출 전략 — 결과물이 광고</span><span class="time">0:30</span></div>
+    <p class="say">둘째, 노출은 새로 뭘 만들기보다 결과물 자체를 광고로 씁니다. 진행한 게시물에 회사 계정을 공동작업자로 걸어 함께 노출하고, 그 게시물로 광고도 돌립니다. 결과물을 인플루언서 태그와 함께 재업로드하고, 스토리엔 모집 중 캠페인을 정기적으로 띄웁니다.</p>
+    <div class="pt"><b>강조</b> — 이미 가진 결과물로 노출을 만들어 추가 제작 부담이 적다.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">25</span><span class="t">모집 ③ 레퍼럴 · 기존 DB 활성화</span><span class="time">0:35</span></div>
+    <p class="say">셋째, 검증된 사람이 검증된 사람을 데려오게 합니다. 기존 인플루언서에게 비슷한 감도의 지인을 추천받고, 실제로 진행되면 리워드를 줘요. 성과가 났을 때만 비용이 나가니 효율적이죠. 동시에 그동안 협업한 기존 DB 전체에 앱 가입을 안내해 잠들어 있던 풀을 깨웁니다.</p>
+    <div class="pt"><b>강조</b> — 광고 없이 신뢰 기반으로 푸는 신규 유입.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">26</span><span class="t">인스타 콘텐츠 — 개요 · 4기둥</span><span class="time">0:40</span></div>
+    <p class="say">셋째 축, 인스타를 뭘로 채우느냐입니다. ‘팔리는 광고’가 아니라 ‘저장하고 싶은 채널’로 만듭니다. 네 가지 기둥이에요 — 포트폴리오, 트렌드·매거진, 교육형, 모집·전환. 다음 장부터 기둥별로 보겠습니다.</p>
+    <div class="pt"><b>연결</b> — “트렌드·매거진”은 기획 중인 <b>자체 뷰티 트렌드 리포트</b>와 직결.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">27</span><span class="t">콘텐츠 ① 포트폴리오 · 크리에이터 아카이브</span><span class="time">0:30</span></div>
+    <p class="say">첫째 기둥, 포트폴리오입니다. 우리 크리에이터들이 찍은 고퀄 결과물을 큐레이션해 올려요. 브랜드에겐 ‘이만큼 한다’는 대행 능력 증명이고, 인플루언서에겐 ‘나도 저기서 협찬받아 예쁜 피드를 만들고 싶다’는 욕구 자극입니다.</p>
+    <div class="pt"><b>강조</b> — “여기서 하면 퀄리티 브랜드를 만난다”를 보여주는 핵심 게시물.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">28</span><span class="t">콘텐츠 ② 트렌드·매거진 + 트렌드 리포트</span><span class="time">0:30</span></div>
+    <p class="say">둘째 기둥, 트렌드·매거진입니다. 광고만 올리면 매력이 떨어지니, 저장하고 싶은 정보성 콘텐츠를 만듭니다. ‘올여름 립 플럼퍼 Top 5’ 같은 카드뉴스요. 기획 중인 자체 뷰티 트렌드 리포트가 바로 이 영역이고, 마지막 장에 ‘친구에게 공유’를 넣어 자연 바이럴을 유도합니다.</p>
+    <div class="pt"><b>강조</b> — ‘저장·공유’를 부르는 콘텐츠가 도달·팔로워를 키운다.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">29</span><span class="t">콘텐츠 ③ 교육형 · ④ 모집·전환</span><span class="time">0:30</span></div>
+    <p class="say">셋째 교육형, 넷째 모집·전환입니다. 교육형은 후킹·촬영·캡션 같은 실전 팁으로 크리에이터를 붙잡아 락인하고, 모집·전환은 ‘신청하면 이렇게 진행돼요’ 안내와 한정 캠페인 티저, 레퍼럴 이벤트로 실제 신청을 받습니다. 둘 다 ‘자세한 건 앱에서’로 마무리합니다.</p>
+    <div class="pt"><b>강조</b> — 교육 = 락인, 모집 = 전환.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">30</span><span class="t">크로스미디어 · 앱 락인 · 자동화</span><span class="time">0:35</span></div>
+    <p class="say">마지막으로, 이 모든 걸 앱 유입으로 연결하고 운영은 자동화합니다. 인스타엔 요약만 올리고 전체는 앱에서 보게 해 다운로드·재방문을 유도하고, 소액 광고로 신규를 더 끌어옵니다. 그리고 콘텐츠 기획·데이터 수집·카드뉴스 제작까지 AI와 시스템으로 자동화해서, 1인이 감당 가능한 운영으로 만듭니다.</p>
+    <div class="pt"><b>강조</b> — 운영 부담을 자동화로 낮춰 ‘지속 가능한’ 채널 운영.</div>
+  </div>
+
+  <h2 class="sec">Part 6 · 효율·기술·로드맵 (약 2분 30초)</h2>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">31</span><span class="t">Before / After — 같은 일을 더 적은 손으로</span><span class="time">0:50</span></div>
+    <p class="say">이걸 Before/After로 정리하면 이렇습니다. 모집, 소통, 배송지, 서류, 송금, 검수, 그리고 운영 주체까지 모든 줄이 ‘수작업’에서 ‘시스템과 AI’로 바뀌었습니다. 가장 중요한 효과는, 인원이 늘어도 매니저 공수가 예전처럼 선형으로 늘지 않는다는 겁니다. 즉, 규모를 키울 수 있는 구조가 됐습니다.</p>
+    <div class="pt"><b>강조</b> — 경영진이 가장 좋아할 메시지. “확장 가능한 구조”를 분명히.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">32</span><span class="t">기술·보안·운영</span><span class="time">0:40</span></div>
+    <p class="say">기술적으로는 검증된 표준 스택을 썼습니다. Next.js와 Supabase 기반이고 Vercel로 자동 배포됩니다. 보안은 특히 신경 썼는데, 주민번호는 별도 테이블에 분리해서 서버에서 권한이 있을 때만 조회되고, 가입도 검토 후 승인제입니다. 외부 솔루션 구독이 아니라 우리 업무에 정확히 맞춘 자체 시스템이라, 필요한 기능을 우리가 바로 추가할 수 있습니다.</p>
+    <div class="pt"><b>강조</b> — 보안 한 줄은 꼭. 개인정보 민감성을 의식하고 있음을 보여주기.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">33</span><span class="t">향후 로드맵</span><span class="time">0:40</span></div>
+    <p class="say">지금도 실제로 돌아가고 있고, 여기서 더 단단하게 만들 계획입니다. 알림은 카카오 알림톡·문자·웹푸시로 도달률을 높이고, 인스타 태그는 자동 검증으로, 팀원 개별 권한, 카테고리 세분화, 캠페인 매출·순이익 관리까지 단계적으로 확장할 예정입니다.</p>
+    <div class="pt"><b>강조</b> — ‘완성형 자랑’이 아니라 ‘계속 발전하는 살아있는 시스템’ 톤.</div>
+  </div>
+
+  <div class="card">
+    <div class="sh"><span class="slideno">34</span><span class="t">마무리</span><span class="time">0:30</span></div>
+    <p class="say">정리하겠습니다. 매니저의 반복 공수는 줄고, 클라이언트 감도와 만족도는 올라가고, 데이터가 쌓이면서 확장 가능한 기반이 생겼습니다. 한마디로, 수작업으로는 못 키우던 규모를 시스템으로 키우려고 합니다. 감사합니다. 질문 받겠습니다.</p>
+    <div class="pt"><b>강조</b> — 마지막 한 문장(“수작업으로는 못 키우던 규모를 시스템으로”)을 천천히, 또렷하게.</div>
+  </div>
+
+  <!-- Q&A -->
+  <h2 class="sec">예상 질문 &amp; 답변 (Q&amp;A)</h2>
+  <div class="card qa">
+    <div class="q">개발은 누가, 얼마나 걸렸나요? 외주인가요?</div>
+    <div class="a">제가 직접 만들었습니다. 현업에서 겪은 문제를 알기 때문에, 실제 업무 흐름에 정확히 맞춰 설계할 수 있었고 필요한 기능을 바로바로 추가·수정합니다. 외주 대비 유지보수 속도와 적합성이 큰 장점입니다.</div>
+
+    <div class="q">기존 솔루션(공구·체험단 플랫폼)을 쓰면 되지 않나요?</div>
+    <div class="a">범용 플랫폼은 우리 특유의 흐름(고료 비공개, 1:1 라포, 브랜드별 전달·중복 관리, 콘텐츠 자동 아카이빙)을 그대로 담기 어렵습니다. 자체 시스템이라 우리 프로세스에 100% 맞고, 데이터도 우리가 자산으로 보유합니다.</div>
+
+    <div class="q">인플루언서들이 앱을 실제로 쓸까요? 진입장벽은?</div>
+    <div class="a">설치가 필요 없는 웹앱이라 링크만으로 접속합니다. 신청·업로드·정산 확인이 한 곳에서 되니 오히려 문자보다 편하고, 정산 내역을 직접 확인할 수 있어 신뢰도 올라갑니다.</div>
+
+    <div class="q">개인정보(주민번호·계좌)는 안전한가요?</div>
+    <div class="a">주민번호는 일반 정보와 분리된 별도 테이블에 저장하고, 서버에서 권한 키로만 조회합니다. 화면에서도 본인과 정산 담당자만 볼 수 있고, 운영 단계에서 암호화를 추가로 적용할 계획입니다.</div>
+
+    <div class="q">노쇼(잠수) 문제는 실제로 줄어드나요?</div>
+    <div class="a">타임라인과 업로드 마감을 명시하고 진행 상태가 시스템에 남기 때문에, 누가 지키지 않았는지 가시화됩니다. 향후 업로드 마감 자동 제어와 패널티 기준을 더해 책임 구조를 강화할 수 있습니다.</div>
+
+    <div class="q">정산 자동화는 실제 송금까지 되나요?</div>
+    <div class="a">현재는 선정 시 정산 항목 자동 생성 → 금액 확정 → ‘지급완료’ 기록까지를 시스템이 관리하고, AI가 은행 일괄이체용 파일을 만들어 줍니다. 실제 이체는 담당자가 검토 후 실행해, 통제와 효율을 함께 가져갑니다.</div>
+
+    <div class="q">비용은 얼마나 드나요?</div>
+    <div class="a">표준 클라우드(호스팅·DB) 기반이라 사용량 기준의 합리적인 운영비로 돌아갑니다. 인원이 늘어도 운영 인건비가 비례해 늘지 않으므로, 규모가 커질수록 비용 대비 효과가 좋아집니다.</div>
+
+    <div class="q">AI가 틀리면 어떻게 하나요?</div>
+    <div class="a">AI는 항상 ‘초안’을 만들고 최종 결정은 사람이 합니다. 메시지·검수·정산 모두 담당자가 확인 후 확정하는 구조라, 속도는 얻고 리스크는 통제합니다.</div>
+
+    <div class="q">인스타 채널 운영은 누가, 얼마나 자주 하나요? 손이 많이 들지 않나요?</div>
+    <div class="a">‘적게 만들어 오래 활용하는’ 구조로 설계했습니다. 캠페인 결과물을 재활용(공동작업자·아카이브)하고, 트렌드 카드뉴스는 AI로 주제·데이터·이미지·캡션 초안을 자동 생성합니다. 주 2~3회 업로드를 1인이 관리 가능한 수준으로 잡았습니다.</div>
+
+    <div class="q">레퍼럴 리워드나 소액 광고 — 비용이 추가로 드는 것 아닌가요?</div>
+    <div class="a">둘 다 ‘성과 연동’이라 효율적입니다. 리워드는 추천이 실제 캠페인 진행으로 이어질 때만 지급하고, 광고는 일 1~2만 원으로 시작해 반응을 보며 조절합니다. 오히려 기존 아웃바운드 DM에 들어가던 인건비·시간을 줄이는 절감 효과가 더 큽니다.</div>
+  </div>
+
+  <!-- Tips -->
+  <h2 class="sec">발표 팁</h2>
+  <div class="tipgrid">
+    <div class="tip"><b>① 속도</b> 슬라이드당 평균 40초. 문제 파트는 빠르게 몰아치고, 정산(16번)에서 한 박자 천천히.</div>
+    <div class="tip"><b>② 라이브 데모</b> 13·16·17번에서 가능하면 실제 앱을 띄워 보여주면 설득력 급상승. 미리 로그인해 두기.</div>
+    <div class="tip"><b>③ 시선</b> 표(12·19번)는 읽지 말고 “핵심만” 짚기. 청중이 읽을 시간을 2초 주기.</div>
+    <div class="tip"><b>④ 멈춤</b> 10번 “시스템의 부재”와 22번 마지막 문장 앞에서 1초 멈춤.</div>
+    <div class="tip"><b>⑤ 숫자화</b> 가능하면 “문자 N회 × 인원 M명”처럼 실제 수치를 넣으면 효과↑. (본인 경험치 대입)</div>
+    <div class="tip"><b>⑥ 조작</b> ← / → 또는 스페이스바로 이동. F11 전체화면 권장. Ctrl+P로 PDF 저장 가능.</div>
+  </div>
+
+  <p style="margin-top:40px; font-size:12px; color:var(--faint); font-family:var(--mono); text-align:center">SIRIAI · 발표 대본 · 2026.06.07 · 슬라이드와 함께 보세요(SIRIAI_발표자료.html)</p>
+</div>
+</body>
+</html>

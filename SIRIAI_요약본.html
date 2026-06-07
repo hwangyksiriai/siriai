@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SIRIAI · 한 장 요약 (핸드아웃)</title>
+<style>
+  :root{
+    --ink:#211A33; --cream:#F3EEE2; --line:rgba(33,26,51,.16); --line2:rgba(33,26,51,.09);
+    --muted:rgba(33,26,51,.62); --faint:rgba(33,26,51,.46);
+    --blue:#2A6FDB; --orange:#e65100; --green:#2e7d32; --red:#c62828; --purple:#6B4DCE; --pink:#C1436D;
+    --sans:'Helvetica Neue',Helvetica,Arial,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--sans); color:var(--ink); background:#cfcad9; padding:24px}
+  .page{
+    width:1000px; max-width:100%; margin:0 auto; background:
+      radial-gradient(50% 30% at 8% 0%, rgba(246,201,168,.34), transparent 60%),
+      radial-gradient(40% 26% at 95% 1%, rgba(221,208,239,.34), transparent 55%), var(--cream);
+    border-radius:14px; padding:30px 34px 26px; box-shadow:0 18px 50px rgba(0,0,0,.18);
+  }
+  .top{display:flex; justify-content:space-between; align-items:flex-end; border-bottom:2px solid var(--ink); padding-bottom:12px}
+  .brand{font-weight:600; font-size:22px; letter-spacing:.12em}
+  .brand .sq{display:inline-block; width:11px; height:11px; background:var(--orange); border-radius:2px; margin-right:9px}
+  .top .r{text-align:right; font-size:11px; color:var(--faint); font-family:var(--mono); letter-spacing:.06em}
+  h1{font-size:25px; font-weight:600; letter-spacing:-.02em; margin-top:16px}
+  .tagline{font-size:13px; color:var(--muted); margin-top:5px}
+  .lead{margin-top:12px; background:rgba(33,26,51,.05); border-radius:10px; padding:11px 14px; font-size:12.5px; color:var(--ink); line-height:1.55}
+  .hl{background:linear-gradient(transparent 58%, rgba(246,201,168,.75) 58%)}
+  h2{font-family:var(--mono); font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--orange); margin:18px 0 8px}
+  table{width:100%; border-collapse:collapse; font-size:11.5px}
+  th{font-family:var(--mono); font-size:8.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--faint); font-weight:500; text-align:left; padding:0 8px 7px 0; border-bottom:1px solid var(--line)}
+  td{padding:8px 8px 8px 0; border-bottom:1px solid var(--line2); vertical-align:top; line-height:1.45}
+  .stage{font-weight:700; white-space:nowrap}
+  .dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:middle}
+  .was{color:var(--red)} .now{color:var(--ink); font-weight:600}
+  .cols{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:8px}
+  .box{border:1px solid var(--line); border-radius:11px; padding:12px 14px; background:rgba(255,255,255,.6)}
+  .box h3{font-size:12px; font-weight:800; margin-bottom:7px}
+  .box ul{list-style:none} .box li{font-size:11px; padding:3px 0 3px 16px; position:relative; color:var(--muted); line-height:1.4}
+  .box li::before{content:"✓"; position:absolute; left:0; color:var(--green); font-weight:800}
+  .effects{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:8px}
+  .eff{border:1px solid var(--line); border-radius:11px; padding:12px; text-align:center; background:rgba(255,255,255,.55)}
+  .eff .big{font-size:24px; font-weight:800; color:var(--orange)} .eff .l{font-size:11px; color:var(--muted); margin-top:3px}
+  .foot{margin-top:16px; padding-top:10px; border-top:1px solid var(--line); display:flex; justify-content:space-between; font-size:10.5px; color:var(--faint)}
+  .chips{display:flex; gap:6px; flex-wrap:wrap}
+  .chip{font-size:10px; border:1px solid var(--line); border-radius:100px; padding:3px 9px; color:var(--muted)}
+  @media print{ body{background:#fff; padding:0} .page{box-shadow:none; border-radius:0; width:100%; padding:24px 26px} @page{size:A4 portrait; margin:10mm} }
+</style>
+</head>
+<body>
+  <div class="page">
+    <div class="top">
+      <div class="brand"><span class="sq"></span>SIRIAI</div>
+      <div class="r">인플루언서 마케팅 운영 시스템<br>한 장 요약 · 2026.06.07</div>
+    </div>
+
+    <h1>수작업으로 운영하던 인플루언서 마케팅을, 시스템으로 재설계했습니다.</h1>
+    <div class="tagline">어드민 웹 · 인플루언서 앱 · AI 자동화 — 모집부터 검수·정산까지 한 곳에서</div>
+
+    <div class="lead">
+      <b>문제.</b> 캠페인은 몇 배로 늘었지만 운영은 1년 전 그대로 — <span class="hl">매니저 1인이 모집·연락·배송·정산·검수를 전부 수기로</span> 처리. 클라이언트 만족도와 회사 성장성이 동시에 임계점에 도달.
+      &nbsp;<b>해결.</b> 5단계 병목을 <span class="hl">두 개의 앱과 AI 자동화</span>로 제거. 단순 반복은 시스템이, 사람은 감도·관계에 집중.
+    </div>
+
+    <h2>5단계 문제 → 해결</h2>
+    <table>
+      <thead><tr><th style="width:13%">단계</th><th style="width:40%">기존 (문제)</th><th style="width:47%">지금 (해결)</th></tr></thead>
+      <tbody>
+        <tr><td class="stage"><span class="dot" style="background:var(--blue)"></span>모집</td><td class="was">DM 의존·기억 매칭으로 Pool 고갈, 무신사 등 감도 불만</td><td class="now">앱 공개 모집(인바운드) + 카테고리·지역·팔로워·단가 구조화 DB·필터 + AI 섭외</td></tr>
+        <tr><td class="stage"><span class="dot" style="background:var(--purple)"></span>연락</td><td class="was">개인 폰 다단계 수동 문자, 고료 공개 딜레마</td><td class="now">자동 알림 + 앱 내 1:1 DM + AI 메시지 초안, 고료는 회원에게만 노출</td></tr>
+        <tr><td class="stage"><span class="dot" style="background:var(--green)"></span>배송</td><td class="was">과거 주소 재사용 → 오배송 / 전수 수기 재확인</td><td class="now">신청 시마다 우편번호로 최신 주소 자동 수집 → 어드민에 자동 표기</td></tr>
+        <tr><td class="stage"><span class="dot" style="background:var(--orange)"></span>정산</td><td class="was">중복 서류, 메일→슬랙→수기 송금 누락·지연, 노쇼</td><td class="now">계좌 1회 등록 재사용 + 선정 시 정산 자동 생성 + 캠페인별 대시보드 + 일괄이체</td></tr>
+        <tr><td class="stage"><span class="dot" style="background:var(--pink)"></span>검수</td><td class="was">링크 일일이 복붙, 영상 수동 다운로드·분류</td><td class="now">인플루언서 직접 업로드 + 드라이브 자동 저장 + AI 가이드 준수 검수</td></tr>
+      </tbody>
+    </table>
+
+    <div class="cols">
+      <div>
+        <h2>두 개의 앱</h2>
+        <div class="cols" style="grid-template-columns:1fr 1fr; gap:10px; margin-top:0">
+          <div class="box">
+            <h3>🖥 어드민 (운영자)</h3>
+            <ul><li>브랜드·캠페인·인플루언서</li><li>신청·검수·정산 대시보드</li><li>콘텐츠 드라이브 아카이브</li></ul>
+          </div>
+          <div class="box">
+            <h3>📱 인플루언서 앱</h3>
+            <ul><li>캠페인 탐색·신청</li><li>콘텐츠 업로드·정산 확인</li><li>알림·1:1 메시지</li></ul>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h2>AI 자동화 (8)</h2>
+        <div class="box">
+          <div class="chips">
+            <span class="chip">섭외 스크리닝</span><span class="chip">단계별 DM</span><span class="chip">캠페인 셋업</span>
+            <span class="chip">가이드 생성</span><span class="chip">콘텐츠 검수</span><span class="chip">정산 계산</span>
+            <span class="chip">성과 리포트</span><span class="chip">데일리 점검</span>
+          </div>
+          <p style="font-size:10.5px; color:var(--muted); margin-top:8px; line-height:1.45">반복되는 쓰기·계산·대조는 AI가 초안, 최종 결정은 사람. 캠페인 라이프사이클 전체 지원.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2>운영 실행 — 어떻게 운영하고 키우나</h2>
+    <div class="cols" style="grid-template-columns:1fr 1fr 1fr; gap:10px; margin-top:0">
+      <div class="box"><h3>📨 대량 연락</h3><ul><li>문자 API(알리고·솔라피)</li><li>카카오 알림톡 단체 발송</li><li>앱 DB 연동 맞춤 발송</li></ul></div>
+      <div class="box"><h3>🧲 인바운드 모집</h3><ul><li>인스타 허브 + 모집 스토리</li><li>레퍼럴·소개 리워드</li><li>기존 DB 앱 가입 유도</li></ul></div>
+      <div class="box"><h3>📱 인스타 채널</h3><ul><li>포트폴리오·트렌드·교육·모집</li><li>“전체는 앱에서” 크로스미디어</li><li>소액광고·AI 자동 콘텐츠</li></ul></div>
+    </div>
+
+    <h2>기대 효과</h2>
+    <div class="effects">
+      <div class="eff"><div class="big">↓</div><div class="l">매니저 반복 공수<br>(인원↑에도 비례 증가 X)</div></div>
+      <div class="eff"><div class="big">↑</div><div class="l">클라이언트 감도·만족도<br>(데이터 기반 매칭)</div></div>
+      <div class="eff"><div class="big">∞</div><div class="l">데이터 자산화·확장성<br>(규모를 키울 구조)</div></div>
+    </div>
+
+    <div class="foot">
+      <span>기술: Next.js · Supabase · Vercel 자동배포 · Google Drive · AI &nbsp;|&nbsp; 보안: 주민번호 분리 보관·서버 조회, 가입 승인제</span>
+      <span>SIRIAI</span>
+    </div>
+  </div>
+</body>
+</html>

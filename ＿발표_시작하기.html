@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SIRIAI 발표 패키지 · 시작하기</title>
+<style>
+  :root{
+    --ink:#211A33; --cream:#F3EEE2; --line:rgba(33,26,51,.15); --line2:rgba(33,26,51,.08);
+    --muted:rgba(33,26,51,.62); --faint:rgba(33,26,51,.46);
+    --blue:#2A6FDB; --orange:#e65100; --green:#2e7d32;
+    --sans:'Helvetica Neue',Helvetica,Arial,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--sans);color:var(--ink);line-height:1.6;min-height:100vh;
+    background:radial-gradient(55% 40% at 10% 0%, rgba(246,201,168,.34), transparent 60%),radial-gradient(45% 32% at 94% 2%, rgba(221,208,239,.34), transparent 55%),var(--cream);
+    padding:clamp(28px,5vw,72px) clamp(20px,5vw,40px)}
+  .wrap{max-width:920px;margin:0 auto}
+  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--faint)}
+  h1{font-size:clamp(28px,4.6vw,44px);font-weight:600;letter-spacing:-.025em;margin-top:10px;line-height:1.05}
+  .sub{font-size:15.5px;color:var(--muted);margin-top:12px;max-width:46em}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:30px}
+  a.file{display:block;text-decoration:none;color:inherit;background:rgba(255,255,255,.72);border:1px solid var(--line);border-radius:16px;padding:20px 22px;transition:.15s}
+  a.file:hover{border-color:var(--ink);transform:translateY(-2px);box-shadow:0 12px 30px rgba(33,26,51,.1)}
+  .file .ic{font-size:26px}
+  .file .nm{font-size:17px;font-weight:800;margin-top:10px;display:flex;align-items:center;gap:8px}
+  .file .ext{font-family:var(--mono);font-size:10px;font-weight:700;color:#fff;background:var(--ink);padding:2px 7px;border-radius:5px}
+  .file .ext.pptx{background:var(--orange)}
+  .file .d{font-size:13px;color:var(--muted);margin-top:7px;line-height:1.5}
+  .file .how{font-size:12px;color:var(--blue);margin-top:9px;font-weight:600}
+  h2{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--orange);margin:38px 0 4px;padding-top:22px;border-top:1px solid var(--line)}
+  .card{background:rgba(255,255,255,.66);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-top:14px}
+  ol,ul{margin:6px 0 0 2px;list-style:none}
+  li{position:relative;padding:6px 0 6px 24px;font-size:14.5px}
+  li b{font-weight:700}
+  ol li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:6px;font-family:var(--mono);font-size:11px;font-weight:700;color:#fff;background:var(--ink);width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+  ol{counter-reset:s}
+  ul li::before{content:"–";position:absolute;left:4px;color:var(--orange);font-weight:700}
+  kbd{font-family:var(--mono);font-size:11px;background:var(--ink);color:var(--cream);padding:2px 7px;border-radius:5px}
+  .hl{background:linear-gradient(transparent 58%, rgba(246,201,168,.75) 58%)}
+  .foot{margin-top:34px;font-size:11.5px;color:var(--faint);font-family:var(--mono);text-align:center}
+  @media (max-width:680px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">SIRIAI · PRESENTATION PACKAGE</div>
+  <h1>발표 패키지 · 시작하기</h1>
+  <p class="sub">「인플루언서 마케팅, 이제 시스템으로 운영합니다」 — 발표에 필요한 모든 파일이 준비됐습니다. 아래에서 원하는 파일을 바로 여세요.</p>
+
+  <div class="grid">
+    <a class="file" href="SIRIAI_발표자료.html">
+      <div class="ic">🖥️</div>
+      <div class="nm">메인 슬라이드 덱 <span class="ext">HTML</span></div>
+      <div class="d">발표용 34슬라이드. 문제→해결 스토리 + 실제 화면 목업 + 운영 실행(연락·모집·인스타) 상세 + Before/After + 로드맵.</div>
+      <div class="how">▶ 더블클릭 → <kbd>F11</kbd> 전체화면 → <kbd>←</kbd> <kbd>→</kbd>/스페이스로 진행</div>
+    </a>
+    <a class="file" href="SIRIAI_발표자료.pptx">
+      <div class="ic">📊</div>
+      <div class="nm">파워포인트 버전 <span class="ext pptx">PPTX</span></div>
+      <div class="d">같은 내용을 PowerPoint로. 회사 공유·추가 편집·빔프로젝터 발표용.</div>
+      <div class="how">▶ PowerPoint로 열어 편집·발표</div>
+    </a>
+    <a class="file" href="SIRIAI_발표대본.html">
+      <div class="ic">🗣️</div>
+      <div class="nm">발표 대본 · 스피커노트 <span class="ext">HTML</span></div>
+      <div class="d">슬라이드별 ‘말할 내용’ + 강조 포인트 + 예상 Q&amp;A 8개 + 발표 팁. 총 12~15분 분량.</div>
+      <div class="how">▶ 발표 전 읽고 연습 / 발표 중 2번째 화면에 띄워두기</div>
+    </a>
+    <a class="file" href="SIRIAI_요약본.html">
+      <div class="ic">📄</div>
+      <div class="nm">1페이지 요약본 (핸드아웃) <span class="ext">HTML</span></div>
+      <div class="d">경영진·동료 배포용 한 장 요약. 문제→해결 표 + 기대효과.</div>
+      <div class="how">▶ <kbd>Ctrl</kbd>+<kbd>P</kbd> → ‘PDF로 저장’ 또는 인쇄(A4)</div>
+    </a>
+  </div>
+
+  <h2>발표 진행 방법</h2>
+  <div class="card">
+    <ol>
+      <li><b>발표는</b> <b>메인 슬라이드 덱(HTML)</b>으로 진행하세요. 더블클릭해 브라우저에서 열고 <kbd>F11</kbd>로 전체화면.</li>
+      <li><b>이동</b>은 <kbd>→</kbd>/<kbd>스페이스</kbd>(다음), <kbd>←</kbd>(이전), <kbd>Home</kbd>/<kbd>End</kbd>(처음/끝). 우측 하단 화살표 버튼·스와이프도 됩니다.</li>
+      <li><b>PDF가 필요하면</b> 어떤 HTML이든 <kbd>Ctrl</kbd>+<kbd>P</kbd> → 대상을 ‘PDF로 저장’. (덱은 슬라이드별 1페이지로 저장됩니다)</li>
+      <li><b>회사에서 PPT가 표준이면</b> <b>PPTX</b>를 쓰세요. 내용은 HTML 덱과 동일합니다.</li>
+    </ol>
+  </div>
+
+  <h2>발표 전 딱 1가지만 수정</h2>
+  <div class="card">
+    <ul>
+      <li>표지의 <b>“발표자 ____________”</b> 부분에 이름을 넣으세요. <br>→ HTML은 편집기로 <code>발표자</code> 검색 후 수정 / PPTX는 1번 슬라이드에서 직접 입력.</li>
+      <li>(선택) 발표 대본 ‘발표 팁 ⑤’처럼 <b>실제 수치</b>(예: 캠페인당 문자 횟수, 월 인원 수)를 넣으면 설득력이 크게 올라갑니다.</li>
+    </ul>
+  </div>
+
+  <h2>구성 (34슬라이드 · 6파트)</h2>
+  <div class="card">
+    <ul>
+      <li><b>Part 1 배경</b> (1–3) — 규모는 커졌는데 방식은 그대로</li>
+      <li><b>Part 2 현황 진단</b> (4–9) — 모집·연락·배송·정산·검수 5단계 문제</li>
+      <li><b>Part 3 솔루션 개요</b> (10–12) — 두 앱 + AI, 전체 구조, 문제→해결 매핑</li>
+      <li><b>Part 4 단계별 해결 &amp; 화면</b> (13–18) — 실제 화면 목업 + AI 자동화</li>
+      <li><b>Part 5 운영 실행</b> (19–30) — 개요 / 대량 연락·단계별 시나리오 / 인바운드 모집(허브·노출·레퍼럴) / 인스타 콘텐츠(포트폴리오·트렌드·교육·모집·자동화)</li>
+      <li><b>Part 6 효율·기술·로드맵</b> (31–34) — Before/After, 기술·보안, 다음 단계</li>
+    </ul>
+  </div>
+
+  <h2>참고</h2>
+  <div class="card">
+    <ul>
+      <li>슬라이드 안의 <b>앱 화면은 실제 코드 기반의 고품질 목업</b>입니다. 더 생생하게 하려면 발표 중 <b>실제 어드민·인플루언서 앱</b>을 라이브로 띄워 보여주면 효과가 큽니다(13·16·17번 추천).</li>
+      <li>이 발표는 우리의 <b>현황진단 5단계 문제</b>와, 실제로 만든 <b>어드민·인플루언서 앱의 기능</b>을 1:1로 매핑해 구성했습니다.</li>
+      <li><code>build_pptx.py</code>는 PPTX 생성 스크립트입니다(재생성·수정용, 발표엔 불필요).</li>
+    </ul>
+  </div>
+
+  <p class="foot">SIRIAI · 발표 패키지 · 2026.06.07 · 파일 5종 (덱 HTML / PPTX / 대본 / 요약본 / 안내)</p>
+</div>
+</body>
+</html>
