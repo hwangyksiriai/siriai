@@ -855,7 +855,7 @@
       <h2 style="margin-top:12px">반복되는 ‘쓰기·계산·대조’는 AI가 초안을, 사람은 결정을.</h2>
       <div class="grid g4 mt-l" style="gap:12px">
         <div class="card tight"><div class="ico">🔎</div><h3 class="mt-s" style="font-size:13.5px">influencer-scout</h3><p>핸들 → 팔로워·카테고리·적합도 스크리닝, DB 추가용 정리</p></div>
-        <div class="card tight"><div class="ico">✉️</div><h3 class="mt-s" style="font-size:13.5px">influencer-dm</h3><p>섭외·선정·리마인드·정산 등 단계별 DM 자동 작성</p></div>
+        <div class="card tight"><div class="ico">✉️</div><h3 class="mt-s" style="font-size:13.5px">influencer-dm</h3><p>이름·핸들·팔로워·카테고리 기반 <strong>AI 실시간 개인화</strong> · 편집 후 발송 · 일괄 전송 지원</p></div>
         <div class="card tight"><div class="ico">🧾</div><h3 class="mt-s" style="font-size:13.5px">campaign-setup</h3><p>브랜드 브리프 → 캠페인 등록 + 모집 공고 + 가이드 연결</p></div>
         <div class="card tight"><div class="ico">📋</div><h3 class="mt-s" style="font-size:13.5px">brand-guide</h3><p>크리에이터용 촬영·업로드 가이드 페이지 자동 생성</p></div>
         <div class="card tight"><div class="ico">✅</div><h3 class="mt-s" style="font-size:13.5px">content-review</h3><p>해시태그·멘션·금지사항 가이드 대조 검수 + 수정요청</p></div>
@@ -1074,27 +1074,34 @@
         <h2 style="max-width:18em">신청 → 선정 → 정산이 한 줄에서 이어집니다</h2>
         <span class="chip">📨 메뉴 ⑥</span>
       </div>
-      <div class="grid mt" style="grid-template-columns:1fr 1.04fr; gap:30px; align-items:center">
+      <div class="grid mt" style="grid-template-columns:1fr 1.08fr; gap:30px; align-items:center">
         <div>
           <ul class="clean">
-            <li><span class="mk">＋</span><div><strong>캠페인별 신청자 목록</strong> — 누가 신청했는지 한눈에, 프로필을 바로 미리보기.</div></li>
-            <li><span class="mk">＋</span><div><strong>선정/탈락 토글</strong> — ‘진행’으로 선정하면 <strong>자동 알림 발송 + 정산 자동 생성</strong>이 한 번에.</div></li>
-            <li><span class="mk">＋</span><div><strong>배송지 자동 표기</strong> — 신청 시 입력한 <strong>최신 주소</strong>가 목록에 바로. 한 명씩 다시 묻는 전수조사가 사라짐.</div></li>
-            <li><span class="mk">＋</span><div><strong>인원 관리</strong> — 모집 N명 중 선정 현황을 실시간으로 보며 마감.</div></li>
+            <li><span class="mk">＋</span><div><strong>캠페인별 신청자 목록</strong> — 누가 신청했는지 한눈에, 프로필을 바로 미리보기. <span class="faint" style="font-size:12px">기본 탭 = 진행중</span></div></li>
+            <li><span class="mk">＋</span><div><strong>선정 토글 → 자동 처리</strong> — ‘진행’으로 선정하면 <strong>앱 알림 발송 + 정산 자동 생성</strong>이 동시에.</div></li>
+            <li><span class="mk">＋</span><div><strong style="color:var(--green)">✓ 선정 완료 버튼</strong> — 모집 마감 시 한 번 클릭으로 <strong>미선정 전원에게 알림톡 자동 발송</strong>. 개별 연락 제로.</div></li>
+            <li><span class="mk">＋</span><div><strong>배송지 자동 표기</strong> — 신청 시 입력한 최신 주소가 목록에 바로. 전수조사 없음.</div></li>
           </ul>
         </div>
         <div class="win">
-          <div class="wbar"><span class="wdot" style="background:#ff5f57"></span><span class="wdot" style="background:#febc2e"></span><span class="wdot" style="background:#28c840"></span><span class="wt">SIRIAI 어드민 · 신청 관리 · 문샷 립컬러</span></div>
+          <div class="wbar"><span class="wdot" style="background:#ff5f57"></span><span class="wdot" style="background:#febc2e"></span><span class="wdot" style="background:#28c840"></span><span class="wt">SIRIAI 어드민 · 신청 관리</span>
+            <span style="margin-left:auto; background:#059669; color:#fff; font-size:9.5px; font-weight:700; padding:3px 10px; border-radius:6px; font-family:var(--mono); letter-spacing:.04em">✓ 선정 완료</span>
+          </div>
           <div class="wbody">
             <table class="tbl">
-              <thead><tr><th>인플루언서</th><th>배송지</th><th></th></tr></thead>
+              <thead><tr><th>인플루언서</th><th>배송지</th><th>상태</th></tr></thead>
               <tbody>
-                <tr><td><span class="h">@minji.beauty</span><span class="faint" style="font-size:10px"> · 4.1만</span></td><td style="font-size:10.5px; color:var(--muted)">서울 성동구 ○○로 12</td><td><span class="tag" style="background:var(--orange)">선정</span></td></tr>
-                <tr><td><span class="h">@sora_daily</span><span class="faint" style="font-size:10px"> · 2.8만</span></td><td style="font-size:10.5px; color:var(--muted)">경기 고양시 △△로 8</td><td><span class="tag" style="background:var(--orange)">선정</span></td></tr>
-                <tr><td><span class="h">@jiwon.skin</span><span class="faint" style="font-size:10px"> · 3.3만</span></td><td style="font-size:10.5px; color:var(--faint)">검토 중</td><td><span class="tag" style="background:rgba(33,26,51,.35)">대기</span></td></tr>
+                <tr><td><span class="h">@minji.beauty</span><span class="faint" style="font-size:10px"> · 4.1만</span></td><td style="font-size:10.5px; color:var(--muted)">서울 성동구 ○○로 12</td><td><span class="tag" style="background:#059669">진행</span></td></tr>
+                <tr><td><span class="h">@sora_daily</span><span class="faint" style="font-size:10px"> · 2.8만</span></td><td style="font-size:10.5px; color:var(--muted)">경기 고양시 △△로 8</td><td><span class="tag" style="background:#059669">진행</span></td></tr>
+                <tr><td><span class="h">@jiwon.skin</span><span class="faint" style="font-size:10px"> · 3.3만</span></td><td style="font-size:10.5px; color:var(--muted)">경기 수원시 ◇◇로 5</td><td><span class="tag" style="background:var(--faint)">대기</span></td></tr>
               </tbody>
             </table>
-            <div class="flowline mt-s" style="font-size:11px"><span class="node" style="font-size:10.5px; padding:6px 9px">‘진행’ 선정</span><span class="ar">→</span><span class="node" style="font-size:10.5px; padding:6px 9px; border-color:var(--orange); color:var(--orange)">정산 자동 생성</span><span class="ar">→</span><span class="node" style="font-size:10.5px; padding:6px 9px">앱 알림 발송</span></div>
+            <div class="flowline mt-s" style="font-size:10.5px; flex-wrap:nowrap">
+              <span class="node" style="font-size:10px; padding:5px 8px">’진행’ 선정</span><span class="ar">→</span>
+              <span class="node" style="font-size:10px; padding:5px 8px; border-color:var(--orange); color:var(--orange)">정산 생성</span><span class="ar">→</span>
+              <span class="node" style="font-size:10px; padding:5px 8px; border-color:#059669; color:#059669; font-weight:600">✓ 선정 완료</span><span class="ar">→</span>
+              <span class="node" style="font-size:10px; padding:5px 8px; border-color:var(--blue); color:var(--blue)">미선정 알림톡</span>
+            </div>
           </div>
         </div>
       </div>
@@ -1109,27 +1116,38 @@
         <h2 style="max-width:18em">개인 폰을 닫고, 앱 안에서 다 같이</h2>
         <span class="chip">💬 메뉴 ⑦</span>
       </div>
-      <div class="grid mt" style="grid-template-columns:1fr .9fr; gap:30px; align-items:center">
-        <div>
+      <div class="grid mt" style="grid-template-columns:1fr 1fr; gap:30px; align-items:start">
+        <div style="padding-top:4px">
           <ul class="clean">
-            <li><span class="mk">＋</span><div><strong>캠페인별 1:1 DM</strong> — 인플루언서와의 대화가 캠페인 단위로 정리돼 맥락이 흩어지지 않음.</div></li>
-            <li><span class="mk">＋</span><div><strong>AI 단계별 초안(influencer-dm)</strong> — 섭외·선정·가이드·리마인드·정산·감사 메시지를 톤 맞춰 자동 작성.</div></li>
-            <li><span class="mk">＋</span><div><strong>일괄 발송</strong> — 이름·핸들 자동 치환으로 수십 명에게 같은 안내를 한 번에.</div></li>
-            <li><span class="mk">＋</span><div><strong>기록이 남는다</strong> — 담당자가 바뀌어도 대화 이력이 그대로 인수인계됨.</div></li>
+            <li><span class="mk">＋</span><div><strong>캠페인별 1:1 DM</strong> — 대화가 캠페인 단위로 정리, 맥락 없이 흩어지지 않음. 담당자 교체 시 이력 그대로.</div></li>
+            <li><span class="mk">＋</span><div><strong style="color:var(--blue)">AI 실시간 개인화</strong> — 템플릿 선택 시 이름·핸들·팔로워·카테고리 기반으로 즉시 개인화. 편집 후 발송.</div></li>
+            <li><span class="mk">＋</span><div><strong style="color:var(--blue)">일괄 메시지 + 개별 미리보기</strong> — N명 체크 → 템플릿 선택 → 각자 AI 개인화 → 1인씩 미리보기 확인 → 일괄 전송.</div></li>
+            <li><span class="mk">＋</span><div><strong>주요 내용 자동 메모</strong> — 고료·일정 등 중요 내용이 담긴 메시지를 인플루언서 프로필 메모에 자동 기록.</div></li>
           </ul>
         </div>
-        <div class="col gap">
-          <div class="card tight" style="padding:12px 14px">
-            <div class="mono" style="font-size:9px; letter-spacing:.14em; color:var(--faint); margin-bottom:9px">1:1 메시지 · 관리자 ↔ @minji.beauty</div>
-            <div class="bubbles">
-              <div class="bub a">선정 축하드려요! 제품은 이번 주 내 발송돼요 😊</div>
-              <div class="bub b">감사합니다! 가이드는 어디서 보나요?</div>
-              <div class="bub a">앱 ‘스케줄’에서 촬영·업로드 가이드 확인 가능해요 👍</div>
+        <div class="col gap-s">
+          <!-- AI 미리보기 모달 -->
+          <div class="card tight" style="padding:13px 15px; border-color:rgba(37,99,235,.22); background:rgba(37,99,235,.03)">
+            <div style="display:flex; align-items:center; gap:7px; margin-bottom:10px">
+              <span style="font-size:10px; font-family:var(--mono); letter-spacing:.12em; color:var(--blue); font-weight:600">🤖 AI 개인화 미리보기</span>
+              <span style="margin-left:auto; font-size:9px; color:var(--faint); font-family:var(--mono)">@minji.beauty · 4.1만 · 뷰티</span>
+            </div>
+            <div style="font-size:12px; color:var(--ink); line-height:1.55; background:#fff; border:1px solid var(--line); border-radius:8px; padding:10px 12px">안녕하세요 minji님 👋 이번 <em>문샷 립컬러</em> 캠페인에 선정되셨습니다! 4.1만 팔로워의 뷰티 크리에이터로서 딱 맞는 조합이라고 생각해요 ✨</div>
+            <div style="display:flex; gap:7px; margin-top:8px">
+              <button style="flex:1; padding:6px 0; border-radius:7px; border:1px solid var(--line); background:#fff; font-size:11px; color:var(--muted); cursor:pointer">수정</button>
+              <button style="flex:1; padding:6px 0; border-radius:7px; border:none; background:var(--blue); color:#fff; font-size:11px; font-weight:600; cursor:pointer">전송</button>
             </div>
           </div>
+          <!-- 일괄 전송 흐름 -->
           <div class="card tight" style="padding:11px 13px">
-            <div class="mono" style="font-size:9px; letter-spacing:.14em; color:var(--faint); margin-bottom:8px">🤖 AI 메시지 초안</div>
-            <div class="row gap-s wrap"><span class="chip" style="font-size:10.5px">섭외</span><span class="chip" style="font-size:10.5px">선정 안내</span><span class="chip" style="font-size:10.5px">D-1 리마인드</span><span class="chip" style="font-size:10.5px">정산 안내</span></div>
+            <div style="font-size:9px; font-family:var(--mono); letter-spacing:.12em; color:var(--faint); margin-bottom:8px">✨ 일괄 메시지 흐름</div>
+            <div class="flowline" style="font-size:10px; gap:6px">
+              <span class="node" style="font-size:9.5px; padding:4px 8px">N명 선택</span><span class="ar" style="font-size:12px">→</span>
+              <span class="node" style="font-size:9.5px; padding:4px 8px">템플릿</span><span class="ar" style="font-size:12px">→</span>
+              <span class="node" style="font-size:9.5px; padding:4px 8px; border-color:var(--blue); color:var(--blue)">AI 개인화</span><span class="ar" style="font-size:12px">→</span>
+              <span class="node" style="font-size:9.5px; padding:4px 8px">미리보기</span><span class="ar" style="font-size:12px">→</span>
+              <span class="node" style="font-size:9.5px; padding:4px 8px; border-color:#059669; color:#059669">전송</span>
+            </div>
           </div>
         </div>
       </div>
