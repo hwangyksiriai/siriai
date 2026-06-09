@@ -196,6 +196,55 @@
   .nav button:hover{background:var(--ink); color:var(--cream)}
   body.on-dark .nav button{border-color:rgba(243,238,226,.3); background:rgba(255,255,255,.12); color:var(--cream)}
 
+  /* ===== TOC Sidebar ===== */
+  .toc-btn{position:fixed;left:0;top:50%;transform:translateY(-50%);z-index:200;
+    background:var(--ink);color:var(--cream);border:none;border-radius:0 11px 11px 0;
+    padding:14px 7px;cursor:pointer;display:flex;flex-direction:column;align-items:center;
+    gap:5px;transition:.18s;line-height:1;}
+  .toc-btn:hover,.toc-btn.open{background:var(--orange);}
+  .toc-btn .tb-ic{font-size:15px;}
+  .toc-btn .tb-tx{font-family:var(--mono);font-size:8px;letter-spacing:.14em;
+    writing-mode:vertical-rl;text-orientation:mixed;}
+  body.on-dark .toc-btn{background:rgba(255,255,255,.14);color:var(--cream);}
+  body.on-dark .toc-btn:hover,body.on-dark .toc-btn.open{background:var(--orange)!important;}
+
+  .toc-panel{position:fixed;left:0;top:0;height:100vh;width:268px;
+    background:var(--cream);border-right:1px solid var(--line);
+    z-index:190;transform:translateX(-268px);
+    transition:transform .28s cubic-bezier(.4,0,.2,1);
+    display:flex;flex-direction:column;
+    box-shadow:6px 0 32px rgba(33,26,51,.22);}
+  .toc-panel.open{transform:translateX(0);}
+  .toc-head{padding:22px 20px 14px;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+  .toc-head-ttl{font-weight:700;font-size:14.5px;letter-spacing:-.01em;}
+  .toc-head-sub{font-family:var(--mono);font-size:9px;color:var(--faint);margin-top:2px;letter-spacing:.06em;}
+  .toc-x{width:28px;height:28px;border-radius:8px;border:1px solid var(--line);
+    background:transparent;cursor:pointer;color:var(--ink);font-size:14px;
+    display:flex;align-items:center;justify-content:center;transition:.15s;}
+  .toc-x:hover{background:var(--ink);color:var(--cream);}
+  .toc-body{flex:1;overflow-y:auto;padding:6px 0 24px;}
+  .toc-body::-webkit-scrollbar{width:4px;}
+  .toc-body::-webkit-scrollbar-thumb{background:rgba(33,26,51,.18);border-radius:2px;}
+  .toc-grp{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--orange);padding:13px 20px 4px;font-weight:700;}
+  .toc-item{width:100%;border:none;background:transparent;text-align:left;
+    padding:7px 20px;cursor:pointer;display:flex;align-items:flex-start;gap:10px;
+    transition:.12s;}
+  .toc-item:hover{background:rgba(33,26,51,.07);}
+  .toc-item.cur{background:var(--ink)!important;}
+  .ti-num{font-family:var(--mono);font-size:9.5px;font-weight:700;color:var(--faint);
+    min-width:20px;padding-top:2px;flex-shrink:0;}
+  .ti-lbl{font-size:12.5px;color:var(--ink);line-height:1.35;}
+  .toc-item.cur .ti-num{color:rgba(243,238,226,.5);}
+  .toc-item.cur .ti-lbl{color:var(--cream);font-weight:600;}
+  .toc-overlay{position:fixed;inset:0;z-index:180;background:rgba(33,26,51,.42);
+    opacity:0;pointer-events:none;transition:opacity .28s;}
+  .toc-overlay.open{opacity:1;pointer-events:auto;}
+  .toc-hint{padding:12px 20px 0;font-size:10.5px;color:var(--faint);font-family:var(--mono);
+    letter-spacing:.06em;border-top:1px solid var(--line);flex-shrink:0;}
+  @media print{.toc-btn,.toc-panel,.toc-overlay{display:none!important;}}
+
   .hint{position:absolute; bottom:34px; left:50%; transform:translateX(-50%); font-size:12px; color:rgba(243,238,226,.6); font-family:var(--mono); letter-spacing:.1em; animation:fade 2.4s ease-in-out infinite}
   @keyframes fade{0%,100%{opacity:.35}50%{opacity:.85}}
 
@@ -1596,6 +1645,24 @@
   <button id="next" aria-label="다음">›</button>
 </div>
 
+<!-- TOC Sidebar -->
+<button id="tocBtn" class="toc-btn" title="목차 (단축키 T)">
+  <span class="tb-ic">≡</span>
+  <span class="tb-tx">목차</span>
+</button>
+<div id="tocOverlay" class="toc-overlay"></div>
+<div id="tocPanel" class="toc-panel">
+  <div class="toc-head">
+    <div>
+      <div class="toc-head-ttl">슬라이드 목차</div>
+      <div class="toc-head-sub" id="tocSub"></div>
+    </div>
+    <button class="toc-x" id="tocClose">✕</button>
+  </div>
+  <div class="toc-body" id="tocBody"></div>
+  <div class="toc-hint">T 키 · 단축키로 열고 닫기</div>
+</div>
+
 <script>
 (function(){
   var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
@@ -1605,6 +1672,7 @@
   var counter = document.getElementById('counter');
   var footlabel = document.getElementById('footlabel');
   var deck = document.getElementById('deck');
+  var updateToc = function(){};  // stub — replaced after TOC init
 
   function pad(n){return (n<10?'0':'')+n;}
   function render(){
@@ -1619,6 +1687,7 @@
     counter.innerHTML = '<b>'+pad(i+1)+'</b> / '+pad(total);
     footlabel.textContent = cur.getAttribute('data-label')||'';
     if(location.hash !== '#'+(i+1)) history.replaceState(null,'','#'+(i+1));
+    updateToc();
   }
   function go(n){ i = Math.max(0, Math.min(total-1, n)); render(); }
   function next(){ go(i+1); } function prev(){ go(i-1); }
@@ -1639,6 +1708,81 @@
     if(x0===null) return; var dx=e.changedTouches[0].clientX-x0;
     if(Math.abs(dx)>50){ dx<0?next():prev(); } x0=null;
   },{passive:true});
+
+  // ===== TOC =====
+  (function(){
+    var tocPanel=document.getElementById('tocPanel');
+    var tocOverlay=document.getElementById('tocOverlay');
+    var tocBody=document.getElementById('tocBody');
+    var tocBtn=document.getElementById('tocBtn');
+    var tocSub=document.getElementById('tocSub');
+
+    // 파트 헤더 감지 (label 기반) — 구체적인 패턴을 먼저 체크
+    function partFor(lbl){
+      if(!lbl||/^(표지|목차|배경)$/.test(lbl)) return null;
+      if(/^문제→/.test(lbl))                    return 'PART 3 · 솔루션 개요';  // "문제→해결 매핑" 먼저
+      if(/^(진단|문제)/.test(lbl))              return 'PART 2 · 현황 진단';
+      if(/^(솔루션|시스템)/.test(lbl))          return 'PART 3 · 솔루션 개요';
+      if(/^(해결|AI 자동화)/.test(lbl))          return 'PART 4 · 단계별 해결';
+      if(/^(어드민|운영|모집|콘텐츠)/.test(lbl))  return 'PART 5 · 운영 실행';
+      if(/^(Before|기술|로드맵|마무리)/.test(lbl))return 'PART 6 · 효율·로드맵';
+      return null;
+    }
+
+    // TOC 목록 생성
+    var lastPart='__none__';
+    slides.forEach(function(s,idx){
+      var lbl=s.getAttribute('data-label')||'슬라이드 '+(idx+1);
+      var pt=partFor(lbl);
+      if(pt && pt!==lastPart){
+        var h=document.createElement('div');
+        h.className='toc-grp'; h.textContent=pt;
+        tocBody.appendChild(h); lastPart=pt;
+      }
+      var btn=document.createElement('button');
+      btn.className='toc-item';
+      btn.setAttribute('data-toc',''+idx);
+      btn.innerHTML='<span class="ti-num">'+pad(idx+1)+'</span><span class="ti-lbl">'+lbl+'</span>';
+      btn.onclick=function(){ go(idx); closeToc(); };
+      tocBody.appendChild(btn);
+    });
+
+    // 현재 슬라이드 표시 업데이트
+    updateToc=function(){
+      var items=tocBody.querySelectorAll('.toc-item');
+      items.forEach(function(it){
+        it.classList.toggle('cur',+it.getAttribute('data-toc')===i);
+      });
+      if(tocSub) tocSub.textContent=(i+1)+' / '+total+' · '+(slides[i].getAttribute('data-label')||'');
+      if(tocPanel.classList.contains('open')){
+        var cur=tocBody.querySelector('.toc-item.cur');
+        if(cur) cur.scrollIntoView({block:'nearest',behavior:'smooth'});
+      }
+    };
+
+    function openToc(){
+      tocPanel.classList.add('open');
+      tocOverlay.classList.add('open');
+      tocBtn.classList.add('open');
+      updateToc();
+    }
+    function closeToc(){
+      tocPanel.classList.remove('open');
+      tocOverlay.classList.remove('open');
+      tocBtn.classList.remove('open');
+    }
+    function toggleToc(){ tocPanel.classList.contains('open')?closeToc():openToc(); }
+
+    tocBtn.onclick=toggleToc;
+    document.getElementById('tocClose').onclick=closeToc;
+    tocOverlay.onclick=closeToc;
+
+    // T 키 단축키
+    document.addEventListener('keydown',function(e){
+      if((e.key==='t'||e.key==='T')&&!e.ctrlKey&&!e.metaKey&&!e.altKey) toggleToc();
+    });
+  })();
+  // ===== /TOC =====
 
   // start from hash
   var h = parseInt((location.hash||'').replace('#',''),10);
