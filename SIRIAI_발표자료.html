@@ -6,7 +6,7 @@
 <title>SIRIAI · 인플루언서 마케팅 운영 시스템 — 발표자료</title>
 <style>
   :root{
-    --ink:#211A33; --cream:#F3EEE2; --paper:#FBF9F3; --white:#ffffff;
+    --ink:#211A33; --cream:#ffffff; --paper:#ffffff; --white:#ffffff;
     --line:rgba(33,26,51,.14); --line2:rgba(33,26,51,.08);
     --muted:rgba(33,26,51,.60); --faint:rgba(33,26,51,.42);
     --blue:#2A6FDB; --orange:#e65100; --green:#2e7d32; --red:#c62828; --purple:#6B4DCE; --pink:#C1436D;
@@ -16,7 +16,7 @@
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
   body{
-    font-family:var(--sans); color:var(--ink); background:#0e0b16;
+    font-family:var(--sans); color:var(--ink); background:#d8d8d8;
     -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; overflow:hidden;
   }
 
@@ -28,26 +28,20 @@
     opacity:0; visibility:hidden; transform:translateY(14px) scale(.994);
     transition:opacity .5s ease, transform .5s ease, visibility .5s;
     overflow:hidden;
-    background:
-      radial-gradient(58% 48% at 13% 4%, rgba(246,201,168,.50), transparent 60%),
-      radial-gradient(48% 42% at 88% 8%, rgba(221,208,239,.46), transparent 56%),
-      var(--cream);
+    background: #ffffff;
   }
   .slide.active{opacity:1; visibility:visible; transform:none; z-index:2}
   .slide.prev{transform:translateY(-14px) scale(.994)}
   .slide-inner{width:100%; max-width:1180px; margin:0 auto; position:relative}
 
-  /* dark variants */
+  /* dark variants — 흰 배경으로 통일 */
   .slide.dark{
-    color:var(--cream);
-    background:
-      radial-gradient(60% 60% at 12% 6%, rgba(180,120,90,.34), transparent 60%),
-      radial-gradient(54% 54% at 90% 96%, rgba(120,98,170,.40), transparent 58%),
-      #1a1426;
+    color:var(--ink);
+    background: #ffffff;
   }
-  .slide.dark .kicker{color:rgba(243,238,226,.62)}
-  .slide.dark .muted{color:rgba(243,238,226,.72)}
-  .slide.dark .faint{color:rgba(243,238,226,.5)}
+  .slide.dark .kicker{color:var(--faint)}
+  .slide.dark .muted{color:var(--muted)}
+  .slide.dark .faint{color:var(--faint)}
 
   /* ===== Typography ===== */
   .kicker{font-family:var(--mono); font-size:clamp(10px,.86vw,12.5px); letter-spacing:.26em; text-transform:uppercase; color:var(--faint); display:flex; align-items:center; gap:12px}
@@ -186,15 +180,12 @@
   .brandmark{position:fixed; bottom:20px; left:28px; z-index:40; font-family:var(--sans); font-weight:600; font-size:13px; letter-spacing:.14em; color:var(--ink)}
   .brandmark .sq{display:inline-block; width:9px; height:9px; background:var(--orange); border-radius:2px; margin-right:8px; transform:translateY(0)}
   .footlabel{position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:40; font-size:11px; color:var(--faint); font-family:var(--mono); letter-spacing:.08em}
-  /* invert chrome on dark slides via body class */
-  body.on-dark .counter b{color:var(--cream)} body.on-dark .counter{color:rgba(243,238,226,.55)}
-  body.on-dark .brandmark{color:var(--cream)} body.on-dark .progress{background:var(--cream)}
-  body.on-dark .footlabel{color:rgba(243,238,226,.5)}
+  /* on-dark overrides 제거 — 모든 슬라이드 흰 배경 통일 */
 
   .nav{position:fixed; bottom:18px; right:120px; z-index:45; display:flex; gap:8px}
   .nav button{width:34px; height:34px; border-radius:50%; border:1px solid var(--line); background:rgba(255,255,255,.7); color:var(--ink); cursor:pointer; font-size:15px; display:flex; align-items:center; justify-content:center; transition:.15s}
   .nav button:hover{background:var(--ink); color:var(--cream)}
-  body.on-dark .nav button{border-color:rgba(243,238,226,.3); background:rgba(255,255,255,.12); color:var(--cream)}
+  /* body.on-dark .nav button — 제거 */
 
   /* ===== TOC Sidebar ===== */
   .toc-btn{position:fixed;left:0;top:50%;transform:translateY(-50%);z-index:200;
@@ -205,8 +196,7 @@
   .toc-btn .tb-ic{font-size:15px;}
   .toc-btn .tb-tx{font-family:var(--mono);font-size:8px;letter-spacing:.14em;
     writing-mode:vertical-rl;text-orientation:mixed;}
-  body.on-dark .toc-btn{background:rgba(255,255,255,.14);color:var(--cream);}
-  body.on-dark .toc-btn:hover,body.on-dark .toc-btn.open{background:var(--orange)!important;}
+  /* body.on-dark .toc-btn — 제거 */
 
   .toc-panel{position:fixed;left:0;top:0;height:100vh;width:268px;
     background:var(--cream);border-right:1px solid var(--line);
@@ -279,20 +269,20 @@
 <div class="deck" id="deck">
 
   <!-- 1 · COVER -->
-  <section class="slide dark active" data-label="표지">
+  <section class="slide active" data-label="표지">
     <div class="slide-inner">
       <div class="kicker"><span>SIRIAI</span> · OPERATIONS PLATFORM · 2026</div>
-      <h1 class="title" style="margin-top:14px">인플루언서 마케팅,<br>이제 <span style="color:#F6C9A8">시스템</span>으로<br>운영합니다.</h1>
-      <p class="lead" style="color:rgba(243,238,226,.82); max-width:42em; margin-top:24px">
+      <h1 class="title" style="margin-top:14px">인플루언서 마케팅,<br>이제 <span style="color:var(--orange)">시스템</span>으로<br>운영합니다.</h1>
+      <p class="lead" style="max-width:42em; margin-top:24px">
         1년간 매니저 한 명이 손으로 돌리던 모집·연락·배송·정산·검수를,<br>
-        <strong style="color:#fff">어드민 웹 · 인플루언서 앱 · AI 자동화</strong>로 다시 설계했습니다.
+        <strong>어드민 웹 · 인플루언서 앱 · AI 자동화</strong>로 다시 설계했습니다.
       </p>
       <div class="row gap center" style="margin-top:34px; flex-wrap:wrap">
-        <span class="chip" style="background:rgba(255,255,255,.1); border-color:rgba(243,238,226,.25); color:rgba(243,238,226,.85)">SIRIAI 어드민</span>
-        <span class="chip" style="background:rgba(255,255,255,.1); border-color:rgba(243,238,226,.25); color:rgba(243,238,226,.85)">SIRIAI 인플루언서 앱</span>
-        <span class="chip" style="background:rgba(255,255,255,.1); border-color:rgba(243,238,226,.25); color:rgba(243,238,226,.85)">AI 자동화 레이어</span>
+        <span class="chip">SIRIAI 어드민</span>
+        <span class="chip">SIRIAI 인플루언서 앱</span>
+        <span class="chip">AI 자동화 레이어</span>
       </div>
-      <p class="mono" style="margin-top:38px; font-size:12px; letter-spacing:.12em; color:rgba(243,238,226,.55)">
+      <p class="mono" style="margin-top:38px; font-size:12px; letter-spacing:.12em; color:var(--faint)">
         발표자 ____________ · SIRIAI · 2026.06.07
       </p>
     </div>
@@ -476,20 +466,20 @@
   </section>
 
   <!-- 10 · 전환 -->
-  <section class="slide dark" data-label="전환">
-    <div class="slide-inner" style="text-align:center">
-      <div class="quotemark">“</div>
-      <p class="big-quote" style="max-width:20em; margin:0 auto">
-        문제는 <span style="color:#F6C9A8">사람</span>이 아니라<br><span style="color:#F6C9A8">‘시스템의 부재’</span>였습니다.
+  <section class=”slide” data-label=”전환”>
+    <div class=”slide-inner” style=”text-align:center”>
+      <div class=”quotemark”>”</div>
+      <p class=”big-quote” style=”max-width:20em; margin:0 auto”>
+        문제는 <span style=”color:var(--orange)”>사람</span>이 아니라<br><span style=”color:var(--orange)”>’시스템의 부재’</span>였습니다.
       </p>
-      <p class="lead" style="color:rgba(243,238,226,.8); max-width:38em; margin:30px auto 0">
+      <p class=”lead” style=”max-width:38em; margin:30px auto 0”>
         그래서 단순 반복은 시스템과 AI가 대신하고, 사람은 ‘감도’와 ‘관계’에만 집중하도록 —
-        <strong style="color:#fff">두 개의 웹앱과 AI 자동화 레이어</strong>를 직접 만들었습니다.
+        <strong>두 개의 웹앱과 AI 자동화 레이어</strong>를 직접 만들었습니다.
       </p>
-      <div class="row gap center" style="justify-content:center; margin-top:40px; flex-wrap:wrap">
-        <span class="chip" style="background:rgba(255,255,255,.1); border-color:rgba(243,238,226,.25); color:#fff; font-size:13px; padding:9px 16px">🖥️ SIRIAI 어드민 — 운영자</span>
-        <span class="chip" style="background:rgba(255,255,255,.1); border-color:rgba(243,238,226,.25); color:#fff; font-size:13px; padding:9px 16px">📱 SIRIAI 인플루언서 앱 — 크리에이터</span>
-        <span class="chip" style="background:rgba(255,255,255,.1); border-color:rgba(243,238,226,.25); color:#fff; font-size:13px; padding:9px 16px">🤖 AI 자동화 — 반복 업무</span>
+      <div class=”row gap center” style=”justify-content:center; margin-top:40px; flex-wrap:wrap”>
+        <span class=”chip” style=”font-size:13px; padding:9px 16px”>🖥️ SIRIAI 어드민 — 운영자</span>
+        <span class=”chip” style=”font-size:13px; padding:9px 16px”>📱 SIRIAI 인플루언서 앱 — 크리에이터</span>
+        <span class=”chip” style=”font-size:13px; padding:9px 16px”>🤖 AI 자동화 — 반복 업무</span>
       </div>
     </div>
   </section>
@@ -842,11 +832,11 @@
   <!-- ===== PART 05 · 어드민 기능 상세 (팀원 운영 가이드) ===== -->
 
   <!-- 05·0 · 디바이더 -->
-  <section class="slide dark" data-label="어드민 가이드">
+  <section class="slide" data-label="어드민 가이드">
     <div class="slide-inner">
       <div class="kicker"><span class="num">05</span> 어드민 기능 상세 · 팀원 운영 가이드</div>
-      <h2 style="margin-top:14px; max-width:21em">어드민 한 화면에서 운영의 전부를 — <span style="color:#F6C9A8">팀원이 실제로 쓰는 법</span></h2>
-      <p class="lead mt-s" style="color:rgba(243,238,226,.78); max-width:52em">지금부터는 메뉴 하나하나를 <strong style="color:#F6C9A8">무엇을 · 어떻게 · 왜</strong> 순서로 봅니다. 신규 팀원이 이 파트만 보면 바로 운영을 시작할 수 있도록, 10개 메뉴를 차례로 설명합니다.</p>
+      <h2 style="margin-top:14px; max-width:21em">어드민 한 화면에서 운영의 전부를 — <span style="color:var(--orange)">팀원이 실제로 쓰는 법</span></h2>
+      <p class="lead mt-s" style="max-width:52em">지금부터는 메뉴 하나하나를 <strong style="color:var(--orange)">무엇을 · 어떻게 · 왜</strong> 순서로 봅니다. 신규 팀원이 이 파트만 보면 바로 운영을 시작할 수 있도록, 10개 메뉴를 차례로 설명합니다.</p>
       <div class="grid g5 mt-l" style="gap:9px">
         <div class="card tight" style="padding:12px 13px"><div class="ico" style="font-size:18px">🏠</div><h3 class="mt-s" style="font-size:12.5px">대시보드</h3><p style="font-size:10.5px">오늘 할 일</p></div>
         <div class="card tight" style="padding:12px 13px"><div class="ico" style="font-size:18px">🏷️</div><h3 class="mt-s" style="font-size:12.5px">브랜드</h3><p style="font-size:10.5px">클라이언트 관리</p></div>
@@ -1629,18 +1619,18 @@
   </section>
 
   <!-- 22 · 마무리 -->
-  <section class="slide dark" data-label="마무리">
+  <section class="slide" data-label="마무리">
     <div class="slide-inner" style="text-align:center">
       <div class="kicker" style="justify-content:center"><span>SIRIAI</span></div>
       <p class="big-quote" style="margin:22px auto 0; max-width:22em">
-        수작업으로는 못 키우던 규모를,<br><span style="color:#F6C9A8">시스템으로 키웁니다.</span>
+        수작업으로는 못 키우던 규모를,<br><span style="color:var(--orange)">시스템으로 키웁니다.</span>
       </p>
       <div class="grid g3 mt-xl" style="max-width:780px; margin-left:auto; margin-right:auto; gap:14px">
-        <div class="card" style="text-align:center"><div class="stat"><div class="n" style="color:#F6C9A8">↓</div><div class="l" style="color:rgba(243,238,226,.8)">매니저 반복 공수</div></div></div>
-        <div class="card" style="text-align:center"><div class="stat"><div class="n" style="color:#F6C9A8">↑</div><div class="l" style="color:rgba(243,238,226,.8)">클라이언트 감도·만족</div></div></div>
-        <div class="card" style="text-align:center"><div class="stat"><div class="n" style="color:#F6C9A8">∞</div><div class="l" style="color:rgba(243,238,226,.8)">데이터 자산화·확장성</div></div></div>
+        <div class="card" style="text-align:center"><div class="stat"><div class="n" style="color:var(--orange)">↓</div><div class="l">매니저 반복 공수</div></div></div>
+        <div class="card" style="text-align:center"><div class="stat"><div class="n" style="color:var(--orange)">↑</div><div class="l">클라이언트 감도·만족</div></div></div>
+        <div class="card" style="text-align:center"><div class="stat"><div class="n" style="color:var(--orange)">∞</div><div class="l">데이터 자산화·확장성</div></div></div>
       </div>
-      <p class="lead" style="color:rgba(243,238,226,.82); margin-top:38px">감사합니다. &nbsp;·&nbsp; 질문을 받겠습니다.</p>
+      <p class="lead" style="margin-top:38px">감사합니다. &nbsp;·&nbsp; 질문을 받겠습니다.</p>
     </div>
   </section>
 
