@@ -6,18 +6,21 @@
 <title>SIRIAI</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Apple SD Gothic Neo',-apple-system,sans-serif;background:#F4EDE0;min-height:100vh;display:flex;align-items:center;justify-content:center}
-.wrap{text-align:center;padding:40px 20px}
-.logo{font-size:13px;font-weight:800;letter-spacing:0.3em;color:#8B7355;text-transform:uppercase;margin-bottom:40px}
-.title{font-size:clamp(2.5rem,6vw,5rem);font-weight:900;color:#2C2318;letter-spacing:-0.04em;line-height:1;margin-bottom:16px}
-.sub{font-size:14px;color:#BFB09A;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:60px}
-.cards{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
-.card{background:#fff;border:1px solid #D9CEBC;border-radius:16px;padding:24px 28px;text-decoration:none;color:#2C2318;min-width:180px;transition:all .2s;cursor:pointer}
+body{font-family:'Apple SD Gothic Neo',-apple-system,sans-serif;background:#F4EDE0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px 20px}
+.wrap{text-align:center;max-width:900px;width:100%}
+.logo{font-size:13px;font-weight:800;letter-spacing:0.3em;color:#8B7355;text-transform:uppercase;margin-bottom:32px}
+.title{font-size:clamp(2.2rem,5.5vw,4.2rem);font-weight:900;color:#2C2318;letter-spacing:-0.04em;line-height:1;margin-bottom:16px}
+.sub{font-size:14px;color:#BFB09A;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:48px}
+.section-label{font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#8B7355;margin:8px 0 16px;text-align:left}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:32px}
+.card{background:#fff;border:1px solid #D9CEBC;border-radius:16px;padding:22px 24px;text-decoration:none;color:#2C2318;transition:all .2s;cursor:pointer;text-align:left;display:flex;flex-direction:column;min-height:104px}
 .card:hover{background:#2C2318;color:#F4EDE0;border-color:#2C2318;transform:translateY(-3px)}
 .card-label{font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#BFB09A;margin-bottom:8px}
-.card:hover .card-label{color:#8B7355}
-.card-name{font-size:15px;font-weight:700;letter-spacing:-0.01em}
-.footer{margin-top:60px;font-size:11px;color:#D9CEBC;letter-spacing:0.15em}
+.card:hover .card-label{color:#C2A878}
+.card-name{font-size:16px;font-weight:800;letter-spacing:-0.01em;line-height:1.3}
+.card-desc{font-size:12px;color:#A89A82;margin-top:6px;line-height:1.45}
+.card:hover .card-desc{color:#BFB09A}
+.footer{margin-top:24px;font-size:11px;color:#D9CEBC;letter-spacing:0.15em}
 </style>
 </head>
 <body>
@@ -25,20 +28,55 @@ body{font-family:'Apple SD Gothic Neo',-apple-system,sans-serif;background:#F4ED
   <div class="logo">SIRIAI</div>
   <div class="title">Architecture<br/>for Insight</div>
   <div class="sub">인플루언서 마케팅 에이전시</div>
+
+  <div class="section-label">서비스 · 데모</div>
   <div class="cards">
     <a class="card" href="/plan.html">
       <div class="card-label">Presentation</div>
       <div class="card-name">운영 체계화 기획안</div>
+      <div class="card-desc">현황 진단부터 실행 타임라인까지</div>
+    </a>
+    <a class="card" href="/siriai-app.html">
+      <div class="card-label">App</div>
+      <div class="card-name">캠페인 플랫폼 앱</div>
+      <div class="card-desc">인플루언서용 모바일 앱 데모</div>
     </a>
     <a class="card" href="/인스타예시.html">
       <div class="card-label">Demo</div>
       <div class="card-name">인스타그램 예시</div>
-    </a>
-    <a class="card" href="/siriai-app.html">
-      <div class="card-label">App</div>
-      <div class="card-name">캠페인 플랫폼</div>
+      <div class="card-desc">공식 인스타 프로필 목업</div>
     </a>
   </div>
+
+  <div class="section-label">발표 패키지</div>
+  <div class="cards">
+    <a class="card" href="/＿발표_시작하기.html">
+      <div class="card-label">Guide</div>
+      <div class="card-name">발표 시작하기</div>
+      <div class="card-desc">발표 파일 안내 허브</div>
+    </a>
+    <a class="card" href="/SIRIAI_발표자료.html">
+      <div class="card-label">Slides</div>
+      <div class="card-name">발표 슬라이드 덱</div>
+      <div class="card-desc">34슬라이드 · 문제→해결</div>
+    </a>
+    <a class="card" href="/SIRIAI_발표대본.html">
+      <div class="card-label">Script</div>
+      <div class="card-name">발표 대본 · 스피커노트</div>
+      <div class="card-desc">슬라이드별 말할 내용 + Q&amp;A</div>
+    </a>
+    <a class="card" href="/SIRIAI_요약본.html">
+      <div class="card-label">Summary</div>
+      <div class="card-name">1페이지 요약본</div>
+      <div class="card-desc">배포용 한 장 핸드아웃</div>
+    </a>
+    <a class="card" href="/SIRIAI_발표자료.pptx">
+      <div class="card-label">Download</div>
+      <div class="card-name">파워포인트 파일</div>
+      <div class="card-desc">PPTX 다운로드</div>
+    </a>
+  </div>
+
   <div class="footer">© 2026 SIRIAI</div>
 </div>
 </body>
